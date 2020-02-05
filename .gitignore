@@ -1,0 +1,8 @@
+django_proj.sh
+*.pyc
+*~
+__pycache__
+myvenv
+db.sqlite3
+.DS_Store
+.vscode/

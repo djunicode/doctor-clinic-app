@@ -1,0 +1,7 @@
+django_proj.sh
+*.pyc
+*~
+__pycache__
+myvenv
+.DS_Store
+.vscode/

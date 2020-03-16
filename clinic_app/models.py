@@ -2,14 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from django.contrib.auth.models import UserManager
 from .managers import CustomManager
-import datetime
+from datetime import datetime
 # Create your models here.
 class CustomUser(AbstractBaseUser,PermissionsMixin):
     username=models.CharField(max_length=100,unique=True)
     email= models.EmailField(null=True,blank=True)
     is_Doctor=models.BooleanField(default=False)
     is_Patient=models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -20,8 +20,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS = []
 
 
-    #def __str__(self):
-     #   return self.get_email_field_name
+    
 
 
 
@@ -29,17 +28,47 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
 
 class Doctor(models.Model):
-    name = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    qualification = models.CharField(max_length=50)
-    speciality = models.CharField(max_length=50)
-    start_time = models.TimeField(default=datetime.datetime.now())
-    end_time = models.TimeField(default=datetime.datetime.now())
+    username = models.OneToOneField(CustomUser,on_delete=models.CASCADE,null=False)
+    Degrees = (
+        ('MBBS', 'MBBS'),
+        ('BDS', 'BDS'),
+        ('BHMS', 'BHMS'),
+        ('DHMS', 'DHMS'),
+        ('BAMS', 'BAMS'),
+        ('BUMS', 'BUMS'),
+        ('BVSc & AH', 'BVSc & AH'),
+        ('B.Pharm.', 'B.Pharm.'),
+        ('D.Pharm.', 'D.Pharm.'),
+        ('BOT', 'BOT'),
+        ('BMLT', 'BMLT'),
+        ('BPT', 'BPT'),
+        ('B.Sc. Nursing', 'B.Sc. Nursing'),
+        ('BNYS', 'BNYS'),
+    )
+    Postgrad = (
+        ('None', 'None'),
+        ('MD', 'MD'),
+        ('MS', 'MS'),
+        ('Diploma', 'Diploma'),
+    )
+
+    Specialization = (
+        ('None', 'None'),
+        ('DM', 'DM'),
+        ('MCh', 'MCh'),
+    )
+    qualification = models.CharField(max_length=50,choices=Degrees,default='MBBS')
+    postgrad = models.CharField(max_length=50,choices=Postgrad,default=None,null=True)
+    speciality = models.CharField(max_length=50,choices=Specialization,default=None,null=True)
+    def __str__(self):
+        return self.username.username
 
 class Patient(models.Model):
-    name = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    email = models.EmailField()
-    DOB = models.DateField()
+    username = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
+    DOB = models.DateField(default=datetime.now(),null=True)
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE) #doc under which patient is working
+    def __str__(self):
+        return self.username.username
 
 class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE)

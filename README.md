@@ -1,1 +1,2 @@
-## doctor-clinic-app
+# Doctor-Patient
+Doctor Patient Management Application  

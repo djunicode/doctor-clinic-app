@@ -13,22 +13,52 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model=CustomUser
         fields=['username','email']
+Degrees = (
+        ('MBBS', 'MBBS'),
+        ('BDS', 'BDS'),
+        ('BHMS', 'BHMS'),
+        ('DHMS', 'DHMS'),
+        ('BAMS', 'BAMS'),
+        ('BUMS', 'BUMS'),
+        ('BVSc & AH', 'BVSc & AH'),
+        ('B.Pharm.', 'B.Pharm.'),
+        ('D.Pharm.', 'D.Pharm.'),
+        ('BOT', 'BOT'),
+        ('BMLT', 'BMLT'),
+        ('BPT', 'BPT'),
+        ('B.Sc. Nursing', 'B.Sc. Nursing'),
+        ('BNYS', 'BNYS'),
+    )
 
+Postgrad = (
+        ('None', 'None'),
+        ('MD', 'MD'),
+        ('MS', 'MS'),
+        ('Diploma', 'Diploma'),
+    )
+
+Specialization = (
+        ('None', 'None'),
+        ('DM', 'DM'),
+        ('MCh', 'MCh'),
+    )
 class DoctorForm(forms.ModelForm):
-   
-    #quali=forms.CharField()
-    #special=forms.CharField()
+    #username=forms.CharField()
+    quali = forms.CharField(widget=forms.Select(choices=Degrees))
+    postgrad = forms.CharField(widget=forms.Select(choices=Postgrad))
+    special=forms.CharField(widget=forms.Select(choices=Specialization))
+    """start_time=forms.TimeField()
+    end_time=forms.TimeField()"""
 
     class Meta:
         model=Doctor
-        fields=['name','qualification','speciality']
+        fields=['username','quali','postgrad','special']
 
 
 
 class PatientForm(forms.ModelForm):
     dob=forms.DateField()
-    docname=forms.CharField()
 
     class Meta:
         model=Patient
-        fields=['name','dob','docname']
+        fields=['username','dob','doctor']

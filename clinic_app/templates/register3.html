@@ -9,13 +9,12 @@
     <form method="POST">
         {% if user.is_authenticated %} 
         {% csrf_token %}
-        
-            {% if user.is_Doctor %}
+            {% if user.is_Patient %}
                 HI {{val}}
                 {{form.as_p}}
                 <button type="submit">Submit</button>
             {% else %}
-                User is not a doctor
+                User is not a patient
             {% endif %}
         {% else %}
             User not authorized

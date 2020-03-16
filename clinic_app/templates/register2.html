@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        {% if user.is_authenticated %} 
+        {% csrf_token %}
+        
+            {% if user.is_Doctor %}
+                HI {{val}}
+                {{form.as_p}}
+                <button type="submit">Submit</button>
+            {% else %}
+                User is not a doctor
+            {% endif %}
+        {% else %}
+            User not authorized
+        {% endif %} 
+
+    </form>
+</body>
+</html>

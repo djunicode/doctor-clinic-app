@@ -25,7 +25,8 @@ SECRET_KEY = 'i4=4p&ft)(9gu75w^z@&9b3s$yurdgn%2p8+*jg$-*3a!lxw@a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -39,6 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'clinic_app',
 ]
+
+AUTH_USER_MODEL='clinic_app.CustomUser'
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

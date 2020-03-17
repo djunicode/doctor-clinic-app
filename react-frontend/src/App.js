@@ -1,17 +1,18 @@
-import React from 'react';
-import { Route, BrowserRouter, Redirect } from 'react-router-dom';
-import DoctorSignup from './views/DoctorSignup';
-import './App.css';
+import React from "react";
+import { Route, BrowserRouter } from "react-router-dom";
+import DoctorSignup from "./views/DoctorSignup";
+import DoctorSignIn from "./views/DoctorSignIn";
+import "./App.css";
 
 const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Redirect from="/" to="/doctorsignup" />
+        <Route exact path="/" component={DoctorSignIn} />
         <Route exact path="/doctorsignup" component={DoctorSignup} />
       </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;

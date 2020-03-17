@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+.bodyStyles{
+    font-family: 'Montserrat', sans-serif;
+}
+.fields-container{
+    padding: 20px;
+}
+.fields{
+    width: 350px !important;
+}
+.signUpContainer{
+    padding-top: 13px;
+}
+.signUpButton{
+    width: 150px !important;
+    margin: 20px;
+}
+@media screen and (max-width: 400px){
+    .fields{
+        width: 300px !important;
+    }
+}

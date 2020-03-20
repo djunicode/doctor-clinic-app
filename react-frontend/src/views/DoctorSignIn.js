@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 function DoctorSignIn() {
-  const [EmailID, setEmailID] = useState("");
+  const [username, setUsername] = useState("");
   const [Pass, setPass] = useState("");
-  const Emailhandler = e => {
-    setEmailID(e.target.value);
+  const history = useHistory();
+  //const [token,setToken] = useState();
+  const [activityIndicator,setActivityIndicator] = useState(false)
+  useEffect(()=>{
+        // setToken(Cookies.get('csrftoken'))
+    // console.log(Cookies.get('csrftoken'))
+  },[])
+  const usernamehandler = e => {
+    setUsername(e.target.value);
   };
   const passhandler = e => {
     setPass(e.target.value);
@@ -26,13 +35,29 @@ function DoctorSignIn() {
   }));
   const classes = useStyles();
 
-  const checkCredentials = () => {
-    fetch("https://jsonplaceholder.typicode.com/users" + { EmailID })
-      .then(response => response.json())
-      .then(json => console.log(json));
+  const checkCredentials = async() => {
+    setActivityIndicator(true);
+    const res = await fetch("http://localhost:8000/login/",{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        //'Authorization': 'Token c0ddb0f680fdddac1d74c930c6722f6748b44e3a'
+        //'X-CSRftoken': token
+      },
+      body: JSON.stringify({
+        username: username,
+        password: Pass
+      })
+    })
+    const resData = await res.json()
+    console.log(resData)
+    localStorage.setItem('doctorClinicAppToken', resData.token)
+    history.push('/home')
   };
 
   return (
+    <div>
+    {activityIndicator ? <LinearProgress /> : null}
     <Typography component="div" className="App">
       <Typography component="h1" variant="h5">
         <br></br>
@@ -51,8 +76,8 @@ function DoctorSignIn() {
               label="username"
               name="email"
               autoComplete="email"
-              onChange={Emailhandler}
-              value={EmailID}
+              onChange={usernamehandler}
+              value={username}
             />
           </Grid>
 
@@ -77,7 +102,7 @@ function DoctorSignIn() {
           <Grid item xs={4}>
             <Typography variant="centre">
               <Button
-                type="submit"
+                
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -101,6 +126,7 @@ function DoctorSignIn() {
         </Grid>
       </form>
     </Typography>
+    </div>
   );
 }
 

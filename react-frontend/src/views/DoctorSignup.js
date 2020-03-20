@@ -11,40 +11,50 @@ import './doc.css';
 
 const DoctorSignup = (props) => {
     const [username,setUsername] = useState("")
-    const [password,setPassword] = useState("")
+    const [password1,setPassword1] = useState("")
+    const [password2,setPassword2] = useState("")
     const [qualification,setQualification] = useState("")
     const [speciality,setSpeciality] = useState("")
-    const [postgraduation,setPostgraduation] = useState("")
+    const [postgrad,setPostgraduation] = useState("")
+    const [email,setEmail] = useState("")
     const [activityIndicator,setActivityIndicator] = useState(false)
     const history = useHistory();
 
-    const signUp = async() => {
-        if(username==="" || password==="" || qualification==="" || postgraduation==="" || speciality===""){
+    const signUp = async(e) => {
+        e.preventDefault()
+        if(username==="" || password1==="" || password2==="" || email==="" || qualification==="" || postgrad==="" || speciality===""){
             alert("Fill in all fields")
         }
+        else if(password1!==password2){
+            alert("Passwords do not match")
+        }
         else{
+            let formdata = new FormData()
+            formdata.append("username",username)
+            formdata.append("postgrad",postgrad)
+            formdata.append("password1",password1)
+            formdata.append("password2",password2)
+            formdata.append("special",speciality)
+            formdata.append("quali",qualification)
+            formdata.append("Email",email)
             try{
                 setActivityIndicator(true);
-                const response = await fetch('',{
+                const response = await fetch('http://localhost:8000/register/',{
                     method: 'POST',
                     headers:{
-                        'Content-Type': 'application/json',
+                        //'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        username,
-                        password,
-                        qualification,
-                        postgraduation,
-                        speciality
-                    })
+                    body: formdata
                 })
                 const resData = await response.json()
-                console.log(resData);
-                history.push('/login')
+                if(resData.success==='Successfully created new doctor'){
+                    history.push('/')
+                }
                 setActivityIndicator(false);
             }
             catch(err){
                 console.log(err);
+                setActivityIndicator(false)
             }
         }
     }
@@ -55,10 +65,16 @@ const DoctorSignup = (props) => {
             <h1>DOCTOR-SIGNUP</h1>
             <form>
                 <div className="fields-container">
-                    <TextField className="fields" id="outlined-basic" label="Username*" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/><br />
+                    <TextField required className="fields" id="outlined-basic" label="Username" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/><br />
                 </div>
                 <div className="fields-container">
-                    <TextField className="fields" id="outlined-basic" label="Password*" type="Password" onChange={(event)=>setPassword(event.target.value)} variant="outlined" /><br />
+                    <TextField required type="email" className="fields" id="outlined-basic" label="Email-ID" onChange={(event)=>setEmail(event.target.value)} variant="outlined"/><br />
+                </div>
+                <div className="fields-container">
+                    <TextField required className="fields" id="outlined-basic" label="Password" type="Password" onChange={(event)=>setPassword1(event.target.value)} variant="outlined" /><br />
+                </div>
+                <div className="fields-container">
+                    <TextField required className="fields" id="outlined-basic" label="Re-enter Password" type="Password" onChange={(event)=>setPassword2(event.target.value)} variant="outlined" /><br />
                 </div>
                 <div className="fields-container">
                 <FormControl variant="outlined" >
@@ -82,8 +98,8 @@ const DoctorSignup = (props) => {
                         <MenuItem value={'BAMS'}>BAMS</MenuItem>
                         <MenuItem value={'BUMS'}>BUMS</MenuItem>
                         <MenuItem value={'BVSc & AH'}>{'BVSc & AH'}</MenuItem>
-                        <MenuItem value={'B.Pharm'}>B.Pharm</MenuItem>
-                        <MenuItem value={'D.Pharm'}>D.Pharm</MenuItem>
+                        <MenuItem value={'B.Pharm.'}>B.Pharm</MenuItem>
+                        <MenuItem value={'D.Pharm.'}>D.Pharm</MenuItem>
                         <MenuItem value={'BOT'}>BOT</MenuItem>
                         <MenuItem value={'BMLT'}>BMLT</MenuItem>
                         <MenuItem value={'BPT'}>BPT</MenuItem>
@@ -136,7 +152,7 @@ const DoctorSignup = (props) => {
                 </FormControl>
                 </div>
                 <div className="signUpContainer">
-                    <Button className="signUpButton" variant="contained" color="primary" onClick={()=>signUp()}>SIGN UP</Button>
+                    <Button type="submit" className="signUpButton" variant="contained" color="primary" onClick={(e)=>signUp(e)}>SIGN UP</Button>
                 </div>
         </form>
         </div>

@@ -179,6 +179,6 @@ def bookAppointment(request):
     else:
         form = AppointmentForm()
     
-    #add_appointment_to_calendar()
+    add_appointment_to_calendar()
     return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 

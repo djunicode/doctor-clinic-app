@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Book an appointment</title>
+    </head>
+    <h2>Current schedule of the clinic</h2>
+    <table>
+		<tr>
+			<th align="left" scope = "col">Summary</th>
+			<th align="left" scope = "col">Start datetime</th>
+			<th align="left" scope = "col">End datetime</th>
+		</tr>
+
+		{% for appointment in current_calendar %}
+			<tr>	
+                <td>{{appointment.summary}}</td>
+                <td>{{appointment.start.dateTime}}</td>
+                <td>{{appointment.end.dateTime}}</td>
+				
+			</tr>
+		{% endfor %}
+	</table>
+    <h2>New appointment</h2>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+</html>

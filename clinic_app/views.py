@@ -21,6 +21,8 @@ def token_generator(userinput):
     return token.key
 
 @csrf_exempt
+from .mycalendar import *
+# Create your views here.
 def register(request):
     form=CustomUserCreationForm(request.POST)
     form2=DoctorForm(request.POST)
@@ -84,6 +86,7 @@ def patRegister(request,name):
         print("in form patient")
         p=Patient.objects.get(username=val)
 
+        p=Patient.objects.filter()
         p.username=val
         p.DOB=form3.cleaned_data['dob']
         p.save()
@@ -161,4 +164,21 @@ def LoginUser(request):
     else:
         return JsonResponse("None",safe=False)
         return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+
+        return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+
+def bookAppointment(request):
+
+    current_calendar = get_current_calendar()
+    if request.method == "POST":
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit = False)
+            appointment.save()
+            return redirect('/docRegister/') #gotta decide where to redirect after booking appointment
+    else:
+        form = AppointmentForm()
+    
+    #add_appointment_to_calendar()
+    return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 

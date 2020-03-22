@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from django.contrib.auth.models import UserManager
 from .managers import CustomManager
-from datetime import datetime
+from django.utils import timezone
 # Create your models here.
 class CustomUser(AbstractBaseUser,PermissionsMixin):
     username=models.CharField(max_length=100,unique=True)
@@ -66,7 +66,7 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     username = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    DOB = models.DateField(default=datetime.now(),null=True)
+    DOB = models.DateField(default=timezone.now,null=True)
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE) #doc under which patient is working
     def __str__(self):
         return self.username.username

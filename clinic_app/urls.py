@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/',auth_views.LoginView.as_view(template_name='login.html'),name="login"),
     path('docRegister/',views.docRegister,name="Doctor Register" ),
     path('patRegister/',views.patRegister,name="Patient Register" ),
+    path('bookAppointment', views.bookAppointment, name='bookAppointment')
 ]

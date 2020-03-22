@@ -4,6 +4,7 @@ from .forms import *
 from django.http import HttpResponse
 from .models import *
 from django.contrib.auth import authenticate, login
+from .mycalendar import *
 # Create your views here.
 def register(request):
     form=CustomUserCreationForm(request.POST)
@@ -49,12 +50,26 @@ def patRegister(request):
     val = request.user.username
     if form3.is_valid():
         form3.save()
-        print("in form patient")
         p=Patient.objects.filter()
         p.username=val
         p.DOB=form3.cleaned_data['dob']
         p.update()
         return redirect("/login/")
     else:
-        print("in else patient")
         return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+
+def bookAppointment(request):
+
+    current_calendar = get_current_calendar()
+    if request.method == "POST":
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit = False)
+            appointment.save()
+            return redirect('/docRegister/') #gotta decide where to redirect after booking appointment
+    else:
+        form = AppointmentForm()
+    
+    #add_appointment_to_calendar()
+    return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
+

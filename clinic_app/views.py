@@ -66,10 +66,11 @@ def bookAppointment(request):
         if form.is_valid():
             appointment = form.save(commit = False)
             appointment.save()
+            add_appointment_to_calendar()
             return redirect('/docRegister/') #gotta decide where to redirect after booking appointment
     else:
         form = AppointmentForm()
+        add_appointment_to_calendar()
     
-    add_appointment_to_calendar()
     return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 

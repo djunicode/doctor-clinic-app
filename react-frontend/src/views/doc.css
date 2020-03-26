@@ -15,8 +15,20 @@
     width: 150px !important;
     margin: 20px;
 }
+.brand {
+    background-color: white;
+    margin: 10px;
+    border-radius: 15px;
+    height: 40px;
+    width: 100px;
+}
+.patientDetails{
+    border: 0.8px solid black;
+    border-radius: 20px;
+}
 @media screen and (max-width: 400px){
     .fields{
         width: 300px !important;
     }
+    
 }

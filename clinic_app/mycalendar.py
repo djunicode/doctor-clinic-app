@@ -80,8 +80,8 @@ def add_appointment_to_calendar():
             'RRULE:FREQ=DAILY;COUNT=2'
         ],
         'attendees': [
-            {'email': 'lpage@example.com'},
-            {'email': 'sbrin@example.com'},
+            {'email': ''},
+            {'email': ''},
         ],
         'reminders': {
             'useDefault': False,

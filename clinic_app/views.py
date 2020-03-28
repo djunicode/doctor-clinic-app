@@ -1,10 +1,12 @@
 
 from django.shortcuts import render, redirect
-from .forms import *
 from django.http import HttpResponse
-from .models import *
 from django.contrib.auth import authenticate, login
+import datetime
+from .forms import *
+from .models import *
 from .mycalendar import *
+from .helper_functions import *
 # Create your views here.
 def register(request):
     form=CustomUserCreationForm(request.POST)
@@ -13,7 +15,6 @@ def register(request):
         new_user=authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
         login(request,new_user)
         t=form.cleaned_data['Position']
-        print(t,"-----------------------------------")
         val=CustomUser.objects.filter(username=form.cleaned_data['username']).first()
         if t=='Doctor':
             val.is_Doctor=True
@@ -42,7 +43,6 @@ def docRegister(request):
         d.update()
         return redirect("/login/")
     else:
-        print("in else doctor")
         return render(request,"register2.html",{'form':form2,'val':val,'status':'doctor'})
 
 def patRegister(request):
@@ -60,17 +60,27 @@ def patRegister(request):
 
 def bookAppointment(request):
 
-    current_calendar = get_current_calendar()
+    #current_calendar = get_current_calendar()
+    current_calendar = Appointment.objects.order_by('-date')
     if request.method == "POST":
         form = AppointmentForm(request.POST)
-        if form.is_valid():
+        # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and )
+        appointments_in_range = Appointment.objects.filter(date = request.POST['date'], 
+            doctor = request.POST['doctor'],
+            start_time__lte = request.POST['end_time'], 
+            end_time__gte = request.POST['start_time'], 
+            )
+        # start_time = datetime.time(form.fields['start_time'])
+        # end_time = form.fields['end_time']
+        if (form.is_valid() and len(appointments_in_range) == 0):
             appointment = form.save(commit = False)
             appointment.save()
-            add_appointment_to_calendar()
+            #add_appointment_to_calendar()
+            
             return redirect('/docRegister/') #gotta decide where to redirect after booking appointment
     else:
         form = AppointmentForm()
-        add_appointment_to_calendar()
+        #add_appointment_to_calendar()
     
     return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 

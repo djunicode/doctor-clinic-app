@@ -65,7 +65,7 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     username = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    DOB = models.DateField(default=datetime.now(),null=True)
+    DOB = models.DateField(auto_now_add=True)
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE) #doc under which patient is working
     def __str__(self):
         return self.username.username

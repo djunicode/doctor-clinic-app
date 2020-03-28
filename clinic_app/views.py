@@ -3,57 +3,158 @@ from .forms import *
 from django.http import HttpResponse
 from .models import *
 from django.contrib.auth import authenticate, login
-# Create your views here.
+from .serializers import *
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework import permissions
+from django.contrib.auth.forms import AuthenticationForm
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from rest_framework.decorators import api_view,permission_classes
+def token_generator(userinput):
+
+    token = Token.objects.create(user=userinput)
+    print(token.key)
+    return token.key
+
+@csrf_exempt
 def register(request):
     form=CustomUserCreationForm(request.POST)
+    form2=DoctorForm(request.POST)
     if form.is_valid():
         new_user=form.save()
-        new_user=authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
-        login(request,new_user)
-        t=form.cleaned_data['Position']
-        print(t,"-----------------------------------")
+
+
+        tok=token_generator(CustomUser.objects.get(username=form.cleaned_data['username']))
+        #new_user=authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
+
+       # login(request,new_user)
+        #t=form.cleaned_data['Position']
+        #print(t,"-----------------------------------")
         val=CustomUser.objects.filter(username=form.cleaned_data['username']).first()
-        if t=='Doctor':
-            val.is_Doctor=True
-            val.save()
-            return redirect('/docRegister/',{'val':val,'status':'doctor'})
-            
-        elif t=='Patient':
-            val.is_Patient=True
-            val.save()
-            return redirect('/patRegister/',{'val':val,'status':'patient'})
+        #if t=='Doctor':
+        val.is_Doctor=True
+        val.save()
+        d=Doctor()
+        d.username=val
+        d.qualification=request.POST['quali']
+        d.qualification=request.POST['postgrad']
+        d.speciality=request.POST['special']
+        d.save()
+
+            #return redirect('/docRegister/{}'.format(val.username),{'val':val,'status':'doctor'})
+        return JsonResponse({'success:':"Successfully created new doctor"}) 
+        # elif t=='Patient':
+        #     val.is_Patient=True
+        #     val.save()
+        #     return redirect('/patRegister/{}'.format(val.username),{'val':val,'status':'patient'})
     else:
 
-        return render(request,"register.html",{'form':form})
+        return render(request,"register.html",{'form':form,'form2':form2})
 
-def docRegister(request):
+@csrf_exempt
+def docRegister(request,name):
     form2 = DoctorForm(request.POST)
-    val = request.user.username
+    val =CustomUser.objects.filter(username=name).first()
     if form2.is_valid():
         form2.save()
         print("in form doctor")
-        d=Doctor.objects.filter()
+        d=Doctor.objects.get(username=val)
         d.username=val
-        d.qualification=form2.cleaned_data['quali']
-        d.qualification=form2.cleaned_data['postgrad']
-        d.speciality=form2.cleaned_data['special']
-        d.update()
-        return redirect("/login/")
+        d.qualification=request.data['quali']
+        d.qualification=request.data['postgrad']
+        d.speciality=request.data['special']
+        d.save()
+        return JsonResponse({'success:':"Successfully created new doctor"})
+        #return HttpResponse("Created")
     else:
         print("in else doctor")
-        return render(request,"register2.html",{'form':form2,'val':val,'status':'doctor'})
+        return render(request,"register2.html",{'form':form2,'val':val.username,'status':'doctor','form2':form2})
 
-def patRegister(request):
-    form3 = PatientForm(request.POST)
-    val = request.user.username
+@csrf_exempt
+def patRegister(request,name):
+    form3 = PatientForm(request.POST,initial={'username':request.user})
+    form3.fields['username'].initial = request.user
+    val =CustomUser.objects.filter(username=name).first() 
     if form3.is_valid():
         form3.save()
         print("in form patient")
-        p=Patient.objects.filter()
+        p=Patient.objects.get(username=val)
+
         p.username=val
         p.DOB=form3.cleaned_data['dob']
-        p.update()
-        return redirect("/login/")
+        p.save()
+        return JsonResponse({'success:':"Successfully created new Patient"})
     else:
         print("in else patient")
-        return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+        return render(request,"register3.html",{'form':form3,'val':val.username,'status':'patient'})
+
+
+
+#API view for the serializer
+
+class NewUserList(APIView):
+    """
+    This view is used to list all the users of our app 
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    #form=AuthenticationForm()
+    def get(self,request):
+        users=CustomUser.objects.all()
+        serializer=NewUserSerializer(users,many=True)
+        print("###############################",request.user)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = NewUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class GetIndividualList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_user(self,un):
+        try:
+            return CustomUser.objects.get(username=un)
+        except CustomUser.DoesNotExist:
+            raise "Hello"
+   
+    
+    def get(self, request):
+        users = self.get_user(request.user)
+        serializer = NewUserSerializer(users)
+        token, created = Token.objects.get_or_create(user=users)
+        print(token)
+        dict3=dict(serializer.data)
+        dict3['token']=token.key
+
+        
+
+        return JsonResponse(dict3,safe=False)
+
+@csrf_protect    
+@api_view(['POST'])
+def LoginUser(request): 
+    
+    u_name=request.data['username']
+    passw=request.data['password']
+    
+    
+    queryset=CustomUser.objects.get(username=u_name)
+    serializer=NewUserSerializer(queryset)
+    user=authenticate(username=u_name,password=passw)
+    if user is not None:
+        user=CustomUser.objects.get(username=u_name)
+        login(request,user)
+        token, created = Token.objects.get_or_create(user=user)
+        dict3=dict(serializer.data)
+        dict3['token']=token.key
+        return Response(dict3)
+    else:
+        return JsonResponse("None",safe=False)

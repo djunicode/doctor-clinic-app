@@ -5,16 +5,24 @@
     <h2>Current schedule of the clinic</h2>
     <table>
 		<tr>
-			<th align="left" scope = "col">Summary</th>
+            <th align="left" scope = "col">Doctor</th>
+            <th align="left" scope = "col">Patient</th>
+            <th align="left" scope = "col">Type</th>
+            <th align="left" scope = "col">Date</th>
 			<th align="left" scope = "col">Start datetime</th>
-			<th align="left" scope = "col">End datetime</th>
+            <th align="left" scope = "col">End datetime</th>
+            <th align="left" scope = "col">Token number</th>
 		</tr>
 
 		{% for appointment in current_calendar %}
 			<tr>	
-                <td>{{appointment.summary}}</td>
-                <td>{{appointment.start.dateTime}}</td>
-                <td>{{appointment.end.dateTime}}</td>
+                <td>{{appointment.doctor}}</td>
+                <td>{{appointment.patient}}</td>
+                <td>{{appointment.type}}</td>
+                <td>{{appointment.date}}</td>
+                <td>{{appointment.start_time}}</td>
+                <td>{{appointment.end_time}}</td>
+                <td>{{appointment.token_number}}</td>
 				
 			</tr>
 		{% endfor %}

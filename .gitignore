@@ -3,5 +3,6 @@ django_proj.sh
 *~
 __pycache__
 myvenv
+
 .DS_Store
 .vscode/

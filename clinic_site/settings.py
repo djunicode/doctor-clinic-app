@@ -25,6 +25,7 @@ SECRET_KEY = 'i4=4p&ft)(9gu75w^z@&9b3s$yurdgn%2p8+*jg$-*3a!lxw@a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = []
 
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 ]
+
 AUTH_USER_MODEL='clinic_app.CustomUser'
 
 
@@ -52,6 +54,7 @@ REST_FRAMEWORK = {
 
    
 }
+
 
 
 
@@ -137,7 +140,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+
 LOGIN_REDIRECT_URL='login2'
+
 
 
 

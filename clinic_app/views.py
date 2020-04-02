@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from .forms import *
 from django.http import HttpResponse
@@ -89,6 +90,7 @@ def patRegister(request,name):
         return JsonResponse({'success:':"Successfully created new Patient"})
     else:
         print("in else patient")
+
         return render(request,"register3.html",{'form':form3,'val':val.username,'status':'patient'})
 
 
@@ -158,3 +160,5 @@ def LoginUser(request):
         return Response(dict3)
     else:
         return JsonResponse("None",safe=False)
+        return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+

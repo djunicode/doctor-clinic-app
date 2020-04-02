@@ -1,4 +1,5 @@
 from django.db import models
+
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from django.contrib.auth.models import UserManager
 from .managers import CustomManager
@@ -69,6 +70,9 @@ class Patient(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE) #doc under which patient is working
     def __str__(self):
         return self.username.username
+
+
+
 
 class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE)

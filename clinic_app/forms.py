@@ -3,17 +3,22 @@ from django.contrib.auth.forms import UserCreationForm,UserChangeForm
 from .models import *
 
 class  CustomUserCreationForm(UserCreationForm):
-    Post=[('Doctor','Doctor'),('Patient','Patient')]
-    Position = forms.ChoiceField(choices=Post, widget=forms.RadioSelect)
+    #Post=[('Doctor','Doctor'),('Patient','Patient')]
+    #Position = forms.ChoiceField(choices=Post, widget=forms.RadioSelect)
     class Meta:
         model=CustomUser
-        fields=['username','email','Position']
+        fields=['username','email' ]
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model=CustomUser
         fields=['username','email']
+
+
+
+
 Degrees = (
+        ('None', 'None'),
         ('MBBS', 'MBBS'),
         ('BDS', 'BDS'),
         ('BHMS', 'BHMS'),
@@ -52,7 +57,7 @@ class DoctorForm(forms.ModelForm):
 
     class Meta:
         model=Doctor
-        fields=['username','quali','postgrad','special']
+        fields=['quali','postgrad','special']
 
 
 

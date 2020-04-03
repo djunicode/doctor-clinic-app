@@ -21,13 +21,6 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS = []
 
 
-    
-
-
-
-
-
-
 class Doctor(models.Model):
     username = models.OneToOneField(CustomUser,on_delete=models.CASCADE,null=False)
     Degrees = (
@@ -73,7 +66,6 @@ class Patient(models.Model):
 
 
 
-
 class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete = models.CASCADE)
@@ -81,7 +73,6 @@ class Appointment(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    token_number = models.IntegerField(unique=True)
 
 class Report(models.Model):
     patient = models.ForeignKey(Patient, on_delete = models.CASCADE) #the patient to whom this report belongs

@@ -2,7 +2,6 @@
 import datetime
 from .forms import *
 from .models import *
-from .helper_functions import *
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
@@ -170,43 +169,30 @@ def LoginUser(request):
 
         return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
 
-def bookAppointment(request):
-
-    current_calendar = get_current_calendar()
-    if request.method == "POST":
-        form = AppointmentForm(request.POST)
-        if form.is_valid():
-            appointment = form.save(commit = False)
-            appointment.save()
-            return redirect('/docRegister/') #gotta decide where to redirect after booking appointment
-    else:
-        form = AppointmentForm()
-    
-        return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
 
 def bookAppointment(request):
 
-    #current_calendar = get_current_calendar()
     current_calendar = Appointment.objects.order_by('-date')
     if request.method == "POST":
         form = AppointmentForm(request.POST)
-        # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and )
-        appointments_in_range = Appointment.objects.filter(date = request.POST['date'], 
+        # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and L2 <= R1)
+        appointments_in_range_for_doctor = Appointment.objects.filter(date = request.POST['date'], 
             doctor = request.POST['doctor'],
             start_time__lte = request.POST['end_time'], 
             end_time__gte = request.POST['start_time'], 
             )
-        # start_time = datetime.time(form.fields['start_time'])
-        # end_time = form.fields['end_time']
-        if (form.is_valid() and len(appointments_in_range) == 0):
+        appointments_in_range_for_patient = Appointment.objects.filter(date = request.POST['date'],
+            patient = request.POST['patient'],
+            start_time__lte = request.POST['end_time'],
+            end_time__gte = request.POST['start_time'],
+            )
+        if (form.is_valid() and len(appointments_in_range_for_doctor) == 0 and len(appointments_in_range_for_patient) == 0):
             appointment = form.save(commit = False)
             appointment.save()
-            #add_appointment_to_calendar()
             
-            return redirect('bookAppointment/') #gotta decide where to redirect after booking appointment
+            return redirect('book-appointment') #gotta decide where to redirect after booking appointment
     else:
         form = AppointmentForm()
-        #add_appointment_to_calendar()
     
     return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 

@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from django.contrib.auth.models import UserManager
 from .managers import CustomManager
-from datetime import datetime
+from django.utils import timezone
 # Create your models here.
 class CustomUser(AbstractBaseUser,PermissionsMixin):
     username=models.CharField(max_length=100,unique=True)
@@ -19,13 +19,6 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
-
-
-    
-
-
-
-
 
 
 class Doctor(models.Model):
@@ -73,7 +66,6 @@ class Patient(models.Model):
 
 
 
-
 class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete = models.CASCADE)
@@ -81,7 +73,6 @@ class Appointment(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    token_number = models.IntegerField()
 
 class Report(models.Model):
     patient = models.ForeignKey(Patient, on_delete = models.CASCADE) #the patient to whom this report belongs

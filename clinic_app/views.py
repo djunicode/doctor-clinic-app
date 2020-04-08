@@ -1,8 +1,9 @@
 
-from django.shortcuts import render, redirect
+import datetime
 from .forms import *
-from django.http import HttpResponse
 from .models import *
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from .serializers import *
 from django.http import JsonResponse
@@ -15,12 +16,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from rest_framework.decorators import api_view,permission_classes
 def token_generator(userinput):
-
     token = Token.objects.create(user=userinput)
     print(token.key)
     return token.key
 
 @csrf_exempt
+# Create your views here.
 def register(request):
     form=CustomUserCreationForm(request.POST)
     form2=DoctorForm(request.POST)
@@ -34,6 +35,9 @@ def register(request):
        # login(request,new_user)
         #t=form.cleaned_data['Position']
         #print(t,"-----------------------------------")
+        new_user=authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
+        login(request,new_user)
+        t=form.cleaned_data['Position']
         val=CustomUser.objects.filter(username=form.cleaned_data['username']).first()
         #if t=='Doctor':
         val.is_Doctor=True
@@ -56,7 +60,7 @@ def register(request):
         return render(request,"register.html",{'form':form,'form2':form2})
 
 @csrf_exempt
-def docRegister(request,name):
+def docRegister(request, name):
     form2 = DoctorForm(request.POST)
     val =CustomUser.objects.filter(username=name).first()
     if form2.is_valid():
@@ -84,6 +88,7 @@ def patRegister(request,name):
         print("in form patient")
         p=Patient.objects.get(username=val)
 
+        p=Patient.objects.filter()
         p.username=val
         p.DOB=form3.cleaned_data['dob']
         p.save()
@@ -161,4 +166,33 @@ def LoginUser(request):
     else:
         return JsonResponse("None",safe=False)
         return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+
+        return render(request,"register3.html",{'form':form3,'val':val,'status':'patient'})
+
+
+def bookAppointment(request):
+
+    current_calendar = Appointment.objects.order_by('-date')
+    if request.method == "POST":
+        form = AppointmentForm(request.POST)
+        # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and L2 <= R1)
+        appointments_in_range_for_doctor = Appointment.objects.filter(date = request.POST['date'], 
+            doctor = request.POST['doctor'],
+            start_time__lte = request.POST['end_time'], 
+            end_time__gte = request.POST['start_time'], 
+            )
+        appointments_in_range_for_patient = Appointment.objects.filter(date = request.POST['date'],
+            patient = request.POST['patient'],
+            start_time__lte = request.POST['end_time'],
+            end_time__gte = request.POST['start_time'],
+            )
+        if (form.is_valid() and len(appointments_in_range_for_doctor) == 0 and len(appointments_in_range_for_patient) == 0):
+            appointment = form.save(commit = False)
+            appointment.save()
+            
+            return redirect('book-appointment') #gotta decide where to redirect after booking appointment
+    else:
+        form = AppointmentForm()
+    
+    return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 

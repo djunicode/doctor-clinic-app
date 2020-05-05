@@ -37,7 +37,7 @@ def register(request):
         #print(t,"-----------------------------------")
         new_user=authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'])
         login(request,new_user)
-        t=form.cleaned_data['Position']
+        #t=form.cleaned_data['Position']
         val=CustomUser.objects.filter(username=form.cleaned_data['username']).first()
         #if t=='Doctor':
         val.is_Doctor=True
@@ -196,3 +196,10 @@ def bookAppointment(request):
     
     return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 
+
+
+
+
+
+def reports(request):
+    

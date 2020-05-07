@@ -4,6 +4,6 @@ django_proj.sh
 __pycache__
 clinic_app/__pycache__
 myvenv
-
+uploads
 .DS_Store
 .vscode/

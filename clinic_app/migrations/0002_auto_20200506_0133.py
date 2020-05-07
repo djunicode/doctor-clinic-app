@@ -6,13 +6,11 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clinic_app', '0001_initial'),
+        ("clinic_app", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='customuser',
-            name='is_superuser',
-            field=models.BooleanField(),
+            model_name="customuser", name="is_superuser", field=models.BooleanField(),
         ),
     ]

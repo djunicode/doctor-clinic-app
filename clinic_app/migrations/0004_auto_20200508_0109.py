@@ -7,24 +7,44 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clinic_app', '0003_auto_20200506_0135'),
+        ("clinic_app", "0003_auto_20200506_0135"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='profile_pic',
-            field=models.ImageField(null=True, upload_to='uploads/%Y/%m/%d/'),
+            model_name="customuser",
+            name="profile_pic",
+            field=models.ImageField(null=True, upload_to="uploads/%Y/%m/%d/"),
         ),
         migrations.CreateModel(
-            name='Receipt',
+            name="Receipt",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('time', models.TimeField()),
-                ('price', models.IntegerField()),
-                ('doctor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='clinic_app.Doctor')),
-                ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='clinic_app.Patient')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                ("time", models.TimeField()),
+                ("price", models.IntegerField()),
+                (
+                    "doctor",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="clinic_app.Doctor",
+                    ),
+                ),
+                (
+                    "patient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="clinic_app.Patient",
+                    ),
+                ),
             ],
         ),
     ]

@@ -17,6 +17,7 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 
+
 Degrees = (
         ('None', 'None'),
         ('MBBS', 'MBBS'),
@@ -59,7 +60,15 @@ class DoctorForm(forms.ModelForm):
         model=Doctor
         fields=['quali','postgrad','special']
 
+class ReceiptForm(forms.ModelForm):
+    class Meta:
+        model=Receipt
+        fields=['date', 'time', 'price','doctor','patient']
 
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model=Report
+        fields=['patient','typeof','published_on','file']
 
 class PatientForm(forms.ModelForm):
     dob=forms.DateField()

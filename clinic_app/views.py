@@ -196,10 +196,31 @@ def bookAppointment(request):
     
     return render(request, 'book_appointment.html', {'form' : form, 'current_calendar' : current_calendar})
 
+def receipt(request):
+    
+    if request.method=='POST':
+        form=ReceiptForm(request.POST)
+        if form.is_valid():
+            receipt=form.save()
+            print("in form receipt")
+            print(Doctor.objects.get(username=request.user),"YO BOIS")
+            
+            return HttpResponse("Done")
+    else:
+        form=ReceiptForm()
+        
+    return render(request,"receipt.html",{'form':form})
 
 
 
 
 
 def reports(request):
-    
+    if request.method=="POST":
+        form=ReportForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("Added")
+    else:
+        form=ReportForm(request.POST,request.FILES)
+    return render(request,"receipt.html",{'form':form})

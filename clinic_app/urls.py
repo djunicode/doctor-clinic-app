@@ -16,5 +16,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html'),name="login"),
     path('doc-register/',views.docRegister, name="Doctor Register" ),
     path('pat-register/',views.patRegister, name="Patient Register" ),
-    path('book-appointment/', views.bookAppointment, name='bookAppointment')
+    path('book-appointment/', views.bookAppointment, name='bookAppointment'),
+    path('createReceipt/', views.receipt, name='Receipt'),
+    path('report/',views.reports,name="report")
 ]

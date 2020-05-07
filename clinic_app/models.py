@@ -14,7 +14,9 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
-    
+    profile_pic = models.ImageField(upload_to='uploads/%Y/%m/%d/',null=True)
+
+
     objects=CustomManager()
 
     USERNAME_FIELD = 'username'
@@ -76,6 +78,14 @@ class Appointment(models.Model):
 
 class Report(models.Model):
     patient = models.ForeignKey(Patient, on_delete = models.CASCADE) #the patient to whom this report belongs
-    type = models.CharField(max_length=50) #x-ray, blood, etc. Maybe make it dropdown in future?
+    typeof = models.CharField(max_length=50) #x-ray, blood, etc. Maybe make it dropdown in future?
     published_on = models.DateTimeField()
     file = models.FileField(upload_to='uploads/%Y/%m/%d/')
+
+class Receipt(models.Model):
+    
+    date=models.DateField()
+    time=models.TimeField()
+    doctor=models.ForeignKey(Doctor, on_delete = models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete = models.CASCADE)
+    price=models.IntegerField()

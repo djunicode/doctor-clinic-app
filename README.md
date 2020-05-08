@@ -26,17 +26,16 @@ Then just open the URL [localhost:8000](http://127.0.0.1:8000) to run the websit
 
 
 ```
-  ├─clinic_app
-  ├───migrations
-  ├─────__pycache__
-  ├───__pycache__
-  ├───templates
-  ├─clinic_site
-  ├───__pycache__
-  ├─react-frontend
-  ├───public
-  ├───src
-  └─────views
+ .
+├─clinic_app
+├───migrations
+├───templates
+├─clinic_site
+├─react-frontend
+├───public
+├───src
+└─────views
+	
   ```
   
   ## Technology Stack
@@ -58,6 +57,7 @@ Then just open the URL [localhost:8000](http://127.0.0.1:8000) to run the websit
 <li>Dhruv Talati(Frontend)</li>
 <li>Samit Kapadia(Frontend)</li>
 <li>Nilay Bhatia(Backend)</li>
+<li>Neha Doshi(Design)</li>
 <li>Amogh Desai(Backend)</li>
 <li>Ishaan Khetan(Backend)</li>
 <li>Hrishikesh Avanoor(Backend)</li>
@@ -65,14 +65,15 @@ Then just open the URL [localhost:8000](http://127.0.0.1:8000) to run the websit
 
   ### Mentors
   <ol>
+  <li>Aniruddh Das(Frontend)</li>
+  <li>Dhairya Shah(Frontend)</li>
+ <li>Harsh Mistry(Backend)</li>
+  <li>Ananya Malik(Backend)</li>
   <li>Viral Tagdiwala</li>
-  <li>Ananya Malik</li>
   <li>Milind Shah</li>
   <li>Keval Nagda</li>
   <li>Jay Gala</li>
-  <li>Aniruddh Das</li>
-  <li>Dhairya Shah</li>
-  <li>Harsh Mistry</li>
+  
 
 
 

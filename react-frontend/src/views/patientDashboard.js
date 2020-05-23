@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Header from '../components/Header';
 // import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import './doc.css'
+import './doctorSignup.css'
 
 const PatientDashboard = () => {
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
@@ -20,10 +20,8 @@ const PatientDashboard = () => {
 
     return(
         <div >
-        <AppBar position="static" style={{backgroundColor: '#DC143C'}}>
-            <span className="brand"></span>
-        </AppBar>
-        <Grid container>
+        <Header />
+        <Grid container style={{paddingTop: 50}}>
             <Grid item xs={12} sm={12} md={8}>
                 <div style={{marginLeft: '10%', marginRight:'10%', marginTop: '5%'}}>
                     <div style={{textAlign:'left'}}>

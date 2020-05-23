@@ -1,0 +1,43 @@
+.innerContainer{
+    width: 600px !important
+}
+.fields-container{
+    justify-content: center;
+}
+.fields-inner-container{
+    padding: 20px;
+}
+.fields{
+    width: 400px !important;
+    background-color: white;
+    border-radius: 5px; 
+}
+.signInButton{
+    width: 300px !important;
+    margin-top: 40px !important;
+    height: 50px !important;
+}
+@media screen and (max-width: 599px){
+    .fields{
+        width: 300px  !important;
+    }
+    .innerContainer{
+        width: 450px !important
+    }
+    .signInButton{
+        width: 200px !important;
+    }
+}
+@media screen and (max-width: 400px){
+    .fields{
+        width: 245px !important;
+    }
+    .signInButton{
+        width: 150px !important;
+    }
+}
+@media screen and (max-width: 360px){
+    .innerContainer{
+        width: 310px !important
+    }
+}

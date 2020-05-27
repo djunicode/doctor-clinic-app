@@ -255,17 +255,18 @@
   width: 100%;
   padding-left: 100px;
   padding-top: 60px;
-  height: 120vh !important;
+  height: 100% !important;
   margin-top: 30px;
   border: 1px solid #f5f5f5;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   background: #f5f5f5;
+  min-height: 100vh;
 }
 .ppmain {
-  padding-left: 100px;
-  padding-top: 60px;
+  padding-left: 10%;
+  padding-top: 6%;
 }
 .DocNameSpan {
   float: left;

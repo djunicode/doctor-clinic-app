@@ -12,10 +12,10 @@ function patientprofile() {
       <Container fluid className="ContainerPadding">
         <Nav />
         <Row>
-          <Col xs={12} md={2} className="Cellpadding">
+          <Col xs={12} md={3} lg={2} className="Cellpadding">
             <LeftSideBarTherapist />
           </Col>
-          <Col xs={12} md={8} className="Cellpadding patientprofilemain">
+          <Col xs={12} md={6} lg={8} className="Cellpadding patientprofilemain">
             <div className="ppmain">
               <img
                 src="https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png"
@@ -73,7 +73,7 @@ function patientprofile() {
               </div>
             </div>
           </Col>
-          <Col xs={12} md={2} className="Cellpadding">
+          <Col xs={12} md={3} lg={2} className="Cellpadding">
             <RightSideBar2 />
           </Col>
         </Row>

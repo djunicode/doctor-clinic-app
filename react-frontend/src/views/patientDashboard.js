@@ -71,7 +71,7 @@ const PatientDashboard = () => {
                         defaultValue="2017-05-24T10:30"
                         style={{width: 200}}
                     /></div>
-                    <Button variant="contained" style={{backgroundColor: "#DC143C", color: 'white', margin: 20}}>
+                    <Button variant="contained" style={{backgroundColor: "#cf6a6a", color: 'white', margin: 20}}>
                         REQUEST
                     </Button>
                     <br />
@@ -79,12 +79,12 @@ const PatientDashboard = () => {
                     <br />
                     <br />
                     <div>
-                    <Button variant="contained" style={{backgroundColor: "#DC143C", color: 'white', margin: 20,width: 200}}>
+                    <Button variant="contained" style={{backgroundColor: "#cf6a6a", color: 'white', margin: 20,width: 200}}>
                         VIEW REPORTS
                     </Button>
                     </div>
                     <div>
-                    <Button variant="contained" style={{backgroundColor: "#DC143C", color: 'white', margin: 10, width: 200}}>
+                    <Button variant="contained" style={{backgroundColor: "#cf6a6a", color: 'white', margin: 10, width: 200}}>
                         VIEW RECEIPTS
                     </Button>
                     </div>

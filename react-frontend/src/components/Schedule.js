@@ -19,13 +19,13 @@ export default class Schedule extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <div>loading...</div>;
-    }
+    // if (this.state.loading) {
+    //   return <div>loading...</div>;
+    // }
 
-    if (!this.state.person) {
-      return <div>didn't get a person</div>;
-    }
+    // if (!this.state.person) {
+    //   return <div>didn't get a person</div>;
+    // }
 
     return (
       <div class="ScheduleContainer ">

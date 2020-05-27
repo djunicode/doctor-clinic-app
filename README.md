@@ -40,14 +40,14 @@ Then just open the URL [localhost:8000](http://127.0.0.1:8000) to run the websit
   
   ## Technology Stack
   #### Backend
-  <ol>
-<li>Django</li>
-<li>Django REST Framework</li>
+<ol>
+  <li>Django</li>
+  <li>Django REST Framework</li>
 </ol>
-  #### Frontend
-  <ol>
-<li>React/li>
 
+  #### Frontend
+<ol>
+  <li>React</li>
 </ol>
 
   ### Developers

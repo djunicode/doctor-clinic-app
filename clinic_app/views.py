@@ -1,21 +1,19 @@
 import datetime
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework import permissions, status
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .forms import *
 from .models import *
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
 from .serializers import *
-from django.http import JsonResponse
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
-
-
-from rest_framework.response import Response
-from rest_framework import permissions
-from django.contrib.auth.forms import AuthenticationForm
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
-from rest_framework.decorators import api_view, permission_classes
 
 
 def token_generator(userinput):
@@ -188,7 +186,10 @@ def LoginUser(request):
             request, "register3.html", {"form": form3, "val": val, "status": "patient"}
         )
 
-
+'''
+Displays a list of current appointments and allows the patient to book a 
+non-clashing one
+'''
 def bookAppointment(request):
 
     current_calendar = Appointment.objects.order_by("-date")
@@ -253,3 +254,18 @@ def reports(request):
     else:
         form = ReportForm(request.POST, request.FILES)
     return render(request, "receipt.html", {"form": form})
+
+
+'''
+To display the doctor's dashboard which consists of
+his upcoming appointments with patients
+'''
+def doctorDashboard(request):
+    doctor_name = request.user
+    doctor_instance = Doctor.objects.get(username = doctor_name)
+    #appointments = Appointment.objects.all()
+    appointments = Appointment.objects.\
+        filter(doctor = doctor_instance).order_by("-start_time")
+    return render(request, "doctor_dashboard.html", {"doctor" : doctor_name, "current_calendar" : appointments})
+
+

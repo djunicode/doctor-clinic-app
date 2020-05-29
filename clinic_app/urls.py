@@ -22,4 +22,5 @@ urlpatterns = [
     path("book-appointment/", views.bookAppointment, name="bookAppointment"),
     path("createReceipt/", views.receipt, name="Receipt"),
     path("report/", views.reports, name="report"),
+    path('doctor/dashboard/', views.doctorDashboard, name = "doctorDashboard"),
 ]

@@ -5,9 +5,14 @@ import DoctorSignIn from "./views/DoctorSignIn";
 import PatientSignUp from "./views/PatientSignUp.js";
 import PatientDashboard from "./views/patientDashboard";
 import Home from "./views/Home.js";
+import Receptionist3 from "./views/receptionist3";
+import Receptionis1 from "./views/receptionis1";
+import Receptionist2 from "./views/receptionist2";
+import patientprofile from "./views/patientprofile";
+import Therapist1 from "./views/therapist1";
 import "./App.css";
 
-const App = () => {
+const App = () => { 
   return (
     <div className="App">
       <BrowserRouter>
@@ -16,6 +21,11 @@ const App = () => {
         <Route exact path="/patientsignup" component={PatientSignUp} />
         <Route exact path="/patientdashboard" component={PatientDashboard} />
         <Route exact path="/home" component={Home} />
+        <Route exact path="/receptionist1" component={Receptionis1} />
+        <Route exact path="/appointment" component={Receptionist2} />
+        <Route exact path="/addpatient" component={Receptionist3} />
+        <Route exact path="/profile" component={patientprofile} />
+        <Route exact path="/therapist1" component={Therapist1} />
       </BrowserRouter>
     </div>
   );

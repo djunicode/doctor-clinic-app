@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
+import Header from '../components/Header'
 import Cookies from 'js-cookie';
+import './doctorSignin.css'
 
 function DoctorSignIn() {
   const [username, setUsername] = useState("");
@@ -24,16 +25,6 @@ function DoctorSignIn() {
   const passhandler = e => {
     setPass(e.target.value);
   };
-  const useStyles = makeStyles(theme => ({
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(3)
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2)
-    }
-  }));
-  const classes = useStyles();
 
   const checkCredentials = async() => {
     setActivityIndicator(true);
@@ -57,75 +48,54 @@ function DoctorSignIn() {
 
   return (
     <div>
-    {activityIndicator ? <LinearProgress /> : null}
-    <Typography component="div" className="App">
-      <Typography component="h1" variant="h5">
-        <br></br>
-        <br></br>
-        Log In
-      </Typography>
-      <form className={classes.form} noValidate>
-        <Grid container spacing={2}>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              id="email"
-              label="username"
-              name="email"
-              autoComplete="email"
-              onChange={usernamehandler}
-              value={username}
-            />
-          </Grid>
-
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              name="password"
-              label="Pass"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={passhandler}
-            />
-          </Grid>
-          <Grid item xs={4}></Grid>
-
-          <Grid item xs={4}></Grid>
-          <Grid item xs={4}>
-            <Typography variant="centre">
-              <Button
-                
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={checkCredentials}
-              >
-                Sign In
-              </Button>
-              <Link to="/doctorsignup">
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  className={classes.submit}
-                >
-                  Sign Up
-                </Button>
-              </Link>
-            </Typography>
-          </Grid>
-        </Grid>
-      </form>
-    </Typography>
+      {activityIndicator ? <LinearProgress /> : null}
+      <Header />
+      <div style={{display: 'flex',justifyContent:'center', margin: 5, marginTop: 100}}>
+            <div className="innerContainer" style={{backgroundColor:'#CF6A6A'}}>
+                <div style={{backgroundColor:'#F5F5F5', borderRadius:15, margin: 20}}>
+                    <h1 style={{paddingTop:35}}>WELCOME!</h1>
+                    <form style={{paddingLeft: 20, paddingRight: 20}}>
+                      <Grid container style={{justifyContent:'center'}}>
+                        <div className="fields-inner-container">
+                          <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Username"
+                            name="email"
+                            autoComplete="email"
+                            className="fields"
+                            onChange={usernamehandler}
+                            value={username}
+                          /><br />
+                        </div>
+                        <div className="fields-inner-container">
+                          <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            className="fields"
+                            onChange={passhandler}
+                          /><br />
+                        </div>
+                      </Grid>
+                      <div>
+                        <Button type="submit" className="signInButton" style={{backgroundColor: '#CF6A6A', color: 'white', fontWeight: 'bold', fontSize: 17, borderRadius: 10}} variant="contained" onClick={checkCredentials}>LOGIN</Button>
+                        
+                      </div>
+                      <div style={{paddingBottom: 30}}>
+                        <p>Dont have an account? <Link style={{textDecoration: 'none', fontWeight:'bold', color: 'black'}} to="/doctorsignup">Sign Up</Link></p>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
   );
 }

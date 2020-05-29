@@ -6,8 +6,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { useHistory } from 'react-router-dom';
-import './doc.css';
+import Grid from '@material-ui/core/Grid';
+import Header from '../components/Header'
+import { useHistory, Link } from 'react-router-dom';
+import './doctorSignup.css';
 
 const DoctorSignup = (props) => {
     const [username,setUsername] = useState("")
@@ -61,100 +63,126 @@ const DoctorSignup = (props) => {
 
     return(
         <div className="bodyStyles">
+            <Header />
             {activityIndicator ? <LinearProgress /> : null}
-            <h1>DOCTOR-SIGNUP</h1>
-            <form>
-                <div className="fields-container">
-                    <TextField required className="fields" id="outlined-basic" label="Username" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/><br />
+            <div style={{display: 'flex',justifyContent:'center', margin: 5, marginTop: 100}}>
+                <div className="innerContainer" style={{backgroundColor:'#CF6A6A'}}>
+                    <div style={{backgroundColor:'#F5F5F5', borderRadius:15, margin: 20}}>
+                        <h1 style={{paddingTop:35}}>DOCTOR-SIGNUP</h1>
+                        <form style={{paddingLeft: 20, paddingRight: 20}}>
+                            <Grid container style={{justifyContent:'center'}}>
+                                <Grid className="fields-container" container item sm={6} xs={12} >
+                                    <div className="fields-inner-container">
+                                        <TextField required className="fields1" id="outlined-basic" label="Username" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/><br />
+                                    </div>
+                                </Grid>
+                                <Grid className="fields-container" container item sm={6} xs={12}>
+                                    <div className="fields-inner-container">
+                                        <TextField required type="email" className="fields1" id="outlined-basic" label="Email-ID" onChange={(event)=>setEmail(event.target.value)} variant="outlined"/><br />
+                                    </div>
+                                </Grid>
+                                <Grid className="fields-container" container item sm={6} xs={12}>
+                                    <div className="fields-inner-container">
+                                        <TextField required className="fields1" id="outlined-basic" label="Password" type="Password" onChange={(event)=>setPassword1(event.target.value)} variant="outlined" /><br />
+                                    </div>
+                                </Grid>
+                                <Grid className="fields-container" container item sm={6} xs={12}>
+                                    <div className="fields-inner-container">
+                                        <TextField required className="fields1" id="outlined-basic" label="Re-enter Password" type="Password" onChange={(event)=>setPassword2(event.target.value)} variant="outlined" /><br />
+                                    </div>
+                                </Grid>
+                                <Grid className="fields-container" container item sm={6} xs={12}>
+                                    <div className="fields-inner-container">
+                                        <FormControl variant="outlined" >
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                Qualification*
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-outlined-label"
+                                                className="fields1"
+                                                id="demo-simple-select-outlined"
+                                                onChange={(event)=>{setQualification(event.target.value)}}
+                                                labelWidth={120}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Select</em>
+                                                </MenuItem>
+                                                <MenuItem value={'MBBS'}>MBBS</MenuItem>
+                                                <MenuItem value={'BDS'}>BDS</MenuItem>
+                                                <MenuItem value={'BHMS'}>BHMS</MenuItem>
+                                                <MenuItem value={'DHMS'}>DHMS</MenuItem>
+                                                <MenuItem value={'BAMS'}>BAMS</MenuItem>
+                                                <MenuItem value={'BUMS'}>BUMS</MenuItem>
+                                                <MenuItem value={'BVSc & AH'}>{'BVSc & AH'}</MenuItem>
+                                                <MenuItem value={'B.Pharm.'}>B.Pharm</MenuItem>
+                                                <MenuItem value={'D.Pharm.'}>D.Pharm</MenuItem>
+                                                <MenuItem value={'BOT'}>BOT</MenuItem>
+                                                <MenuItem value={'BMLT'}>BMLT</MenuItem>
+                                                <MenuItem value={'BPT'}>BPT</MenuItem>
+                                                <MenuItem value={'B.Sc. Nursing'}>B.Sc. Nursing</MenuItem>
+                                                <MenuItem value={'BNYS'}>BNYS</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </Grid>
+                                <Grid className="fields-container" container item sm={6} xs={12}>
+                                    <div className="fields-inner-container">
+                                        <FormControl variant="outlined" >
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                Postgraduation*
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-outlined-label"
+                                                className="fields1"
+                                                id="demo-simple-select-outlined"
+                                                onChange={(event)=>{setPostgraduation(event.target.value)}}
+                                                labelWidth={120}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Select</em>
+                                                </MenuItem>
+                                                <MenuItem value={'None'}>None</MenuItem>
+                                                <MenuItem value={'MD'}>MD</MenuItem>
+                                                <MenuItem value={'MS'}>MS</MenuItem>
+                                                <MenuItem value={'Diploma'}>Diploma</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </Grid>
+                                <Grid className="fields-container" container item sm={6} xs={12}>
+                                    <div className="fields-inner-container">
+                                        <FormControl variant="outlined" >
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                Speciality*
+                                            </InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-outlined-label"
+                                                className="fields1"
+                                                id="demo-simple-select-outlined"
+                                                onChange={(event)=>{setSpeciality(event.target.value)}}
+                                                labelWidth={120}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Select</em>
+                                                </MenuItem>
+                                                <MenuItem value={'None'}>None</MenuItem>
+                                                <MenuItem value={'DM'}>DM</MenuItem>
+                                                <MenuItem value={'MCh'}>MCh</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <div>
+                                <Button type="submit" className="signUpButton" style={{backgroundColor: '#CF6A6A', color: 'white', fontWeight: 'bold', fontSize: 17, borderRadius: 10}} variant="contained" onClick={(e)=>signUp(e)}>SIGN UP</Button>
+                            </div>
+                            <div style={{paddingBottom: 30}}>
+                                <p>Already Registered? <Link style={{textDecoration: 'none', fontWeight:'bold', color: 'black'}} to="/">Login</Link></p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div className="fields-container">
-                    <TextField required type="email" className="fields" id="outlined-basic" label="Email-ID" onChange={(event)=>setEmail(event.target.value)} variant="outlined"/><br />
-                </div>
-                <div className="fields-container">
-                    <TextField required className="fields" id="outlined-basic" label="Password" type="Password" onChange={(event)=>setPassword1(event.target.value)} variant="outlined" /><br />
-                </div>
-                <div className="fields-container">
-                    <TextField required className="fields" id="outlined-basic" label="Re-enter Password" type="Password" onChange={(event)=>setPassword2(event.target.value)} variant="outlined" /><br />
-                </div>
-                <div className="fields-container">
-                <FormControl variant="outlined" >
-                    <InputLabel id="demo-simple-select-outlined-label">
-                        Qualification*
-                    </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        className="fields"
-                        id="demo-simple-select-outlined"
-                        onChange={(event)=>{setQualification(event.target.value)}}
-                        labelWidth={120}
-                    >
-                        <MenuItem value="">
-                            <em>Select</em>
-                        </MenuItem>
-                        <MenuItem value={'MBBS'}>MBBS</MenuItem>
-                        <MenuItem value={'BDS'}>BDS</MenuItem>
-                        <MenuItem value={'BHMS'}>BHMS</MenuItem>
-                        <MenuItem value={'DHMS'}>DHMS</MenuItem>
-                        <MenuItem value={'BAMS'}>BAMS</MenuItem>
-                        <MenuItem value={'BUMS'}>BUMS</MenuItem>
-                        <MenuItem value={'BVSc & AH'}>{'BVSc & AH'}</MenuItem>
-                        <MenuItem value={'B.Pharm.'}>B.Pharm</MenuItem>
-                        <MenuItem value={'D.Pharm.'}>D.Pharm</MenuItem>
-                        <MenuItem value={'BOT'}>BOT</MenuItem>
-                        <MenuItem value={'BMLT'}>BMLT</MenuItem>
-                        <MenuItem value={'BPT'}>BPT</MenuItem>
-                        <MenuItem value={'B.Sc. Nursing'}>B.Sc. Nursing</MenuItem>
-                        <MenuItem value={'BNYS'}>BNYS</MenuItem>
-                    </Select>
-                </FormControl>
-                </div>
-                <div className="fields-container">
-                <FormControl variant="outlined" >
-                    <InputLabel id="demo-simple-select-outlined-label">
-                        Postgraduation*
-                    </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        className="fields"
-                        id="demo-simple-select-outlined"
-                        onChange={(event)=>{setPostgraduation(event.target.value)}}
-                        labelWidth={120}
-                    >
-                        <MenuItem value="">
-                            <em>Select</em>
-                        </MenuItem>
-                        <MenuItem value={'None'}>None</MenuItem>
-                        <MenuItem value={'MD'}>MD</MenuItem>
-                        <MenuItem value={'MS'}>MS</MenuItem>
-                        <MenuItem value={'Diploma'}>Diploma</MenuItem>
-                    </Select>
-                </FormControl>
-                </div>
-                <div className="fields-container">
-                <FormControl variant="outlined" >
-                    <InputLabel id="demo-simple-select-outlined-label">
-                        Speciality*
-                    </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        className="fields"
-                        id="demo-simple-select-outlined"
-                        onChange={(event)=>{setSpeciality(event.target.value)}}
-                        labelWidth={120}
-                    >
-                        <MenuItem value="">
-                            <em>Select</em>
-                        </MenuItem>
-                        <MenuItem value={'None'}>None</MenuItem>
-                        <MenuItem value={'DM'}>DM</MenuItem>
-                        <MenuItem value={'MCh'}>MCh</MenuItem>
-                    </Select>
-                </FormControl>
-                </div>
-                <div className="signUpContainer">
-                    <Button type="submit" className="signUpButton" variant="contained" color="primary" onClick={(e)=>signUp(e)}>SIGN UP</Button>
-                </div>
-        </form>
+            </div>
         </div>
     )
 }

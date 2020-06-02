@@ -77,9 +77,9 @@ class Patient(models.Model):
 
 
 class Appointment(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, related_name="doc", on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    type = models.CharField(max_length=50)  # not sure what is this
+    type_of = models.CharField(max_length=50)  # not sure what is this
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()

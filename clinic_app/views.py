@@ -216,7 +216,7 @@ def bookAppointment(request):
             appointment.save()
 
             return redirect(
-                "book-appointment"
+                "bookAppointment"
             )  # gotta decide where to redirect after booking appointment
     else:
         form = AppointmentForm()

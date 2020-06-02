@@ -85,4 +85,4 @@ class PatientForm(forms.ModelForm):
 class AppointmentForm(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ["doctor", "patient", "type", "date", "start_time", "end_time"]
+        fields = ["doctor", "patient", "type_of", "date", "start_time", "end_time"]

@@ -12,6 +12,7 @@ class CustomUserAdmin(UserAdmin):
         "last_login",
         "is_superuser",
         "is_staff",
+        "id",
     )
     search_fields = (
         "email",

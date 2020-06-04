@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-
+from pprint import pprint
 
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -29,6 +29,7 @@ def token_generator(userinput):
 def register(request):
     form = CustomUserCreationForm(request.POST)
     form2 = DoctorForm(request.POST)
+    print(request.POST)
     if form.is_valid():
         new_user = form.save()
 
@@ -64,7 +65,7 @@ def register(request):
         #     val.save()
         #     return redirect('/patRegister/{}'.format(val.username),{'val':val,'status':'patient'})
     else:
-
+        pprint(form2.errors.get_json_data())
         return render(request, "register.html", {"form": form, "form2": form2})
 
 
@@ -106,6 +107,7 @@ def patRegister(request, name):
         p.username = val
         p.DOB = form3.cleaned_data["dob"]
         p.save()
+
         return JsonResponse({"success:": "Successfully created new Patient"})
     else:
         print("in else patient")
@@ -212,6 +214,8 @@ def bookAppointment(request):
             and len(appointments_in_range_for_doctor) == 0
             and len(appointments_in_range_for_patient) == 0
         ):
+
+            print(form.data)
             appointment = form.save(commit=False)
             appointment.save()
 

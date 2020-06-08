@@ -62,6 +62,8 @@ class Doctor(models.Model):
     speciality = models.CharField(
         max_length=50, choices=Specialization, default=None, null=True
     )
+    daily_start_time=models.TimeField(null=True,blank=True)
+    daily_end_time=models.TimeField(null=True,blank=True)
 
     def __str__(self):
         return self.username.username
@@ -105,3 +107,9 @@ class Receipt(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     price = models.IntegerField()
+
+
+class IndivdualDoctorQueue(models.Model):
+
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    queue = models.ManyToManyField(Appointment)

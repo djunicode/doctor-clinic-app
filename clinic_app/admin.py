@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Doctor, Patient, Appointment, Report, CustomUser
+from .models import (
+    Doctor,
+    Patient,
+    Appointment,
+    Report,
+    CustomUser,
+    IndivdualDoctorQueue,
+)
 from django.contrib.auth.admin import UserAdmin
 from .forms import *
 
@@ -26,6 +33,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 # Register your models here.
-app_models = [Doctor, Patient, Appointment, Report]
+app_models = [Doctor, Patient, Appointment, Report, IndivdualDoctorQueue]
 admin.site.register(app_models)
 admin.site.register(CustomUser, CustomUserAdmin)

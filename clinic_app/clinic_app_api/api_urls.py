@@ -8,4 +8,5 @@ urlpatterns = [
     path("patregister/", PatientRegisterView.as_view(), name="PatientRegister"),
     path("test/", docview.as_view()),
     path("patientdetails/", PatientView.as_view(), name="dash"),
+    path("newAppointment/",AppointmentScheduler.as_view(),name="new")
 ]

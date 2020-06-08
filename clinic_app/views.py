@@ -257,3 +257,15 @@ def reports(request):
     else:
         form = ReportForm(request.POST, request.FILES)
     return render(request, "receipt.html", {"form": form})
+
+
+def scheduleAppointments(request):
+
+    doc = Doctor.objects.get(username=CustomUser.objects.get(username="avon"))
+    schedule = IndivdualDoctorQueue.objects.filter(doctor=doc)
+    token = []
+    count = 1
+    for i in schedule[0].queue.all():
+        token.append({"name": i.patient.username.username, "token_Number": len(token)})
+        count += 1
+    return HttpResponse(token)

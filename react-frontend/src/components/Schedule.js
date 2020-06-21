@@ -44,7 +44,7 @@ export default class Schedule extends React.Component {
 
   getTherapistData = async(docID, date) => {
     document.getElementById('confirm').disabled = false
-    alert(docID)
+    // alert(docID)
     const url = `http://localhost:8000/api/newAppointment?id=${docID}&date=${date}`
     const response = await fetch(url)
     const data = await response.json()

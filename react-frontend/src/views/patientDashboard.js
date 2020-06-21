@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Header from '../components/Header';
+import Modal from '@material-ui/core/Modal';
+import { makeStyles } from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
 // import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -11,12 +14,75 @@ import {
 } from '@material-ui/pickers';
 import './doctorSignup.css'
 
-const PatientDashboard = () => {
+const PatientDashboard = (props) => {
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+    const [open, setOpen] = useState(false)
+    const [details, setDetails] = useState()
+    const [modalContent, setModalContent] = React.useState("Reports")
+    console.log(new URLSearchParams(props.location.search).get("id"))
+    useEffect(() => {
+        init()
+    },[])
+
+    // const init = async() => {
+    //     const response = await localStorage.getItem('doctorClinicAppData')
+    //     // const details = await response.json()
+    //     let details = JSON.parse(response)
+    //     // console.log(details.id)
+    // }
 
     const handleDateChange = date => {
       setSelectedDate(date);
     };
+
+    const init = async() => {
+        const token = await JSON.parse(localStorage.getItem('doctorClinicAppData')).token
+        const response = await fetch("http://localhost:8000/api/patientdetails?id="+new URLSearchParams(props.location.search).get("id"),{
+            headers: {
+                'Authorization': token
+            }
+        })
+        const details = await response.json()
+        console.log(details)
+        setDetails(details)
+    }
+      
+    const useStyles = makeStyles((theme) => ({
+        paper: {
+            position: 'absolute',
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+        },
+    }));
+
+      const classes = useStyles();
+
+        const body = (
+            modalContent === "Reports" ? <div style={{
+                top: '40%',
+                left: '7.5%',
+                width: '85%'
+            }} className={classes.paper}>
+                <ClearIcon onClick={() => setOpen(false)} style={{position: 'absolute', right: 10, top: 10, cursor: 'pointer'}} />
+                <h2 id="simple-modal-title">Reports</h2>
+                <p id="simple-modal-description">
+                    Reports
+                </p>
+          </div> :
+            <div style={{
+                top: '40%',
+                left: '7.5%',
+                width: '85%'
+            }} className={classes.paper}>
+                <ClearIcon onClick={() => setOpen(false)} style={{position: 'absolute', right: 10, top: 10, cursor: 'pointer'}} />
+                <h2 id="simple-modal-title">Receipts</h2>
+                <p id="simple-modal-description">
+                    Receipts
+                </p>
+            </div>
+          );
+    // )
 
     return(
         <div >
@@ -39,21 +105,22 @@ const PatientDashboard = () => {
                                 <p style={{fontSize: 23}}>DOCTOR NAME</p>
                                 <br />
                                 <div className="patientDetails">
+                                    {details ? <>
                                     <div style={{margin: 25}}>
-                                        <p style={{fontSize: 20}}>Details</p>
+                                        <p style={{fontSize: 20}}>Patient: {details[0].username}</p>
+                                    </div>
+                                    <div style={{margin: 25}}>
+                                        <p style={{fontSize: 20}}>Doctor: {details[0].doctor}</p>
+                                    </div>
+                                    <div style={{margin: 25}}>
+                                        <p style={{fontSize: 20}}>Date of Birth: {details[0].DOB}</p>
                                     </div>
                                     <div style={{margin: 25}}>
                                         <p style={{fontSize: 20}}>Details</p>
                                     </div>
                                     <div style={{margin: 25}}>
                                         <p style={{fontSize: 20}}>Details</p>
-                                    </div>
-                                    <div style={{margin: 25}}>
-                                        <p style={{fontSize: 20}}>Details</p>
-                                    </div>
-                                    <div style={{margin: 25}}>
-                                        <p style={{fontSize: 20}}>Details</p>
-                                    </div>
+                                    </div> </> : <p>Loading...</p>}
                                 </div>
                             </Grid>
                         </Grid>
@@ -79,15 +146,29 @@ const PatientDashboard = () => {
                     <br />
                     <br />
                     <div>
-                    <Button variant="contained" style={{backgroundColor: "#cf6a6a", color: 'white', margin: 20,width: 200}}>
+                    <Button variant="contained" onClick={() => {
+                        setModalContent("Reports")
+                        setOpen(true)
+                    }}style={{backgroundColor: "#cf6a6a", color: 'white', margin: 20,width: 200}}>
                         VIEW REPORTS
                     </Button>
                     </div>
                     <div>
-                    <Button variant="contained" style={{backgroundColor: "#cf6a6a", color: 'white', margin: 10, width: 200}}>
+                    <Button variant="contained" onClick={() => {
+                        setModalContent("Receipts");
+                        setOpen(true)
+                    }} style={{backgroundColor: "#cf6a6a", color: 'white', margin: 10, width: 200}}>
                         VIEW RECEIPTS
                     </Button>
                     </div>
+                    <Modal
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                    >
+                        {body}
+                    </Modal>
                 </div>
             </Grid>
         </Grid>

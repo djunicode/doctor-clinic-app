@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 
 class LeftSideBarTherapist extends Component {
+  constructor(props){
+    super(props)
+  }
+
   render() {
     return (
       <div className="LeftContainer">
@@ -11,8 +15,8 @@ class LeftSideBarTherapist extends Component {
           ></img>
           <br></br>
           <br></br>
-          <p>Name Of Therapist</p>
-          <p>Qualification</p>
+          <p>{this.props.doctor.username}</p>
+          <p>{this.props.doctor.qualification}</p>
         </div>
       </div>
     );

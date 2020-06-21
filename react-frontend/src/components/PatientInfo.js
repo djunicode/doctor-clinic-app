@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button";
 
 class PatientInfo extends Component {
@@ -11,9 +12,11 @@ class PatientInfo extends Component {
           <p>{this.props.dname}</p>
           <p>{this.props.desc}</p>
           <br></br>
-          <Button variant="contained" color="secondary" className="defred">
-            Profile
-          </Button>
+          <Link to={`/patientdashboard?id=${this.props.id}`}>
+            <Button variant="contained" color="secondary" className="defred">
+              Profile
+            </Button>
+          </Link>
         </div>
       </div>
     );

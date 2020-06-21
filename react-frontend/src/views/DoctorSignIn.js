@@ -6,7 +6,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
 import Header from '../components/Header'
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import './doctorSignin.css'
 
 function DoctorSignIn() {
@@ -26,7 +26,8 @@ function DoctorSignIn() {
     setPass(e.target.value);
   };
 
-  const checkCredentials = async() => {
+  const checkCredentials = async(e) => {
+    e.preventDefault()
     setActivityIndicator(true);
     const res = await fetch("http://localhost:8000/login/",{
       method: 'POST',
@@ -42,16 +43,17 @@ function DoctorSignIn() {
     })
     const resData = await res.json()
     console.log(resData)
-    localStorage.setItem('doctorClinicAppToken', resData.token)
-    history.push('/home')
+    localStorage.setItem('doctorClinicAppData', JSON.stringify(resData))
+    // localStorage.setItem('doctorClinicAppPatientId', resData.token)
+    history.replace('/receptionist1')
   };
 
   return (
     <div>
-      {activityIndicator ? <LinearProgress /> : null}
       <Header />
+      {activityIndicator ? <LinearProgress style={{position: 'fixed', top: 60, width: '100%'}} /> : null}
       <div style={{display: 'flex',justifyContent:'center', margin: 5, marginTop: 100}}>
-            <div className="innerContainer" style={{backgroundColor:'#CF6A6A'}}>
+            <div className="innerContainer" style={{backgroundColor:'#CF6A6A', justifySelf:'center'}}>
                 <div style={{backgroundColor:'#F5F5F5', borderRadius:15, margin: 20}}>
                     <h1 style={{paddingTop:35}}>WELCOME!</h1>
                     <form style={{paddingLeft: 20, paddingRight: 20}}>
@@ -86,7 +88,7 @@ function DoctorSignIn() {
                         </div>
                       </Grid>
                       <div>
-                        <Button type="submit" className="signInButton" style={{backgroundColor: '#CF6A6A', color: 'white', fontWeight: 'bold', fontSize: 17, borderRadius: 10}} variant="contained" onClick={checkCredentials}>LOGIN</Button>
+                        <Button type="submit" className="signInButton" style={{backgroundColor: '#CF6A6A', color: 'white', fontWeight: 'bold', fontSize: 17, borderRadius: 10}} variant="contained" onClick={(e) => checkCredentials(e)}>LOGIN</Button>
                         
                       </div>
                       <div style={{paddingBottom: 30}}>

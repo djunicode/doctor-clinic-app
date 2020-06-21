@@ -20,7 +20,7 @@ class LeftSideBar extends Component {
         <br></br>
         <br></br>
         <Button variant="contained" className={this.props.className1}>
-          <Link style={{ color: "black" }} to="/appoinment">
+          <Link style={{ color: "black" }} to="/appointment">
             Appointments
           </Link>
         </Button>

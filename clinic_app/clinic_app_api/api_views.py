@@ -120,15 +120,15 @@ class AppointmentScheduler(APIView):
         appointments_in_range_for_doctor = Appointment.objects.filter(
             date=request.POST["date"],
             doctor=request.POST["doctor"],
-            start_time__lte=request.POST["end_time"],
-            end_time__gte=request.POST["start_time"],
+            start_time__lt=request.POST["end_time"],
+            end_time__gt=request.POST["start_time"],
         )
 
         appointments_in_range_for_patient = Appointment.objects.filter(
             date=request.POST["date"],
             patient=request.POST["patient"],
-            start_time__lte=request.POST["end_time"],
-            end_time__gte=request.POST["start_time"],
+            start_time__lt=request.POST["end_time"],
+            end_time__gt=request.POST["start_time"],
         )
         print(serializer.is_valid())
         if (
@@ -143,3 +143,9 @@ class AppointmentScheduler(APIView):
             return Response({"Not posssible": "This slot is not available"})
 
         return Response(serializer.errors)
+
+
+class PatientList(APIView):
+    def get(self,request):
+        val=PatientSerializer(Patient.objects.all(),many=True)
+        return Response(val.data)

@@ -57,6 +57,8 @@ class AppointmentSerializer2(serializers.ModelSerializer):
 
 
 class DocSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="username.username")
+    
     class Meta:
 
         model = Doctor

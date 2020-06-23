@@ -21,7 +21,6 @@ function Receptionist2() {
     const response = await fetch('http://localhost:8000/api/appointments/')
     const resp = await response.json()
     console.log(resp)
-    // setAppointments(resp.appointments)
   }
 
   return (
@@ -35,14 +34,8 @@ function Receptionist2() {
           <Col xs={12} md={4} className="Cellpadding">
             <div id="div1">
               <Row>
-                {/* <Col xs={12} md={6} className="Cellpadding">
-                  <br></br>
-                  <Requests />
-                </Col> */}
-                {/* <Col xs={12} md={6} className="Cellpadding"> */}
                   <br></br>
                   <Schedule />
-                {/* </Col> */}
               </Row>
             </div>
           </Col>
@@ -57,7 +50,6 @@ function Receptionist2() {
                 docname={appointment.doctor}
               />
             ))}
-            
           </Col>
         </Row>
       </Container>

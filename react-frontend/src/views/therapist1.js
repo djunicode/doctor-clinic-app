@@ -22,19 +22,6 @@ function Therapist1(props) {
     const data = await response.json()
     console.log(data)
     setData(data)
-    // if(data.patients.length===0){
-    //   toast.error('No slots available', {
-    //     position: "top-center",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-    // }else{
-    //   this.availableSlots(data.doctor[0],data.patients)
-    // }
   }
 
   return (

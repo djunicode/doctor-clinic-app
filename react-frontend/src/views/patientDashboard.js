@@ -6,7 +6,6 @@ import Header from '../components/Header';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
-// import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -23,13 +22,6 @@ const PatientDashboard = (props) => {
     useEffect(() => {
         init()
     },[])
-
-    // const init = async() => {
-    //     const response = await localStorage.getItem('doctorClinicAppData')
-    //     // const details = await response.json()
-    //     let details = JSON.parse(response)
-    //     // console.log(details.id)
-    // }
 
     const handleDateChange = date => {
       setSelectedDate(date);

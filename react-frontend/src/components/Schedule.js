@@ -26,30 +26,25 @@ export default class Schedule extends React.Component {
   static contextType = Context
 
   async componentDidMount() {
-    // this.createHalfHourIntervals("06:30:00", null)
-    // const url = "http://127.0.0.1:8000/book-appointment/";
-    let arr = ["2020-11-11"]
+    let arr = []
     for(let i=0;i<7;i++){
       arr.push((new Date().getYear()+1900)+'-'+(new Date().getMonth()+1)+'-'+(new Date().getDate()+i))
     }
-    // console.log(arr)
     console.log(this.context)
     this.setState({dates: arr, loading: false})
-    // const url = "http://localhost:8000/api/test/";
-    // const response = await fetch(url);
-    // const data = await response.json();
-    // console.log(data);
-    // this.setState({  });
   }
 
   getTherapistData = async(docID, date) => {
     document.getElementById('confirm').disabled = false
-    // alert(docID)
     const url = `http://localhost:8000/api/newAppointment?id=${docID}&date=${date}`
     const response = await fetch(url)
     const data = await response.json()
     console.log(data)
-    if(data.patients.length===0){
+    this.availableSlots(data.doctor[0],data.patients)
+  }
+  
+  availableSlots(doctorData, patientData){
+    if(patientData.length === parseInt(doctorData.daily_end_time.slice(0,2)) - parseInt(doctorData.daily_start_time.slice(0,2))) {
       toast.error('No slots available', {
         position: "top-center",
         autoClose: 5000,
@@ -59,43 +54,38 @@ export default class Schedule extends React.Component {
         draggable: true,
         progress: undefined,
       });
-    }else{
-      this.availableSlots(data.doctor[0],data.patients)
     }
-  }
-  
-  availableSlots(doctorData, patientData){
-    let abc = patientData.map((x)=>{
-      return x.start_time
-    })
-    let array = []
-    let current = doctorData.daily_start_time
-    array.push(current)
-    let flag = true
-    if(current.split(":")[1]==="30"){
-      flag = false
-    }
-    while(doctorData.daily_end_time!==current){
-      if(flag){
-        let temp = current.split(":")
-        current = temp[0] + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2]
-        array.push(current)
+    else{
+      let abc = patientData.map((x)=>{
+        return x.start_time
+      })
+      let array = []
+      let current = doctorData.daily_start_time
+      array.push(current)
+      let flag = true
+      if(current.split(":")[1]==="30"){
+        flag = false
       }
-      else{
-        let temp1 = current.split(":")
-        current = (parseInt(temp1[0]) + 1) + ":" + "00" + ":" + temp1[2]
-        array.push(current)
+      while(doctorData.daily_end_time!==current){
+        if(flag){
+          let temp = current.split(":")
+          current = temp[0] + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2]
+          array.push(current)
+        }
+        else{
+          let temp1 = current.split(":")
+          current = (parseInt(temp1[0]) + 1) + ":" + "00" + ":" + temp1[2]
+          array.push(current)
+        }
+        flag = !flag
       }
-      flag = !flag
+      array.pop()
+      let slots = array.filter((element) => {
+        return !abc.includes(element);
+      });
+      console.log(slots)
+      this.setState({ slots })
     }
-    array.pop()
-    // console.log(abc)
-    // console.log(array)
-    let slots = array.filter((element) => {
-      return !abc.includes(element);
-    });
-    console.log(slots)
-    this.setState({ slots })
   }
 
   confirmAppointment = () => {
@@ -105,7 +95,6 @@ export default class Schedule extends React.Component {
     formdata.append("type_of", this.state.selectedType)
     formdata.append("start_time", this.state.selectedSlot)
     formdata.append("date", this.state.selectedDate)
-    // console.log(this.state.selectedDate)
     if(this.state.selectedSlot.split(":")[1]==="00"){
       let temp = this.state.selectedSlot.split(":")
       let end_time = temp[0] + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2]
@@ -123,7 +112,6 @@ export default class Schedule extends React.Component {
       return res.json()
     }).then((response)=>{
       console.log(response)
-      // if(response.)
       let temp = this.state.slots
       let index = temp.findIndex(slot => slot===this.state.selectedSlot)
       console.log(index)
@@ -146,18 +134,9 @@ export default class Schedule extends React.Component {
     }).catch((err)=>{
       console.log(err)
     })
-    // document.getElementById('confirm').disabled = true
   }
 
   render() {
-    // if (this.state.loading) {
-    //   return <div>loading...</div>;
-    // }
-
-    // if (!this.state.person) {
-    //   return <div>didn't get a person</div>;
-    // }
-
     return (
       <div class="ScheduleContainer ">
         <div className="MainPara">
@@ -191,9 +170,6 @@ export default class Schedule extends React.Component {
               }}
               onChange = {(e) => {
                 this.setState({selectedDoctor: e.target.textContent.split(": ")[0]})
-                // if(this.state.selectedDate!==null && this.state.selectedDoctor!==null){
-                //   this.getTherapistData(parseInt(this.state.selectedDoctor), this.state.selectedDate)
-                // }
               }}
             />}
             <br></br>
@@ -224,9 +200,6 @@ export default class Schedule extends React.Component {
                 )}
                 onChange = {(e) => {
                   this.setState({selectedDate: e.target.textContent})
-                  // if(this.state.selectedDate!==null && this.state.selectedDoctor!==null){
-                  //   this.getTherapistData(parseInt(this.state.selectedDoctor), e.target.textContent)
-                  // }
                 }}
               />
             </div>

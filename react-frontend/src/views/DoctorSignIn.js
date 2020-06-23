@@ -6,19 +6,13 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
 import Header from '../components/Header'
-// import Cookies from 'js-cookie';
 import './doctorSignin.css'
 
 function DoctorSignIn() {
   const [username, setUsername] = useState("");
   const [Pass, setPass] = useState("");
   const history = useHistory();
-  //const [token,setToken] = useState();
   const [activityIndicator,setActivityIndicator] = useState(false)
-  useEffect(()=>{
-        // setToken(Cookies.get('csrftoken'))
-    // console.log(Cookies.get('csrftoken'))
-  },[])
   const usernamehandler = e => {
     setUsername(e.target.value);
   };
@@ -32,9 +26,7 @@ function DoctorSignIn() {
     const res = await fetch("http://localhost:8000/login/",{
       method: 'POST',
       headers:{
-        'Content-Type': 'application/json',
-        //'Authorization': 'Token c0ddb0f680fdddac1d74c930c6722f6748b44e3a'
-        //'X-CSRftoken': token
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         username: username,
@@ -43,8 +35,12 @@ function DoctorSignIn() {
     })
     const resData = await res.json()
     console.log(resData)
-    localStorage.setItem('doctorClinicAppData', JSON.stringify(resData))
-    // localStorage.setItem('doctorClinicAppPatientId', resData.token)
+    try{
+      localStorage.setItem('doctorClinicAppData', JSON.stringify(resData))
+    }
+    catch(err){
+      console.log(err)
+    }
     history.replace('/receptionist1')
   };
 

@@ -34,7 +34,7 @@ function Receptionist2() {
           <Col xs={12} md={4} className="Cellpadding">
             <div id="div1">
               <Row>
-                  <br></br>
+                 
                   <Schedule />
               </Row>
             </div>

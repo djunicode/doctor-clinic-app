@@ -4,6 +4,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import './style.css'
 
 class Requests extends Component {
   render() {
@@ -24,7 +25,7 @@ class Requests extends Component {
         <br></br>
         <div className="MainPara">
           <br></br>
-          <span className="span1" style={{ textAlign: "left" }}>
+          <span className="span1" id="span1">
             Free slots of therapist:
           </span>
           <br></br>

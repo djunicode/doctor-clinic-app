@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
-import Header from '../components/Header'
+import Header from '../components/Header';
 import './doctorSignin.css'
 
 function DoctorSignIn() {
@@ -48,12 +48,12 @@ function DoctorSignIn() {
     <div>
       <Header />
       {activityIndicator ? <LinearProgress style={{position: 'fixed', top: 60, width: '100%'}} /> : null}
-      <div style={{display: 'flex',justifyContent:'center', margin: 5, marginTop: 100}}>
-            <div className="innerContainer" style={{backgroundColor:'#CF6A6A', justifySelf:'center'}}>
-                <div style={{backgroundColor:'#F5F5F5', borderRadius:15, margin: 20}}>
-                    <h1 style={{paddingTop:35}}>WELCOME!</h1>
-                    <form style={{paddingLeft: 20, paddingRight: 20}}>
-                      <Grid container style={{justifyContent:'center'}}>
+      <div className="outerContainer">
+            <div className="innerContainer">
+                <div className="innerField">
+                    <h1 className="welcome">WELCOME!</h1>
+                    <form className="form">
+                      <Grid container className="gridContainer">
                         <div className="fields-inner-container">
                           <TextField
                             variant="outlined"
@@ -66,7 +66,7 @@ function DoctorSignIn() {
                             className="fields"
                             onChange={usernamehandler}
                             value={username}
-                          /><br />
+                          />
                         </div>
                         <div className="fields-inner-container">
                           <TextField
@@ -80,15 +80,15 @@ function DoctorSignIn() {
                             autoComplete="current-password"
                             className="fields"
                             onChange={passhandler}
-                          /><br />
+                          />
                         </div>
                       </Grid>
                       <div>
-                        <Button type="submit" className="signInButton" style={{backgroundColor: '#CF6A6A', color: 'white', fontWeight: 'bold', fontSize: 17, borderRadius: 10}} variant="contained" onClick={(e) => checkCredentials(e)}>LOGIN</Button>
+                        <Button type="submit" className="signInButton" id="stylebutton"  variant="contained" onClick={(e) => checkCredentials(e)}>LOGIN</Button>
                         
                       </div>
                       <div style={{paddingBottom: 30}}>
-                        <p>Dont have an account? <Link style={{textDecoration: 'none', fontWeight:'bold', color: 'black'}} to="/doctorsignup">Sign Up</Link></p>
+                        <p>Dont have an account? <Link className="link" to="/doctorsignup">Sign Up</Link></p>
                       </div>
                     </form>
                 </div>

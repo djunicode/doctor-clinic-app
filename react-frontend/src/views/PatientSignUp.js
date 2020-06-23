@@ -8,7 +8,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import './doctorSignin.css'
+import './doctorSignin.css';
+import './patient.css';
 
 class PatientSignUp extends React.Component {
   state = {
@@ -38,21 +39,21 @@ class PatientSignUp extends React.Component {
       <div>
         <Header />
             {/* {activityIndicator ? <LinearProgress /> : null} */}
-            <div style={{display: 'flex',justifyContent:'center', margin: 5, marginTop: 100}}>
-                <div className="innerContainer" style={{backgroundColor:'#CF6A6A'}}>
-                    <div style={{backgroundColor:'#F5F5F5', borderRadius:15, margin: 20}}>
-                        <h1 style={{paddingTop:35}}>PATIENT-SIGNUP</h1>
-                        <form style={{paddingLeft: 20, paddingRight: 20}}>
-                            <Grid container style={{justifyContent:'center'}}>
+            <div className="outerContainer">
+                <div className="innerContainer">
+                    <div className="innerField">
+                        <h1 className="heading">PATIENT-SIGNUP</h1>
+                        <form className="form">
+                            <Grid container className="gridContainer">
                               <div className="fields-inner-container">
-                                  <TextField name="username" required className="fields" id="outlined-basic" label="Username" onChange={(event)=>this.setState({username: event.target.value})} variant="outlined"/><br />
+                                  <TextField name="username" required className="fields" id="outlined-basic" label="Username" onChange={(event)=>this.setState({username: event.target.value})} variant="outlined"/>
                               </div>
                               <div className="fields-inner-container">
-                                  <TextField name="DateOfBirth" required className="fields" id="outlined-basic" label="Email-ID" onChange={(event)=>this.setState({DateOfBirth: event.target.value})} variant="outlined"/><br />
+                                  <TextField name="DateOfBirth" required className="fields" id="outlined-basic" label="Email-ID" onChange={(event)=>this.setState({DateOfBirth: event.target.value})} variant="outlined"/>
                               </div>
                               <div className="fields-inner-container">
                                 <FormControl component="fieldset">
-                                  <FormLabel component="legend" style={{color: 'black', fontSize: 17.5, marginBottom: 8}}>Gender *</FormLabel>
+                                  <FormLabel component="legend" className="formlabel">Gender *</FormLabel>
                                   <RadioGroup row aria-label="position" name="gender" defaultValue="top" onChange={(event)=>this.setState({gender: event.target.value})}>
                                     <FormControlLabel
                                       value="Male"
@@ -76,10 +77,10 @@ class PatientSignUp extends React.Component {
                                 </FormControl>
                               </div>
                               <div className="fields-inner-container">
-                                  <TextField required className="fields" id="outlined-basic" label="Doctor Name" onChange={(event)=>this.setState({doctorname: event.target.value})} variant="outlined" /><br />
+                                  <TextField required className="fields" id="outlined-basic" label="Doctor Name" onChange={(event)=>this.setState({doctorname: event.target.value})} variant="outlined" />
                               </div>
                             </Grid>
-                            <div style={{paddingBottom: 30}}>
+                            <div className="already">
                                 <p>Already Registered? <Link style={{textDecoration: 'none', fontWeight:'bold', color: 'black'}} to="/">Login</Link></p>
                             </div>
                         </form>

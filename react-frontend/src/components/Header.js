@@ -4,7 +4,7 @@ import './header.css'
 
 const Header = () => {
     return(
-        <AppBar style={{backgroundColor: '#CF6A6A', position:'fixed'}}>
+        <AppBar id="header">
             <span className="brand"></span>
         </AppBar>
     )

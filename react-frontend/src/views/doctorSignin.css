@@ -1,5 +1,41 @@
+.outerContainer{
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 100px;
+}
 .innerContainer{
-    width: 600px !important
+    background-color:#CF6A6A;
+    justify-self: center;
+    width: 600px !important;
+
+}
+.innerField{
+    background-color: #F5F5F5;
+    border-radius: 15px;
+    margin: 20px;
+}
+.welcome{
+    padding-top: 35px;
+}
+.form{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.gridContainer{
+    justify-content: center;
+}
+#stylebutton{
+    background-color:#CF6A6A;
+    color: white;
+    font-weight: bold;
+    font-size: 17px;
+    border-radius: 10px;
+}
+.link{
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
 }
 .fields-container{
     justify-content: center;

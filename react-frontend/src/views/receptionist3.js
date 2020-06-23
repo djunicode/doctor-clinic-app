@@ -18,7 +18,7 @@ function Receptionist3() {
             <LeftSideBar className2="defred" />
           </Col>
           <Col xs={12} md={8} className="Cellpadding">
-            <br></br>
+            
             <MainBody2 />
           </Col>
           <Col xs={12} md={2} className="Cellpadding">

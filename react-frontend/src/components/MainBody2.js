@@ -6,6 +6,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
+import './style.css'
+
 
 const options = [
   { key: 1, text: "Dr.Asthana ", value: 1 },
@@ -85,7 +87,7 @@ const MainBody2 = (props) => {
     <div className="MainContainer">
       <h2>Add Patient</h2>
       <div className="formclass">
-        <form style={{ paddingLeft: 20, paddingRight: 20 }}>
+        <form className="form">
           <Grid container style={{ justifyContent: "center" }}>
             <Grid
               className="fields-container"

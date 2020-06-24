@@ -9,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Header from "../components/Header";
 
 function Receptionist2() {
   const [appointments, setAppointments] = useState([])
@@ -24,17 +25,16 @@ function Receptionist2() {
   }
 
   return (
-    <div className="App">
-      <Container fluid className="ContainerPadding">
-        <Nav />
-        <Row>
+    <>
+      <Header />
+      <Container className="ContainerMargin" fluid>
+        <Row className="RowMarginAppointment">
           <Col xs={12} md={4} className="Cellpadding">
             <LeftSideBar className1="defred" />
           </Col>
           <Col xs={12} md={4} className="Cellpadding">
             <div id="div1">
               <Row>
-                 
                   <Schedule />
               </Row>
             </div>
@@ -53,7 +53,7 @@ function Receptionist2() {
           </Col>
         </Row>
       </Container>
-    </div>
+    </>
   );
 }
 

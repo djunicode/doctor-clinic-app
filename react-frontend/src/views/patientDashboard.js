@@ -130,7 +130,7 @@ const PatientDashboard = (props) => {
                         defaultValue="2017-05-24T10:30"
                         style={{width: 200}}
                     /></div>
-                    <Button variant="contained" style={{backgroundColor: "#cf6a6a", color: 'white', margin: 20}}>
+                    <Button variant="contained" className="RequestButton">
                         REQUEST
                     </Button>
                     <br />
@@ -141,7 +141,7 @@ const PatientDashboard = (props) => {
                     <Button variant="contained" onClick={() => {
                         setModalContent("Reports")
                         setOpen(true)
-                    }}style={{backgroundColor: "#cf6a6a", color: 'white', margin: 20,width: 200}}>
+                    }} className="ViewModal" style={{backgroundColor: "#cf6a6a", color: 'white'}}>
                         VIEW REPORTS
                     </Button>
                     </div>
@@ -149,7 +149,7 @@ const PatientDashboard = (props) => {
                     <Button variant="contained" onClick={() => {
                         setModalContent("Receipts");
                         setOpen(true)
-                    }} style={{backgroundColor: "#cf6a6a", color: 'white', margin: 10, width: 200}}>
+                    }} className="ViewModal" style={{backgroundColor: "#cf6a6a", color: 'white'}}>
                         VIEW RECEIPTS
                     </Button>
                     </div>

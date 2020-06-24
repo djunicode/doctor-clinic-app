@@ -192,9 +192,29 @@
   float: left;
   width: 100%;
 }
-.ContainerPadding {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+.ProgressBar{
+  position: 'fixed';
+   top: 60px; 
+   width: 100%
+}
+
+.RequestButton{
+  background-color: "#cf6a6a"; 
+  color: 'white'; 
+  margin: 20;
+}
+
+.ViewModal{
+  margin: 15px !important;
+  width: 200px !important;
+}
+
+.ContainerMargin{
+  padding-top: 70px;
+}
+.RowMarginAppointment {
+  margin-left: 0px;
+  margin-right: 0px;
 }
 .span1 {
   font-size: 25px;

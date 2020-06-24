@@ -47,7 +47,7 @@ function DoctorSignIn() {
   return (
     <div>
       <Header />
-      {activityIndicator ? <LinearProgress style={{position: 'fixed', top: 60, width: '100%'}} /> : null}
+      {activityIndicator ? <LinearProgress className="ProgressBar" /> : null}
       <div className="outerContainer">
             <div className="innerContainer">
                 <div className="innerField">

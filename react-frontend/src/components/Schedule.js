@@ -142,8 +142,6 @@ export default class Schedule extends React.Component {
         <div className="MainPara">
           <span className="span1">SCHEDULE APPOINTMENTS</span>
           <br></br>
-          <br></br>
-          <br></br>
           <div className="defgrey appointmentbox">
             <p>PATIENT:</p>
             {this.context.patients.length===0 ? <p>Loading Patients...</p> : <Autocomplete

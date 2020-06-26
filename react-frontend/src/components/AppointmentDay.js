@@ -20,7 +20,7 @@ class AppointmentDay extends Component {
           {this.props.patients.map((patient)=>(
             <div class="Patientcard">
               <div class="PatientNameTime ">
-                Patient Name: {patient.username} <br></br>Time: {patient.start_time}
+                <span id= "PatientName">Patient Name: {patient.username}</span>  <span>Time: {patient.start_time} </span>
               </div>
               <div class="Patientprofilebutton">
                 <Link to={"/patientdashboard?id="+patient.patient}>

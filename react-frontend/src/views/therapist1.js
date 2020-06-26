@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import Nav from "../components/nav";
+import Header from "../components/Header";
 import LeftSideBarTherapist from "../components/LeftSideBarTherapist";
 import AppointmentDay from "../components/AppointmentDay";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,9 +25,9 @@ function Therapist1(props) {
   }
 
   return (
-    <div className="App">
-      <Container fluid className="ContainerPadding">
-        <Nav />
+    <div>
+      <Header />
+      <Container fluid className="ContainerMargin">
         {data && 
           <Row>
             <Col xs={12} md={2} className="Cellpadding">

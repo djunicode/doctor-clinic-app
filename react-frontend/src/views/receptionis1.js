@@ -8,12 +8,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Header from "../components/Header";
+
 function Receptionist1() {
   return (
     <div className="App">
-      <Container fluid className="ContainerPadding">
-        <Nav />
-        <Row>
+      <Header />
+      <Container fluid className="ContainerMargin">
+        <Row className="RowMarginAppointment">
           <Col xs={12} md={3} lg={2} className="Cellpadding">
             <LeftSideBar className="defred" />
           </Col>

@@ -2,16 +2,22 @@ import React, {useState, createContext} from 'react'
 
 export const Context = createContext()
 
-// var patients = []
-// var doctors = []
+const INIT_STATE = {
+    doctors: [],
+    patients: []
+}
 
 const ContextProvider = (props) => {
-    const [doctors, setDoctors] = useState([])
-    const [patients, setPatients] = useState([])
+    const [clinicData, setClinicData] = useState(INIT_STATE)
 
     const init = async() => {
-        getAllDoctors()
-        getAllPatients()
+        const arrayOfPromises = [getAllDoctors(), getAllPatients()]
+        const responses = await Promise.all(arrayOfPromises)
+        console.log(responses);
+        setClinicData({
+            doctors: responses[0],
+            patients: responses[1]
+        })
     }
 
     const getAllDoctors = async() => {
@@ -19,7 +25,7 @@ const ContextProvider = (props) => {
         const response = await fetch(url);
         const data = await response.json();
         console.log(data);
-        setDoctors(data)
+        return data;
     }
 
     const getAllPatients = async() => {
@@ -27,11 +33,11 @@ const ContextProvider = (props) => {
         const response = await fetch(url);
         const data = await response.json();
         console.log(data);
-        setPatients(data)
+        return data;
     }
 
     return(
-        <Context.Provider value={{patients, doctors, init}}>
+        <Context.Provider value={{patients: clinicData.patients, doctors: clinicData.doctors, init}}>
             {props.children}
         </Context.Provider>
     )

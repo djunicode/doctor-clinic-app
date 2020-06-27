@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 
-class LeftSideBar extends Component {
+class RightSideBar2 extends Component {
   render() {
     return (
       <div className="LeftContainer">
@@ -15,21 +15,17 @@ class LeftSideBar extends Component {
           <br></br>
           <br></br>
         </div>
-        <Button variant="contained" color="Secondary" className="defred">
+        <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">
           Upload Reports
         </Button>
-        <br></br>
-        <br></br>
-        <Button variant="contained" color="Secondary" className="defred">
+        <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">
           Upload Reciepts
         </Button>
-        <br></br>
-        <br></br>
-        <Button variant="contained" color="Secondary" className="defred">
+        <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">
           Remove Patient
         </Button>
       </div>
     );
   }
 }
-export default LeftSideBar;
+export default RightSideBar2;

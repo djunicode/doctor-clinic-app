@@ -373,5 +373,8 @@
 }
 
 .margin_10 {
-  margin-top: 10%;
+  margin-top: 10% !important;
+}
+.margin_10_b{
+  margin-bottom: 10% !important;
 }

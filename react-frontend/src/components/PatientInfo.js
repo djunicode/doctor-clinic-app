@@ -11,12 +11,13 @@ class PatientInfo extends Component {
           <p>{this.props.name}</p>
           <p>{this.props.dname}</p>
           <p>{this.props.desc}</p>
-          <br></br>
-          <Link to={`/patientdashboard?id=${this.props.id}`}>
-            <Button variant="contained" color="secondary" className="defred">
-              Profile
+          <div className='margin_10'>
+            <Link to={`/patientdashboard?id=${this.props.id}`}>
+              <Button variant="contained" color="secondary" className="defred">
+                Profile
             </Button>
-          </Link>
+            </Link>
+          </div>
         </div>
       </div>
     );

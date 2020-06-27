@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PatientInfo from "./PatientInfo";
-import {Context} from '../context/Context'
+import { Context } from '../context/Context'
 
 class MainBody extends Component {
   static contextType = Context
@@ -15,17 +15,15 @@ class MainBody extends Component {
             placeholder="Search.."
             className="SearchBar"
           ></input>
-          <br></br>
-          <br></br>
-        </p>
-        {this.context.patients.map((patient)=>(
+        </p><p className="margin_10">{this.context.patients.map((patient) => (
           <PatientInfo
             name={patient.username}
             dname={patient.doctor}
             desc="description"
             id={patient.id}
           ></PatientInfo>
-        ))}
+        ))}</p>
+
       </div>
     );
   }

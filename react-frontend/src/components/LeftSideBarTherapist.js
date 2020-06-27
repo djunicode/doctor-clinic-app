@@ -13,9 +13,7 @@ class LeftSideBarTherapist extends Component {
             src="https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png"
             className="LImage"
           ></img>
-          <br></br>
-          <br></br>
-          <p>{this.props.doctor.username}</p>
+          <p className ="margin_10">{this.props.doctor.username}</p>
           <p>{this.props.doctor.qualification}</p>
         </div>
       </div>

@@ -25,16 +25,51 @@ export default class Schedule extends React.Component {
 
   static contextType = Context;
 
-  async componentDidMount() {
+  leapYr = () => {
+    let y = new Date().getYear()
+    if(y%400 === 0 || (y%100 !== 0 && y%4 === 0)){
+      return 29
+    }
+    return 28
+  }
+
+  daysInMonth = {
+    1: 31,
+    2: this.leapYr(),
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31 
+  }
+
+  componentDidMount() {
     let arr = [];
+    let dt = new Date() 
+    let y = dt.getYear() + 1900
+    let m = dt.getMonth() + 1
+    let d = dt.getDate()
     for (let i = 0; i < 7; i++) {
+      d += 1
+      if(d == this.daysInMonth[m] + 1) {
+        m += 1
+        d = 1
+        if(m==13){
+          m = 1
+          y += 1
+        }
+      }
       arr.push(
-        new Date().getYear() +
-          1900 +
-          "-" +
-          (new Date().getMonth() + 1) +
-          "-" +
-          (new Date().getDate() + i)
+        y +
+        "-" +
+        m +
+        "-" +
+        d
       );
     }
     console.log(this.context);

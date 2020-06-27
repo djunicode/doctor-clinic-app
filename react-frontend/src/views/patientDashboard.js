@@ -95,8 +95,7 @@ const PatientDashboard = (props) => {
                             <Grid item xs={12} sm={12} md={8}>
                                 <p style={{fontSize: 30}}>PATIENT NAME</p>
                                 <p style={{fontSize: 23}}>DOCTOR NAME</p>
-                                <br />
-                                <div className="patientDetails">
+                                <div className="patientDetails margin_10">
                                     {details ? <>
                                     <div style={{margin: 25}}>
                                         <p style={{fontSize: 20}}>Patient: {details[0].username}</p>
@@ -130,14 +129,10 @@ const PatientDashboard = (props) => {
                         defaultValue="2017-05-24T10:30"
                         style={{width: 200}}
                     /></div>
-                    <Button variant="contained" className="RequestButton">
+                    <Button variant="contained" className="RequestButton margin_10_b">
                         REQUEST
                     </Button>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <div>
+                    <div className="margin_10">
                     <Button variant="contained" onClick={() => {
                         setModalContent("Reports")
                         setOpen(true)

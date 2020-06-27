@@ -5,17 +5,7 @@ class RightSideBar2 extends Component {
   render() {
     return (
       <div className="LeftContainer">
-        <div>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-        </div>
-        <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">
+        <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b margin_30">
           Upload Reports
         </Button>
         <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">

@@ -97,7 +97,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -106,7 +106,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setFirstname(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -117,7 +116,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container  ">
                 <TextField
                   required
                   type="text"
@@ -127,7 +126,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setLastname(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -138,7 +136,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -148,7 +146,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setAge(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -159,7 +156,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -169,7 +166,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setCondition(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -190,7 +186,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setSymptom_since(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -241,7 +236,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setDate(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -262,7 +256,6 @@ const MainBody2 = (props) => {
                   type="Number"
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -283,7 +276,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setEmail(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -303,7 +295,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setHistory(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
           </Grid>

@@ -53,7 +53,7 @@ export default class Schedule extends React.Component {
     let dt = new Date() 
     let y = dt.getYear() + 1900
     let m = dt.getMonth() + 1
-    let d = dt.getDate()
+    let d = dt.getDate() - 1
     for (let i = 0; i < 7; i++) {
       d += 1
       if(d == this.daysInMonth[m] + 1) {

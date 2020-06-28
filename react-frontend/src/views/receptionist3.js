@@ -15,13 +15,13 @@ function Receptionist3() {
       <Header />
       <Container fluid className="ContainerMargin">
         <Row>
-          <Col xs={12} md={2} className="Cellpadding">
+          <Col xs={12}  lg={3} xl={2} className="Cellpadding">
             <LeftSideBar className2="defred" />
           </Col>
-          <Col xs={12} md={8} className="Cellpadding">
+          <Col xs={12}  lg={6} xl={8} className="Cellpadding">
             <MainBody2 />
           </Col>
-          <Col xs={12} md={2} className="Cellpadding">
+          <Col xs={12}  lg={3} xl={2} className="Cellpadding">
             <RightSideBar
               time="18:00"
               date="24-03-20"

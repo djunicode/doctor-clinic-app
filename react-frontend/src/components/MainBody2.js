@@ -181,56 +181,6 @@ const MainBody2 = (props) => {
                   required
                   className="fields1"
                   id="outlined-basic"
-                  label="Symptom Since"
-                  type="Text"
-                  onChange={(event) => setSymptom_since(event.target.value)}
-                  variant="outlined"
-                />
-              </div>
-            </Grid>
-            <Grid
-              className="fields-container"
-              container
-              item
-              lg={6}
-              sm={8}
-              xs={12}
-            >
-              <div className="fields-inner-container">
-                <FormControl variant="outlined">
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    Therapist
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    className="fields1"
-                    id="demo-simple-select-outlined"
-                    onChange={(event) => {
-                      setTherapist(event.target.value);
-                    }}
-                    labelWidth={120}
-                  >
-                    <MenuItem value="">
-                      <em>Select</em>
-                    </MenuItem>
-                    {menuoptions}
-                  </Select>
-                </FormControl>
-              </div>
-            </Grid>
-            <Grid
-              className="fields-container"
-              container
-              item
-              lg={6}
-              sm={8}
-              xs={12}
-            >
-              <div className="fields-inner-container">
-                <TextField
-                  required
-                  className="fields1"
-                  id="outlined-basic"
                   label="Date"
                   type="Text"
                   onChange={(event) => setDate(event.target.value)}

@@ -6,6 +6,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
+import './style.css'
+
 
 const options = [
   { key: 1, text: "Dr.Asthana ", value: 1 },
@@ -85,7 +87,7 @@ const MainBody2 = (props) => {
     <div className="MainContainer">
       <h2>Add Patient</h2>
       <div className="formclass">
-        <form style={{ paddingLeft: 20, paddingRight: 20 }}>
+        <form className="form">
           <Grid container style={{ justifyContent: "center" }}>
             <Grid
               className="fields-container"
@@ -95,7 +97,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -104,7 +106,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setFirstname(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -115,7 +116,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container  ">
                 <TextField
                   required
                   type="text"
@@ -125,7 +126,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setLastname(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -136,7 +136,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -146,7 +146,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setAge(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -157,7 +156,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -167,58 +166,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setCondition(event.target.value)}
                   variant="outlined"
                 />
-                <br />
-              </div>
-            </Grid>
-            <Grid
-              className="fields-container"
-              container
-              item
-              lg={6}
-              sm={8}
-              xs={12}
-            >
-              <div className="fields-inner-container">
-                <TextField
-                  required
-                  className="fields1"
-                  id="outlined-basic"
-                  label="Symptom Since"
-                  type="Text"
-                  onChange={(event) => setSymptom_since(event.target.value)}
-                  variant="outlined"
-                />
-                <br />
-              </div>
-            </Grid>
-            <Grid
-              className="fields-container"
-              container
-              item
-              lg={6}
-              sm={8}
-              xs={12}
-            >
-              <div className="fields-inner-container">
-                <FormControl variant="outlined">
-                  <InputLabel id="demo-simple-select-outlined-label">
-                    Therapist
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    className="fields1"
-                    id="demo-simple-select-outlined"
-                    onChange={(event) => {
-                      setTherapist(event.target.value);
-                    }}
-                    labelWidth={120}
-                  >
-                    <MenuItem value="">
-                      <em>Select</em>
-                    </MenuItem>
-                    {menuoptions}
-                  </Select>
-                </FormControl>
               </div>
             </Grid>
             <Grid
@@ -239,7 +186,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setDate(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -260,7 +206,6 @@ const MainBody2 = (props) => {
                   type="Number"
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -281,7 +226,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setEmail(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
             <Grid
@@ -301,7 +245,6 @@ const MainBody2 = (props) => {
                   onChange={(event) => setHistory(event.target.value)}
                   variant="outlined"
                 />
-                <br />
               </div>
             </Grid>
           </Grid>
@@ -328,49 +271,3 @@ const MainBody2 = (props) => {
   );
 };
 export default MainBody2;
-{
-  /* <Form>
-            <Form.Group widths="equal">
-              <Form.Input fluid label="First name" placeholder="First name" />
-              <Form.Input fluid label="Last name" placeholder="Last name" />
-            </Form.Group>
-            <Form.Group>
-              <Form.Input type="number" placeholder="Age" />
-            </Form.Group>
-            <Form.Group>
-              <Form.Input type="text" placeholder="Condition" />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Input type="text" placeholder="Symptons since" />
-            </Form.Group>
-
-            <Form.Group controlId="formGridState">
-              <Dropdown
-                clearable
-                options={options}
-                selection
-                placeholder="Therapists"
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Input type="text" placeholder="Date" />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Input type="text" placeholder="Phone" />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Input type="email" placeholder="Email Address" />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Input type="text" placeholder="History" />
-            </Form.Group>
-            <Button variant="contained" color="secondary" className="defred">
-              Confirm
-            </Button>
-          </Form> */
-}

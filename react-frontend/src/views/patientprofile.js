@@ -1,20 +1,21 @@
 import React from "react";
 import LeftSideBarTherapist from "../components/LeftSideBarTherapist";
-import Nav from "../components/nav.js";
+import Header from "../components/Header";
 import RightSideBar2 from "../components/RightSideBar2";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "@material-ui/core/Button";
 import Col from "react-bootstrap/Col";
+
 function patientprofile() {
   return (
-    <div className="App">
-      <Container fluid className="ContainerPadding">
-        <Nav />
+    <div>
+      <Header />
+      <Container fluid className="ContainerMargin">
         <Row>
-          <Col xs={12} md={3} lg={2} className="Cellpadding">
-            <LeftSideBarTherapist />
-          </Col>
+          {/* <Col xs={12} md={3} lg={2} className="Cellpadding">
+            {/* <LeftSideBarTherapist /> 
+          </Col> */}
           <Col xs={12} md={6} lg={8} className="Cellpadding patientprofilemain">
             <div className="ppmain">
               <img

@@ -65,30 +65,30 @@ const DoctorSignup = (props) => {
         <div className="bodyStyles">
             <Header />
             {activityIndicator ? <LinearProgress /> : null}
-            <div style={{display: 'flex',justifyContent:'center', margin: 5, marginTop: 100}}>
-                <div className="innerContainer" style={{backgroundColor:'#CF6A6A'}}>
-                    <div style={{backgroundColor:'#F5F5F5', borderRadius:15, margin: 20}}>
-                        <h1 style={{paddingTop:35}}>DOCTOR-SIGNUP</h1>
-                        <form style={{paddingLeft: 20, paddingRight: 20}}>
-                            <Grid container style={{justifyContent:'center'}}>
+            <div className="outerContainer">
+                <div className="innerContainer">
+                    <div className="innerField">
+                        <h1 className="heading">DOCTOR-SIGNUP</h1>
+                        <form className="form">
+                            <Grid container className="gridContainer">
                                 <Grid className="fields-container" container item sm={6} xs={12} >
                                     <div className="fields-inner-container">
-                                        <TextField required className="fields1" id="outlined-basic" label="Username" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/><br />
+                                        <TextField required className="fields1" id="outlined-basic" label="Username" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/>
                                     </div>
                                 </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12}>
                                     <div className="fields-inner-container">
-                                        <TextField required type="email" className="fields1" id="outlined-basic" label="Email-ID" onChange={(event)=>setEmail(event.target.value)} variant="outlined"/><br />
+                                        <TextField required type="email" className="fields1" id="outlined-basic" label="Email-ID" onChange={(event)=>setEmail(event.target.value)} variant="outlined"/>
                                     </div>
                                 </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12}>
                                     <div className="fields-inner-container">
-                                        <TextField required className="fields1" id="outlined-basic" label="Password" type="Password" onChange={(event)=>setPassword1(event.target.value)} variant="outlined" /><br />
+                                        <TextField required className="fields1" id="outlined-basic" label="Password" type="Password" onChange={(event)=>setPassword1(event.target.value)} variant="outlined" />
                                     </div>
                                 </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12}>
                                     <div className="fields-inner-container">
-                                        <TextField required className="fields1" id="outlined-basic" label="Re-enter Password" type="Password" onChange={(event)=>setPassword2(event.target.value)} variant="outlined" /><br />
+                                        <TextField required className="fields1" id="outlined-basic" label="Re-enter Password" type="Password" onChange={(event)=>setPassword2(event.target.value)} variant="outlined" />
                                     </div>
                                 </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12}>
@@ -174,10 +174,10 @@ const DoctorSignup = (props) => {
                                 </Grid>
                             </Grid>
                             <div>
-                                <Button type="submit" className="signUpButton" style={{backgroundColor: '#CF6A6A', color: 'white', fontWeight: 'bold', fontSize: 17, borderRadius: 10}} variant="contained" onClick={(e)=>signUp(e)}>SIGN UP</Button>
+                                <Button type="submit" className="signUpButton" id="stylebutton" variant="contained" onClick={(e)=>signUp(e)}>SIGN UP</Button>
                             </div>
                             <div style={{paddingBottom: 30}}>
-                                <p>Already Registered? <Link style={{textDecoration: 'none', fontWeight:'bold', color: 'black'}} to="/">Login</Link></p>
+                                <p>Already Registered? <Link className="link" to="/">Login</Link></p>
                             </div>
                         </form>
                     </div>

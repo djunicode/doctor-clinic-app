@@ -5,3 +5,7 @@
     height: 40px;
     width: 100px;
 }
+#header{
+    background-color:#CF6A6A;
+    position: fixed;
+}

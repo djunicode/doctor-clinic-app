@@ -4,6 +4,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import './style.css'
 
 class Requests extends Component {
   render() {
@@ -12,22 +13,17 @@ class Requests extends Component {
         <p className="MainPara">
           <span className="span1">APPOINTMENT REQUESTS</span>
         </p>
-        <br></br>
-        <br></br>
-        <div className="PContainer">
+        <div className="PContainer margin_10">
           <div className="PImage"></div>
           <div className="PInfo">
             <p>Samit</p>
             <p>kapadia</p>
           </div>
         </div>
-        <br></br>
-        <div className="MainPara">
-          <br></br>
-          <span className="span1" style={{ textAlign: "left" }}>
+        <div className="MainPara margin_10">
+          <span className="span1" id="span1 margin_10">
             Free slots of therapist:
           </span>
-          <br></br>
           <FormControl className="Select">
             <InputLabel id="demo-simple-select-label">Slot</InputLabel>
             <Select labelId="demo-simple-select-label" id="demo-simple-select">
@@ -37,17 +33,13 @@ class Requests extends Component {
               <MenuItem>Slot 3</MenuItem>
             </Select>
           </FormControl>
-          <br></br>
-          <br></br>
           <Button
             variant="contained"
             color="secondary"
-            className="defred Select"
+            className="defred Select margin_10 margin_10_b"
           >
             Confirm
           </Button>
-          <br></br>
-          <br></br>
         </div>
       </div>
     );

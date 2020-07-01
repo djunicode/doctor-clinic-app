@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
-/* .bodyStyles{
-    
-    font-family: 'Montserrat', sans-serif;
-
-} */
+.outerContainer{
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 100px;
+}
 .innerContainer{
-    width: 600px !important
+    background-color:#CF6A6A;
+    width: 600px !important;
 }
 .fields-container{
     justify-content: center;
@@ -26,6 +28,33 @@
 .patientDetails{
     border: 0.8px solid black;
     border-radius: 20px;
+}
+.link{
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+.form{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.heading{
+    padding-top: 35px;
+}
+.innerField{
+    background-color: #F5F5F5;
+    border-radius: 15px;
+    margin: 20px;
+}
+#stylebutton{
+    background-color:#CF6A6A;
+    color: white;
+    font-weight: bold;
+    font-size: 17px;
+    border-radius: 10px;
+}
+.gridContainer{
+    justify-content: center;
 }
 @media screen and (max-width: 599px){
     .fields{

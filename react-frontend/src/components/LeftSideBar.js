@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import './style.css'
+
 class LeftSideBar extends Component {
   render() {
     return (
@@ -13,21 +15,20 @@ class LeftSideBar extends Component {
           ></img>
         </div>
         <Button variant="contained" className={this.props.className}>
-          <Link style={{ color: "black" }} to="/">
+          <Link className="link" to="/">
             Patients
           </Link>
         </Button>
-        <br></br>
-        <br></br>
-        <Button variant="contained" className={this.props.className1}>
-          <Link style={{ color: "black" }} to="/appoinment">
+        <div className="margin_10 margin_10_b">
+          <Button variant="contained" className={this.props.className1} >
+          <Link className="link" to="/appointment">
             Appointments
           </Link>
         </Button>
-        <br></br>
-        <br></br>
+        </div>
+        
         <Button variant="contained" className={this.props.className2}>
-          <Link style={{ color: "black" }} to="/addpatient">
+          <Link className="link" to="/addpatient">
             New Patients
           </Link>
         </Button>

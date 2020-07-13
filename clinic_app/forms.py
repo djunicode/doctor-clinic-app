@@ -65,13 +65,13 @@ class DoctorForm(forms.ModelForm):
 class ReceiptForm(forms.ModelForm):
     class Meta:
         model = Receipt
-        fields = ["date", "time", "price", "doctor", "patient"]
+        fields = "__all__"
 
 
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        fields = ["patient", "typeof", "published_on", "file"]
+        fields = "__all__"
 
 
 class PatientForm(forms.ModelForm):
@@ -79,7 +79,7 @@ class PatientForm(forms.ModelForm):
 
     class Meta:
         model = Patient
-        fields = ["username", "dob", "doctor"]
+        fields = "__all__"
 
 
 class AppointmentForm(forms.ModelForm):

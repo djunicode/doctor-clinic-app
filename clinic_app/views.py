@@ -261,11 +261,30 @@ def reports(request):
 
 def scheduleAppointments(request):
 
-    doc = Doctor.objects.get(username=CustomUser.objects.get(username="avon"))
-    schedule = IndivdualDoctorQueue.objects.filter(doctor=doc)
+    doc = Doctor.objects.get(username=CustomUser.objects.get(username="Nilay"))
+    # schedule = IndivdualDoctorQueue.objects.filter(doctor=doc)
+    schedule=Appointment.objects.filter(doctor=doc,date=datetime.date.today())
+    print(schedule)
+
     token = []
     count = 1
-    for i in schedule[0].queue.all():
+    for i in schedule:
+        
         token.append({"name": i.patient.username.username, "token_Number": len(token)})
-        count += 1
+        if not DailyDoctorQueue.objects.filter(appointment=i).exists():
+            val=DailyDoctorQueue.objects.create(appointment=i,token=len(token))
+            val.save()
+            count += 1
     return HttpResponse(token)
+
+
+def test(request):
+    form=PatientForm(request.POST)
+    print(form.is_valid())
+    print(form.errors)
+    if form.is_valid():
+        print("hi")
+        print(form.data)
+
+    return render(request,'test.html',{'form':form})
+

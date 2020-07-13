@@ -96,7 +96,7 @@ class AppointmentScheduler(APIView):
 
     def get(self,request):
         doc_id=request.query_params.get('id')
-        day=request.query_params.get('date')
+            
         print("doc_id=",doc_id)
         print(day)
         if doc_id:
@@ -109,7 +109,9 @@ class AppointmentScheduler(APIView):
             final={"doctor":ser.data,"patients":ser2.data}
             return Response(final)
         else:
-            return Response({"Nop":"not valoid"})
+            val=Appointment.objects.all()
+            ser=AppointmentSerializer2(val,many=True)
+            return Response(ser.data)
 
             
     def post(self, request):
@@ -149,3 +151,10 @@ class PatientList(APIView):
     def get(self,request):
         val=PatientSerializer(Patient.objects.all(),many=True)
         return Response(val.data)
+
+
+
+class AddPatient(APIView):
+    
+    def post(self,request):
+        pass

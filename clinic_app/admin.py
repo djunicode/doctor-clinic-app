@@ -5,7 +5,7 @@ from .models import (
     Appointment,
     Report,
     CustomUser,
-    IndivdualDoctorQueue,
+    DailyDoctorQueue,
 )
 from django.contrib.auth.admin import UserAdmin
 from .forms import *
@@ -33,6 +33,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 # Register your models here.
-app_models = [Doctor, Patient, Appointment, Report, IndivdualDoctorQueue]
+app_models = [Doctor, Patient, Appointment, Report, DailyDoctorQueue]
 admin.site.register(app_models)
 admin.site.register(CustomUser, CustomUserAdmin)

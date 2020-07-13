@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
+    'phone_field'
 ]
 
 AUTH_USER_MODEL = "clinic_app.CustomUser"

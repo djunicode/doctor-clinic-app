@@ -5,10 +5,11 @@ from .serializers import (
     PatientSerializer,
     AppointmentSerializer2,
     DocSerializer,
+    DailySerializer
 )
 from ..models import *
 from rest_framework.response import Response
-
+import datetime
 
 class PatientDashboardView(APIView):
     def get(self, request):
@@ -154,7 +155,24 @@ class PatientList(APIView):
 
 
 
-class AddPatient(APIView):
-    
-    def post(self,request):
-        pass
+class DailyQueue(APIView):
+    def get(self,request):
+        schedule=Appointment.objects.filter(date=datetime.date.today()).order_by("start_time")
+        token = []
+        for i in schedule:
+        
+            token.append({"name": i.patient.username.username, "token_Number": len(token)})
+            if not DailyDoctorQueue.objects.filter(appointment=i).exists():
+                val=DailyDoctorQueue.objects.create(appointment=i,token=len(token))
+                val.save()
+        
+
+        val2=DailyDoctorQueue.objects.filter(appointment__date=datetime.date.today())
+        print(val2)
+        ser=DailySerializer(val2,many=True)
+
+        return Response(ser.data)
+
+class AddNewPatient(APIView):
+    def get(self,request):
+        data1=request.data['']

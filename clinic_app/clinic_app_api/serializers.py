@@ -64,3 +64,11 @@ class DocSerializer(serializers.ModelSerializer):
         model = Doctor
         fields = "__all__"
 
+class DailySerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model=DailyDoctorQueue
+
+        fields="__all__"
+        depth=2

@@ -27,8 +27,6 @@ const MainBody2 = (props) => {
   const [lastname, setLastname] = useState("");
   const [age, setAge] = useState("");
   const [condition, setCondition] = useState("");
-  const [symptom_since, setSymptom_since] = useState("");
-  const [therapist, setTherapist] = useState("");
   const [date, setDate] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -42,8 +40,6 @@ const MainBody2 = (props) => {
       lastname === "" ||
       age === "" ||
       condition === "" ||
-      symptom_since === "" ||
-      therapist === "" ||
       date === "" ||
       phone === "" ||
       email === ""
@@ -55,16 +51,13 @@ const MainBody2 = (props) => {
       formdata.append("lastname", lastname);
       formdata.append("age", age);
       formdata.append("condition", condition);
-      formdata.append("symptom_since", symptom_since);
-      formdata.append("therapist", therapist);
       formdata.append("date", date);
       formdata.append("phone", phone);
       formdata.append("Email", email);
       formdata.append("history", history);
       try {
         setActivityIndicator(true);
-        // Take rishi's help for this
-        const response = await fetch("http://localhost:8000/register/", {
+        const response = await fetch("http://localhost:8000/pat-register/avon", {
           method: "POST",
           headers: {
             //'Content-Type': 'application/json',
@@ -72,7 +65,7 @@ const MainBody2 = (props) => {
           body: formdata,
         });
         const resData = await response.json();
-        if (resData.success === "Successfully created new doctor") {
+        if (resData.success === "Successfully created new Patient") {
           history.push("/");
         }
         setActivityIndicator(false);

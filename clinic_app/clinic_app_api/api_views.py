@@ -158,12 +158,19 @@ class PatientList(APIView):
 class DailyQueue(APIView):
     def get(self,request):
         schedule=Appointment.objects.filter(date=datetime.date.today()).order_by("start_time")
+        print("--->",schedule)
         token = []
-        for i in schedule:
-        
+        for index, i in enumerate(schedule):
+        # for i in schedule:
             token.append({"name": i.patient.username.username, "token_Number": len(token)})
-            if not DailyDoctorQueue.objects.filter(appointment=i).exists():
-                val=DailyDoctorQueue.objects.create(appointment=i,token=len(token))
+            if DailyDoctorQueue.objects.filter(appointment=i).exists():
+                check=DailyDoctorQueue.objects.filter(appointment=i).first()
+                check.token=index
+                check.save()
+
+            
+            else:
+                val=DailyDoctorQueue.objects.create(appointment=i,token=index)
                 val.save()
         
 
@@ -173,6 +180,6 @@ class DailyQueue(APIView):
 
         return Response(ser.data)
 
-class AddNewPatient(APIView):
-    def get(self,request):
-        data1=request.data['']
+# class AddNewPatient(APIView):
+#     def get(self,request):
+#         data1=request.data['']

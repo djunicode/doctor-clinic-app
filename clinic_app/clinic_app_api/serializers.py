@@ -71,4 +71,14 @@ class DailySerializer(serializers.ModelSerializer):
         model=DailyDoctorQueue
 
         fields="__all__"
-        depth=2
+        depth=3
+
+    
+class CustomSerializer(serializers.ModelSerializer):
+    password1=serializers.CharField(read_only=True)
+    password2=serializers.CharField(read_only=True)
+
+    class Meta:
+        model=CustomUser
+        #fields=['username','DOB','password1','password2','DOB','first_name','last_name','contact_no']
+        fields="__all__"

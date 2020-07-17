@@ -5,7 +5,8 @@ from .serializers import (
     PatientSerializer,
     AppointmentSerializer2,
     DocSerializer,
-    DailySerializer
+    DailySerializer,
+    CustomSerializer
 )
 from ..models import *
 from rest_framework.response import Response
@@ -97,6 +98,8 @@ class AppointmentScheduler(APIView):
 
     def get(self,request):
         doc_id=request.query_params.get('id')
+        day=request.query_params.get('date')
+
             
         print("doc_id=",doc_id)
         print(day)
@@ -180,6 +183,35 @@ class DailyQueue(APIView):
 
         return Response(ser.data)
 
-# class AddNewPatient(APIView):
-#     def get(self,request):
-#         data1=request.data['']
+class AddNewPatient(APIView):
+    def post(self,request):
+        data1={'username':request.data['username'],
+                'DOB':request.data['DOB'],
+                'email':request.data['email'],
+                'first_name':request.data['first_name'],
+                'last_name':request.data['last_name'],
+                'is_Patient':True,
+                'contact_no':request.data['contact_no'],
+                'password':request.data['password'],
+                'Confirm_password':request.data['confirm_password']
+
+                }
+
+        ser=CustomSerializer(data=data1)
+        print("----------->",ser.is_valid())
+        print("-------+++++",ser.errors)
+        if ser.is_valid():
+            ser.save()
+            return Response({'added':'New user added'})
+
+        # data2={
+        #     'username':request.data['username'],
+        #     'doctor':request.data['doctor'],
+        #     'conditions':request.data['conditions'],
+        #     'history':request.data['history']
+        # }
+
+        # ser2=PatientSerializer(data2)
+        # if ser2.is_valid():
+        #     ser2.save()
+        #     return Response({'added':'New user added'})

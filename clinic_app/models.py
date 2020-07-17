@@ -9,7 +9,7 @@ from phone_field import PhoneField
 # Create your models here.
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=100, unique=True)
-    DOB = models.DateField(auto_now_add=True,blank=True,null=True)
+    DOB = models.DateField(blank=True,null=True)
     email = models.EmailField(null=True, blank=True)
     first_name = models.CharField(max_length=100,null=True, blank=True)
     last_name = models.CharField(max_length=100,null=True, blank=True)

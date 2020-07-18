@@ -185,24 +185,18 @@ class DailyQueue(APIView):
 
 class AddNewPatient(APIView):
     def post(self,request):
-        data1={'username':request.data['username'],
-                'DOB':request.data['DOB'],
-                'email':request.data['email'],
-                'first_name':request.data['first_name'],
-                'last_name':request.data['last_name'],
-                'is_Patient':True,
-                'contact_no':request.data['contact_no'],
-                'password':request.data['password'],
-                'Confirm_password':request.data['confirm_password']
+       
 
-                }
-
-        ser=CustomSerializer(data=data1)
+        ser=CustomSerializer(data=request.data)
         print("----------->",ser.is_valid())
         print("-------+++++",ser.errors)
         if ser.is_valid():
-            ser.save()
+            val=ser.save()
+            # newPat=Patient.objects.create(username=val,)
+
+        
             return Response({'added':'New user added'})
+        return Response(ser.errors)
 
         # data2={
         #     'username':request.data['username'],

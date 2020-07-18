@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models import *
+from django.contrib.auth.hashers import make_password
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
@@ -82,3 +83,7 @@ class CustomSerializer(serializers.ModelSerializer):
         model=CustomUser
         #fields=['username','DOB','password1','password2','DOB','first_name','last_name','contact_no']
         fields="__all__"
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data.get('password'))
+        return super(CustomSerializer, self).create(validated_data)

@@ -79,9 +79,7 @@ class Doctor(models.Model):
 class Patient(models.Model):
     username = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     
-    doctor = models.ForeignKey(
-        Doctor, on_delete=models.CASCADE
-    )  # doc under which patient is working
+     # doc under which patient is working
     conditions=models.CharField(max_length=200,blank=True,null=True)
     history=models.CharField(max_length=200,blank=True,null=True)
     def __str__(self):

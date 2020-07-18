@@ -51,20 +51,18 @@ const MainBody2 = (props) => {
       alert("Fill in all fields");
     } else {
       let formdata = new FormData();
-      formdata.append("firstname", firstname);
-      formdata.append("lastname", lastname);
+      formdata.append("first_name", firstname);
+      formdata.append("last_name", lastname);
       formdata.append("age", age);
       formdata.append("condition", condition);
-      formdata.append("symptom_since", symptom_since);
-      formdata.append("therapist", therapist);
-      formdata.append("date", date);
-      formdata.append("phone", phone);
-      formdata.append("Email", email);
+      formdata.append("DOB", date);
+      formdata.append("contact_no", phone);
+      formdata.append("email", email);
       formdata.append("history", history);
       try {
         setActivityIndicator(true);
         // Take rishi's help for this
-        const response = await fetch("http://localhost:8000/register/", {
+        const response = await fetch("register/", {
           method: "POST",
           headers: {
             //'Content-Type': 'application/json',
@@ -137,11 +135,12 @@ const MainBody2 = (props) => {
               xs={12}
             >
               <div className="fields-inner-container ">
+              
                 <TextField
                   required
                   className="fields1"
                   id="outlined-basic"
-                  label="Age"
+                  label="Date of Birth"
                   type="Number"
                   onChange={(event) => setAge(event.target.value)}
                   variant="outlined"

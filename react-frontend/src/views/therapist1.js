@@ -17,7 +17,7 @@ function Therapist1(props) {
   },[])
 
   const getTherapistData = async(docID, date) => {
-    const url = `http://localhost:8000/api/newAppointment?id=${docID}&date=${date}`
+    const url = `api/newAppointment?id=${docID}&date=${date}`
     const response = await fetch(url)
     const data = await response.json()
     console.log(data)

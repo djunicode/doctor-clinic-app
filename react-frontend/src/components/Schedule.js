@@ -77,13 +77,38 @@ export default class Schedule extends React.Component {
     this.setState({ dates: arr, loading: false });
   }
 
+  appointmentValidation = () => {
+    const { selectedType, selectedPatient, selectedDoctor, selectedDate, selectedSlot } = this.state
+    if(selectedType!==null && selectedPatient!==null && selectedDoctor!==null && selectedDate!==null && selectedSlot!==null){
+      return true
+    }
+    return false
+  }
+
+  getSlotsValidation = () => {
+    const { selectedDoctor, selectedDate } = this.state
+    if(selectedDoctor!==null && selectedDate!==null){
+      return true
+    }
+    return false
+  }
+
   getTherapistData = async (docID, date) => {
-    document.getElementById("confirm").disabled = false;
-    const url = `http://localhost:8000/api/newAppointment?id=${docID}&date=${date}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
-    this.availableSlots(data.doctor[0], data.patients);
+    // alert("getslots")
+    const { selectedDoctor, selectedDate } = this.state
+    if(selectedDoctor!==null && selectedDate!==null){
+      // alert("apicall")
+      // document.getElementById("confirm").disabled = false;
+      const url = `api/newAppointment?id=${parseInt(selectedDoctor)}&date=${selectedDate}`;
+      const response = await fetch(url);
+      // console.log(await response.text())
+      const data = await response.json();
+      console.log(data);
+      this.availableSlots(data.doctor[0], data.patients);
+    }
+    else{
+
+    }
   };
 
   availableSlots(doctorData, patientData) {
@@ -149,7 +174,7 @@ export default class Schedule extends React.Component {
       let end_time = parseInt(temp1[0]) + 1 + ":" + "00" + ":" + temp1[2];
       formdata.append("end_time", end_time);
     }
-    fetch("http://localhost:8000/api/newAppointment/", {
+    fetch("api/newAppointment/", {
       method: "POST",
       body: formdata,
     })
@@ -158,25 +183,40 @@ export default class Schedule extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        let temp = this.state.slots;
-        let index = temp.findIndex((slot) => slot === this.state.selectedSlot);
-        console.log(index);
-        temp.splice(index, 1);
-        console.log(temp);
-        this.setState({
-          slots: temp,
-          confirmVisible: false,
-        });
-        toast.success("Appointment booked", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        document.getElementById("slot").textContent = temp[0];
+        if(response['Not posssible']){
+          toast.error("This slot has been booked", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        else{
+          let temp = this.state.slots;
+          let index = temp.findIndex((slot) => slot === this.state.selectedSlot);
+          console.log(index);
+          if(index>=0){
+            temp.splice(index, 1);
+          }
+          console.log(temp);
+          this.setState({
+            slots: temp,
+            // confirmVisible: false,
+          });
+          toast.success("Appointment booked", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          document.getElementById("slot").textContent = temp[0];
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -185,7 +225,7 @@ export default class Schedule extends React.Component {
 
   render() {
     return (
-      <div class="ScheduleContainer ">
+      <div class="ScheduleContainer " style={{textAlign:'center'}}>
         <div className="MainPara">
           <span className="span1">SCHEDULE APPOINTMENTS</span>
           <div className="defgrey appointmentbox">
@@ -197,15 +237,16 @@ export default class Schedule extends React.Component {
                 id="combo-box-demo"
                 options={this.context.patients}
                 getOptionLabel={(option) =>
-                  option.id.toString() + ": " + option.username
+                  // option.id.toString() + ": " + 
+                  option.username
                 }
                 style={{ width: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Patient" variant="outlined" />
                 )}
-                onChange={(e) => {
+                onChange={(e, newValue) => {
                   this.setState({
-                    selectedPatient: e.target.textContent.split(": ")[0],
+                    selectedPatient: newValue===null ? null : newValue.id,
                   });
                 }}
               />
@@ -218,9 +259,18 @@ export default class Schedule extends React.Component {
                 id="combo-box-demo"
                 options={this.context.doctors}
                 getOptionLabel={(option) =>
-                  option.id.toString() + ": " + option.username
+                  // option.id.toString() + ": " + 
+                  option.username
                 }
                 style={{ width: 300 }}
+                // onInputChange={(event, newInputValue) => {
+                //   // alert("newInputValue"+newInputValue)
+                //   this.setState({
+                //     selectedDoctor: newInputValue,
+                //     // confirmVisible: true,
+                //   });
+
+                // }}
                 renderInput={(params) => {
                   return (
                     <TextField
@@ -230,10 +280,13 @@ export default class Schedule extends React.Component {
                     />
                   );
                 }}
-                onChange={(e) => {
-                  this.setState({
-                    selectedDoctor: e.target.textContent.split(": ")[0],
+                onChange={async(e, newValue) => {
+                  // alert(Object.keys(newValue))
+                  // alert(newValue)
+                  await this.setState({
+                    selectedDoctor: newValue===null ? null : newValue.id,
                   });
+                  this.getTherapistData()
                 }}
               />
             )}
@@ -248,69 +301,81 @@ export default class Schedule extends React.Component {
                   <TextField {...params} label="Type" variant="outlined" />
                 );
               }}
-              onChange={(e) => {
-                this.setState({ selectedType: e.target.textContent });
+              onChange={(e, newValue) => {
+                this.setState({ selectedType: newValue });
               }}
             />
-            <div class = "margin_10" style={{ float: "left" }}>
-              <p>DATE:</p>
-              <Autocomplete
-                id="combo-box-demo"
-                options={this.state.dates}
-                getOptionLabel={(option) => option.toString()}
-                style={{ width: 150 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Date" variant="outlined" />
-                )}
-                onChange={(e) => {
-                  this.setState({ selectedDate: e.target.textContent });
-                }}
-              />
-            </div>
-            {this.state.selectedDate !== null &&
-              this.state.selectedDoctor !== null && (
-                <button
-                  onClick={() =>
-                    this.getTherapistData(
-                      parseInt(this.state.selectedDoctor),
-                      this.state.selectedDate
-                    )
-                  }
-                >
-                  getslots
-                </button>
-              )}
-            {this.state.selectedDate !== null &&
-              this.state.selectedDoctor !== null &&
-              this.state.slots.length !== 0 && (
-                <div style={{ float: "right", marginRight: "45px" }}>
-                  <p>SLOT:</p>
-                  <Autocomplete
-                    id="slot"
-                    options={this.state.slots}
-                    getOptionLabel={(option) => option.toString()}
-                    style={{ width: 150 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Slot" variant="outlined" />
-                    )}
-                    onChange={(e) => {
-                      this.setState({
-                        selectedSlot: e.target.textContent,
-                        confirmVisible: true,
-                      });
-                    }}
-                  />
-                </div>
-              )}
+            <div style={{display: "flex", flex: 1}}>
+              <div class = "margin_10" style={{ float: "left" }}>
+                <p>DATE:</p>
+                <Autocomplete
+                  id="combo-box-demo"
+                  options={this.state.dates}
+                  getOptionLabel={(option) => option.toString()}
+                  style={{ width: 140 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Date" variant="outlined" />
+                  )}
+                  onChange={async(e, newValue) => {
+                    // alert(newValue)
+                    await this.setState({ selectedDate: newValue });
+                    this.getTherapistData()
+                  }}
+                />
+                 {/* {this.getSlotsValidation() && (
+                  <button style={{alignSelf: 'center'}}
+                    onClick={() =>
 
+                      this.getTherapistData(
+                        parseInt(this.state.selectedDoctor),
+                        this.state.selectedDate
+                      )
+                    }
+                  >
+                    getslots
+                  </button>
+                )} */}
+              </div>
+             
+              {this.getSlotsValidation() &&
+                this.state.slots.length !== 0 && (
+                  <div class="margin_10" style={{ float: "right", marginLeft: 20, marginRight: "45px" }}>
+                    <p>SLOT:</p>
+                    <Autocomplete
+                      id="slot"
+                      options={this.state.slots}
+                      getOptionLabel={(option) => option.toString()}
+                      style={{ width: 140 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Slot" variant="outlined" />
+                      )}
+                      // inputValue={inputValue}
+                      // onInputChange={(event, newInputValue) => {
+                      //   // alert("newInputValue"+newInputValue)
+                      //   this.setState({
+                      //     selectedSlot: newInputValue,
+                      //     confirmVisible: true,
+                      //   });
+                      // }}
+                      onChange={(e, newValue) => {
+                        // alert("newValue"+newValue)
+                        this.setState({
+                          selectedSlot: newValue,
+                          confirmVisible: true,
+                        });
+                      }}
+                    />
+                  </div>
+                ) }
+            </div>
             <Button
               variant="contained"
               color="secondary"
               className="defred"
               id="confirm"
-              style={{ marginLeft: "35%", marginTop:" 45%", zIndex: 1001 }}
+              style={{ alignSelf: 'center',marginLeft: "35%", marginTop: 50, zIndex: 1001 }}
               onClick={this.confirmAppointment}
-              disabled={!this.state.confirmVisible}
+              disabled={!this.appointmentValidation()}
             >
               Confirm
             </Button>

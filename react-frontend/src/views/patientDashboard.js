@@ -29,7 +29,7 @@ const PatientDashboard = (props) => {
 
     const init = async() => {
         const token = await JSON.parse(localStorage.getItem('doctorClinicAppData')).token
-        const response = await fetch("http://localhost:8000/api/patientdetails?id="+new URLSearchParams(props.location.search).get("id"),{
+        const response = await fetch("api/patientdetails?id="+new URLSearchParams(props.location.search).get("id"),{
             headers: {
                 'Authorization': token
             }

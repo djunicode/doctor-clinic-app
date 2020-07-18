@@ -19,7 +19,7 @@ function Receptionist2() {
   },[])
 
   const getAppointments = async() => {
-    const response = await fetch('http://localhost:8000/api/appointments/')
+    const response = await fetch('api/appointments/')
     const resp = await response.json()
     console.log(resp)
   }
@@ -32,24 +32,19 @@ function Receptionist2() {
           <Col xs={12} md={4} className="Cellpadding">
             <LeftSideBar className1="defred" />
           </Col>
-          <Col xs={12} md={4} className="Cellpadding">
+          <Col xs={12} md={5} className="Cellpadding">
             <div id="div1">
               <Row>
                   <Schedule />
               </Row>
             </div>
           </Col>
-          <Col xs={12} md={4} className="Cellpadding">
-            {appointments.map((appointment)=>(
+          <Col xs={12} md={3} lg={2} className="Cellpadding">
+            {/* {appointments.map((appointment)=>( */}
               <RightSideBar
-                time={appointment.start_time}
-                date={appointment.date}
-                day="Tuesday"
-                queue="1"
-                name={appointment.patient}
-                docname={appointment.doctor}
+                
               />
-            ))}
+            {/* ))} */}
           </Col>
         </Row>
       </Container>

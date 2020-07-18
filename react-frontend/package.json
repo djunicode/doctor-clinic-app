@@ -12,6 +12,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.0",
+    "date-fns": "^2.15.0",
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
@@ -42,5 +43,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8000/"
 }

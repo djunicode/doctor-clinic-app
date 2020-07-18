@@ -20,7 +20,6 @@ function Receptionist1() {
             <LeftSideBar className="defred" />
           </Col>
           <Col xs={12} md={6} lg={8} className="Cellpadding">
-            
             <MainBody />
           </Col>
           <Col xs={12} md={3} lg={2} className="Cellpadding">

@@ -41,14 +41,16 @@ const DoctorSignup = (props) => {
             formdata.append("Email",email)
             try{
                 setActivityIndicator(true);
-                const response = await fetch('http://localhost:8000/register/',{
+                const response = await fetch('register/',{
                     method: 'POST',
-                    headers:{
+                    headers: {
                         //'Content-Type': 'application/json',
                     },
                     body: formdata
                 })
+                console.log(await response.text())
                 const resData = await response.json()
+                
                 if(resData.success==='Successfully created new doctor'){
                     history.push('/')
                 }

@@ -180,6 +180,10 @@ class DailyQueue(APIView):
         val2=DailyDoctorQueue.objects.filter(appointment__date=datetime.date.today())
         print(val2)
         ser=DailySerializer(val2,many=True)
+        # print("HIIIIIIIIIIIIIII",ser.data)
+        # for i in ser.data:
+        #     i['appointment']['doctor']['username']['password']="Nice try but you trash"
+        #     i['appointment']['patient']['username']['password']="Nice try but you trash"   
 
         return Response(ser.data)
 
@@ -188,9 +192,13 @@ class AddNewPatient(APIView):
        
 
         ser=CustomSerializer(data=request.data)
+        print("--------------------------------->",(ser.fields))
         print("----------->",ser.is_valid())
         print("-------+++++",ser.errors)
-        if ser.is_valid():
+        if request.data['password'] !=request.data['password']:
+            return Response({'error':"Your Passwords don't match ,Please check"})
+
+        elif ser.is_valid():
             val=ser.save()
             # newPat=Patient.objects.create(username=val,)
 

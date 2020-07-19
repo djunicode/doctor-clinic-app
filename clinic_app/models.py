@@ -29,6 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
+    
 
 
 class Doctor(models.Model):
@@ -95,7 +96,7 @@ class Appointment(models.Model):
     end_time = models.TimeField()
 
     def __str__(self):
-        return str(self.patient.username.username)+' '+str(self.type_of)
+        return 'Patient='+str(self.patient.username.username)+' '+'Doctor='+ str(self.doctor.username.username)+'Type-of'+ str(self.type_of)
 
 
 class Report(models.Model):

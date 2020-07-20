@@ -94,8 +94,8 @@ class CustomSerializer(serializers.ModelSerializer):
         model=CustomUser
         #fields=['username','DOB','password1','password2','DOB','first_name','last_name','contact_no']
         # fields="__all__"
-        fields = ('username',)
-        write_only_fields = ('password',) 
+        fields = "__all__"
+            # write_only_fields = ('password',) 
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data.get('password'))

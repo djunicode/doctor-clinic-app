@@ -11,6 +11,7 @@ urlpatterns = [
     path("newAppointment/",AppointmentScheduler.as_view(),name="new"),
     path("allpat/",PatientList.as_view(),name="allpat"),
     path('daily/',DailyQueue.as_view(),name="daily"),
-    path('newpat/',AddNewPatient.as_view(), name="newpatient")
+    path('newpat/',AddNewPatient.as_view(), name="newpatient"),
+    path('markAttend/',MarkAttendance.as_view(),name="Mark")
 
 ]

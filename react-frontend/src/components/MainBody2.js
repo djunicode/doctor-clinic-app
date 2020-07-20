@@ -25,9 +25,11 @@ for (var i = 0; i < options.length; i++) {
 const MainBody2 = (props) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [age, setAge] = useState("");
+  const [username, setUsername] = useState("");
   const [condition, setCondition] = useState("");
-  const [date, setDate] = useState("");
+  const [password1,setPassword1] = useState("")
+  const [password2,setPassword2] = useState("")
+  const [DOB, setDOB] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [history, setHistory] = useState("");
@@ -35,29 +37,25 @@ const MainBody2 = (props) => {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (
-      firstname === "" ||
-      lastname === "" ||
-      age === "" ||
-      condition === "" ||
-      date === "" ||
-      phone === "" ||
-      email === ""
-    ) {
+    if (firstname === "" || lastname === "" || username === "" || condition === "" || DOB === "" || phone === "" || email === "" || password1 ==="" || password2 ==="") {
       alert("Fill in all fields");
-    } else {
+    }  else if(password1!==password2){
+      alert("Passwords do not match")
+  } else {
       let formdata = new FormData();
       formdata.append("first_name", firstname);
       formdata.append("last_name", lastname);
-      formdata.append("age", age);
-      formdata.append("condition", condition);
-      formdata.append("date", date);
-      formdata.append("phone", phone);
-      formdata.append("Email", email);
+      formdata.append("username", username);
+      formdata.append("conditions", condition);
+      formdata.append("password",password1)
+      formdata.append("confirm_password",password2)
+      formdata.append("DOB", DOB);
+      formdata.append("contact_no", phone);
+      formdata.append("email", email);
       formdata.append("history", history);
       try {
         setActivityIndicator(true);
-        const response = await fetch("http://localhost:8000/pat-register/avon", {
+        const response = await fetch("api/newpat/", {
           method: "POST",
           headers: {
             //'Content-Type': 'application/json',
@@ -65,7 +63,7 @@ const MainBody2 = (props) => {
           body: formdata,
         });
         const resData = await response.json();
-        if (resData.success === "Successfully created new Patient") {
+        if (resData.success === "Successfully added new Patient") {
           history.push("/");
         }
         setActivityIndicator(false);
@@ -135,9 +133,9 @@ const MainBody2 = (props) => {
                   required
                   className="fields1"
                   id="outlined-basic"
-                  label="Date of Birth"
-                  type="Number"
-                  onChange={(event) => setAge(event.target.value)}
+                  label="Username"
+                  type="text"
+                  onChange={(event) => setUsername(event.target.value)}
                   variant="outlined"
                 />
               </div>
@@ -170,14 +168,54 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
+              <div className="fields-inner-container ">
+                <TextField
+                  required
+                  className="fields1"
+                  id="outlined-basic"
+                  label="Enter Password"
+                  type="Password"
+                  onChange={(event) => setPassword1(event.target.value)}
+                  variant="outlined"
+                />
+              </div>
+            </Grid>
+            <Grid
+              className="fields-container"
+              container
+              item
+              lg={6}
+              sm={8}
+              xs={12}
+            >
+              <div className="fields-inner-container ">
+                <TextField
+                  required
+                  className="fields1"
+                  id="outlined-basic"
+                  label="Re-enter Password"
+                  type="Password"
+                  onChange={(event) => setPassword2(event.target.value)}
+                  variant="outlined"
+                />
+              </div>
+            </Grid>
+            <Grid
+              className="fields-container"
+              container
+              item
+              lg={6}
+              sm={8}
+              xs={12}
+            >
               <div className="fields-inner-container">
                 <TextField
                   required
                   className="fields1"
                   id="outlined-basic"
-                  label="Date"
+                  label="Date of Birth"
                   type="Text"
-                  onChange={(event) => setDate(event.target.value)}
+                  onChange={(event) => setDOB(event.target.value)}
                   variant="outlined"
                 />
               </div>

@@ -226,6 +226,41 @@ class AddNewPatient(APIView):
                 return Response(ser.errors)
 
 
+# class AddNewDoctor(APIView):
+#     def post(self, request):
+
+#         ser = CustomSerializer(data=request.data)
+#         print("request.data", request.data)
+#         if ser.is_valid() and request.data != {}:
+#             print("----------->", ser.is_valid())
+#             print("-------+++++", ser.errors)
+#             if request.data["password"] != request.data["password"]:
+#                 return Response({"error": "Your Passwords don't match ,Please check"})
+
+#             else:
+#                 ser.validated_data["is_Patient"] = True
+#                 val = ser.save()
+#                 temp=Doctor.objects.create(
+#                     username=val,
+#                     Degrees=request.POST["Degrees"],
+#                     Postgrad=request.POST["history"],
+#                     Specialization=request.POST['Specialization'],
+#                     daily_start_time=request.POST['daily_start_time']
+#                     daily_end_time=request.POST['daily_end_time']
+#                 )
+#                 temp.save()
+
+
+#                 return Response({"added": "New user added"})
+#         else:
+#             if request.data == {}:
+#                 return Response({"Null Fields": "Some fields are not filled"})
+#             else:
+#                 return Response(ser.errors)
+
+
+
+
 class MarkAttendance(APIView):
     def get(self, request):
         pid = request.query_params.get("name")

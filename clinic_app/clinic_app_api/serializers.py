@@ -3,18 +3,6 @@ from ..models import *
 from django.contrib.auth.hashers import make_password
 from rest_framework.utils.field_mapping import get_nested_relation_kwargs
 
-class AppointmentSerializer(serializers.ModelSerializer):
-    # doctor = serializers.CharField(source="doctor.username", read_only=True)
-    # patient = serializers.CharField(source="patient.username", read_only=True)
-    doctor=serializers.StringRelatedField()
-    patient=serializers.StringRelatedField()
-
-    class Meta:
-
-        model = Appointment
-
-        #fields = ["doctor", "patient", "type_of", "date", "start_time", "end_time"]
-        fields = "__all__"
 
 
 class PatientSerializer(serializers.ModelSerializer):
@@ -65,7 +53,22 @@ class DocSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Doctor
+
         fields = "__all__"
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    # doctor = serializers.CharField(source="doctor.username", read_only=True)
+    # patient = serializers.CharField(source="patient.username", read_only=True)
+    doctor=DocSerializer()
+    patient=PatientSerializer()
+
+    class Meta:
+
+        model = Appointment
+
+        #fields = ["doctor", "patient", "type_of", "date", "start_time", "end_time"]
+        fields = "__all__"
+
 
 class DailySerializer(serializers.ModelSerializer):
     #appointment = serializers.StringRelatedField()
@@ -113,4 +116,4 @@ class CustomSerializer2(CustomSerializer):
 # class PartialFirstSerializer(FirstSerializer):
 
 #     class Meta:
-        
+

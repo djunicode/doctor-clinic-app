@@ -123,7 +123,7 @@ class AppointmentScheduler(APIView):
     def post(self, request):
         print(request.data)
         serializer = AppointmentSerializer2(data=request.data)
-       
+
         # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and L2 <= R1)
         if request.POST["start_time"] < request.POST["end_time"]:
             appointments_in_range_for_doctor = Appointment.objects.filter(
@@ -210,13 +210,12 @@ class AddNewPatient(APIView):
             else:
                 ser.validated_data["is_Patient"] = True
                 val = ser.save()
-                temp=Patient.objects.create(
+                temp = Patient.objects.create(
                     username=val,
                     conditions=request.POST["conditions"],
                     history=request.POST["history"],
                 )
                 temp.save()
-
 
                 return Response({"added": "New user added"})
         else:
@@ -259,16 +258,16 @@ class AddNewPatient(APIView):
 #                 return Response(ser.errors)
 
 
-
-
 class MarkAttendance(APIView):
     def get(self, request):
         pid = request.query_params.get("name")
         # day=request.query_params.get('date')
+        print(pid, "000000000000000000000")
         val = DailyDoctorQueue.objects.get(
-            appointment__patient__username=CustomUser.objects.get(username=pid),
+            appointment__patient__username=CustomUser.objects.get(username=str(pid)),
             appointment__date=datetime.date.today(),
         )
+        print(val)
         val.present = True
         val.save()
         return Response({"done": "done"})

@@ -129,7 +129,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
-LOGIN_REDIRECT_URL = "login2"
+# LOGIN_REDIRECT_URL = "login2"
+
+MEDIA_URL='/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')

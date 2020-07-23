@@ -87,7 +87,7 @@ class PatientView(APIView):
         user_id = request.query_params.get("id")
         print(user_id)
         if user_id:
-            val = Patient.objects.filter(id=user_id)
+            val = Patient.objects.filter(patient_id=user_id)
             print(val[0].username)
             ser = PatientSerializer(val, many=True)
             # if ser.is_valid():
@@ -107,7 +107,7 @@ class AppointmentScheduler(APIView):
         print("doc_id=", doc_id)
         print(day)
         if doc_id:
-            val = Doctor.objects.filter(id=doc_id)
+            val = Doctor.objects.filter(doctor_id=doc_id)
             print(val)
             val2 = Appointment.objects.filter(doctor=val[0], date=day)
 

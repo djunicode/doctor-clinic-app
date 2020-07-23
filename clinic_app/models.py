@@ -116,9 +116,9 @@ class Report(models.Model):
     typeof = models.CharField(
         max_length=50
     )  # x-ray, blood, etc. Maybe make it dropdown in future?
-    published_on = models.DateTimeField()
+    published_on = models.DateField()
     appointment = models.ForeignKey(Appointment,on_delete=models.CASCADE,null=True,blank=True)
-    file = models.FileField(upload_to="uploads/%Y/%m/%d/")
+    filelocation = models.FileField(upload_to="uploads/%Y/%m/%d/")
 
 
 class Receipt(models.Model):

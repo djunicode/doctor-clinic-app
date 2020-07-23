@@ -12,6 +12,7 @@ urlpatterns = [
     path("allpat/",PatientList.as_view(),name="allpat"),
     path('daily/',DailyQueue.as_view(),name="daily"),
     path('newpat/',AddNewPatient.as_view(), name="newpatient"),
-    path('markAttend/',MarkAttendance.as_view(),name="Mark")
+    path('markAttend/',MarkAttendance.as_view(),name="Mark"),
+    path('report/',ReportUploader.as_view(),name='report')
 
 ]

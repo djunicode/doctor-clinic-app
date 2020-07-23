@@ -259,6 +259,14 @@ class AddNewPatient(APIView):
 
 
 class MarkAttendance(APIView):
+    
+    """
+    This view handles the attendance part of the user.It takes the 
+    patient id whose attendance has to be marked as query params
+
+
+    """
+
     def get(self, request):
         pid = request.query_params.get("name")
         # day=request.query_params.get('date')
@@ -271,4 +279,28 @@ class MarkAttendance(APIView):
         val.present = True
         val.save()
         return Response({"done": "done"})
+
+
+
+class ReportUploader(APIView):
+    
+
+    def get(self,request):
+        pid = request.query_params.get("patientid")
+        rep=Report.objects.filter(patient=Patient.objects.get(patient_id=pid))
+        print(rep)
+
+        ser=ReportSerializer(rep,many=True)
+        return Response(ser.data)
+
+        return (ser.data)
+    def post(self,request):
+        ser=ReportSerializer(data=request.data)
+        if ser.is_valid():
+            print("Yes")
+            val=ser.save()
+            return Response({'success':'Your reports have been uploaded ',
+                                'location':f'{val.filelocation}'})
+
+        return Response(ser.errors)
 

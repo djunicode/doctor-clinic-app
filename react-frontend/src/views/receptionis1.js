@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-import Nav from "../components/nav";
 import LeftSideBar from "../components/LeftSideBar";
 import MainBody from "../components/MainBody";
 import RightSideBar from "../components/RightSideBar";

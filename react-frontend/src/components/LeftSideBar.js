@@ -15,8 +15,8 @@ class LeftSideBar extends Component {
           ></img>
         </div>
         <Button variant="contained" className={this.props.className}>
-          <Link className="link" to="/">
-            Patients
+          <Link className="link" to="/receptionist1">
+            Home
           </Link>
         </Button>
         <div className="margin_10 margin_10_b">

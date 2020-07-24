@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Context } from '../context/Context';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import DoneIcon from '@material-ui/icons/Done';
@@ -6,6 +6,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 
 const RightSideBar = (props) => {
   const context = useContext(Context)
+  const [spinner, showSpinner] = useState(false)
 
   const status = (start_time, present) => {
     let dt = new Date()
@@ -38,17 +39,38 @@ const RightSideBar = (props) => {
     return DOWcodes[dt.getDay()] + ", " + dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear() 
   }
 
+  const markAttendance = async(id, index) => {
+    // alert("x")
+    showSpinner(true)
+    try{
+      const response = await fetch(`api/markAttend/?id=${id}`)
+      // console.log(await response.text())
+      const res = await response.json()
+      console.log(res)
+      context.attendance(index)
+    }
+    catch(err){
+      console.log(err)
+    }
+    showSpinner(false)
+  }
+
   return (
     <div className="RightContainer">
       {/* <p>Time: {appointment.appointment.start_time}</p> */}
       <p>{today()}</p>
-      <div style={{height: '80vh',overflow: 'scroll'}}>
-        {context.appointments.length>0 ? context.appointments.map((appointment) => (
-          <div>
+      <div style={{position:'relative', height: '80vh', overflowY: 'scroll'}}>
+        {spinner && <div style={{width: '100%',height:'100%',top:0,left:0,position: 'absolute', zIndex: 1001, backgroundColor: 'rgba(255,255,255,0.5)'}}>
+          <div class="lds-dual-ring" style={{marginTop:'70%'}}></div>
+        </div>}
+        {context.appointments.length>0 ? context.appointments.map((appointment, index) => (
+          <div style={{width: '100%',height:'100%',top:0,left:0,position: 'absolute'}}>
             <h6>QUEUE: {appointment.token} {status(appointment.appointment.start_time, appointment.present)}</h6>
-            <p>Name: {appointment.appointment.patient.username.first_name, appointment.appointment.patient.username.last_name}</p>
-            <p>Doctor: {appointment.appointment.doctor.username.first_name, appointment.appointment.doctor.username.last_name}</p>
+            <p>Name: {appointment.appointment.patient.username}</p>
+            <p>Doctor: {appointment.appointment.doctor.username}</p>
             <p>Time: {appointment.appointment.start_time}</p>
+            {/* <p>{appointment.appointment.id}</p> */}
+            {!appointment.present && <button onClick={() => markAttendance(appointment.appointment.patient.patient_id, index)}>mark</button>}
           </div>
         )): <p>No Appointments Today</p>}
         {/* {JSON.stringify(context.appointments)} */}

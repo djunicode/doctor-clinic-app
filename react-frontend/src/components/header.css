@@ -8,4 +8,13 @@
 #header{
     background-color:#CF6A6A;
     position: fixed;
+    flex-direction: row;
+}
+#logout{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 20px;
+    align-self: center;
+    cursor: pointer;
 }

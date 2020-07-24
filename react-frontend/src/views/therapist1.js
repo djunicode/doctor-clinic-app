@@ -13,7 +13,7 @@ function Therapist1(props) {
 
   useEffect(()=>{
     let d = new Date()
-    getTherapistData(new URLSearchParams(props.location.search).get("id"),'2020-11-11')//(d.getYear()+1900)+'-'+(d.getMonth()+1)+'-'+(d.getDate()))
+    getTherapistData(new URLSearchParams(props.location.search).get("id"),(d.getYear()+1900)+'-'+(d.getMonth()+1)+'-'+(d.getDate()))
   },[])
 
   const getTherapistData = async(docID, date) => {

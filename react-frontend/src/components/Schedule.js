@@ -10,7 +10,6 @@ export default class Schedule extends React.Component {
   state = {
     loading: true,
     person: null,
-    confirmVisible: false,
     doctors: [],
     type: ["X-ray", "checkup", "sonography", "other"],
     dates: [],
@@ -21,6 +20,7 @@ export default class Schedule extends React.Component {
     selectedDoctor: null,
     selectedDate: null,
     selectedSlot: null,
+    spinnerVisible: false
   };
 
   static contextType = Context;
@@ -99,6 +99,7 @@ export default class Schedule extends React.Component {
     if(selectedDoctor!==null && selectedDate!==null){
       // alert("apicall")
       // document.getElementById("confirm").disabled = false;
+      this.setState({spinnerVisible: true, slots: []})
       const url = `api/newAppointment?id=${parseInt(selectedDoctor)}&date=${selectedDate}`;
       const response = await fetch(url);
       // console.log(await response.text())
@@ -106,9 +107,9 @@ export default class Schedule extends React.Component {
       console.log(data);
       this.availableSlots(data.doctor[0], data.patients);
     }
-    else{
+    // else{
 
-    }
+    // }
   };
 
   availableSlots(doctorData, patientData) {
@@ -126,6 +127,7 @@ export default class Schedule extends React.Component {
         draggable: true,
         progress: undefined,
       });
+      this.setState({slots: [], spinnerVisible: false})
     } else {
       let abc = patientData.map((x) => {
         return x.start_time;
@@ -154,7 +156,7 @@ export default class Schedule extends React.Component {
         return !abc.includes(element);
       });
       console.log(slots);
-      this.setState({ slots });
+      this.setState({ slots, spinnerVisible: false });
     }
   }
 
@@ -246,7 +248,7 @@ export default class Schedule extends React.Component {
                 )}
                 onChange={(e, newValue) => {
                   this.setState({
-                    selectedPatient: newValue===null ? null : newValue.id,
+                    selectedPatient: newValue===null ? null : newValue.patient_id,
                   });
                 }}
               />
@@ -282,9 +284,9 @@ export default class Schedule extends React.Component {
                 }}
                 onChange={async(e, newValue) => {
                   // alert(Object.keys(newValue))
-                  // alert(newValue)
+                  alert(newValue['doctor_id'])
                   await this.setState({
-                    selectedDoctor: newValue===null ? null : newValue.id,
+                    selectedDoctor: newValue===null ? null : newValue['doctor_id'],
                   });
                   this.getTherapistData()
                 }}
@@ -336,7 +338,7 @@ export default class Schedule extends React.Component {
                   </button>
                 )} */}
               </div>
-             
+              {this.state.spinnerVisible && <div class="lds-dual-ring" style={{marginLeft: 95, marginTop: 80}}></div>}
               {this.getSlotsValidation() &&
                 this.state.slots.length !== 0 && (
                   <div class="margin_10" style={{ float: "right", marginLeft: 20, marginRight: "45px" }}>
@@ -361,7 +363,7 @@ export default class Schedule extends React.Component {
                         // alert("newValue"+newValue)
                         this.setState({
                           selectedSlot: newValue,
-                          confirmVisible: true,
+                          // confirmVisible: true,
                         });
                       }}
                     />

@@ -50,8 +50,9 @@
 }
 .signInButton{
     width: 300px !important;
-    margin-top: 40px !important;
     height: 50px !important;
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
 }
 @media screen and (max-width: 599px){
     .fields{

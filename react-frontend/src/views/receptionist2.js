@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import Nav from "../components/nav";
 import LeftSideBar from "../components/LeftSideBar";
-import Requests from "../components/Requests";
 import Schedule from "../components/Schedule";
 import RightSideBar from "../components/RightSideBar";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,17 +10,17 @@ import Col from "react-bootstrap/Col";
 import Header from "../components/Header";
 
 function Receptionist2() {
-  const [appointments, setAppointments] = useState([])
+  // const [appointments, setAppointments] = useState([])
 
-  useEffect(()=>{
-    getAppointments()
-  },[])
+  // useEffect(()=>{
+  //   getAppointments()
+  // },[])
 
-  const getAppointments = async() => {
-    const response = await fetch('api/appointments/')
-    const resp = await response.json()
-    console.log(resp)
-  }
+  // const getAppointments = async() => {
+  //   const response = await fetch('api/appointments/')
+  //   const resp = await response.json()
+  //   console.log(resp)
+  // }
 
   return (
     <>

@@ -6,21 +6,16 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
+import Modal from '@material-ui/core/Modal';
+import DateTimePicker from 'date-time-picker'
+import Calendar from 'react-calendar';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import './style.css'
-
-
-const options = [
-  { key: 1, text: "Dr.Asthana ", value: 1 },
-  { key: 2, text: "Dr.Shah ", value: 2 },
-  { key: 3, text: "Dr.Strange ", value: 3 },
-];
-
-const menuoptions = [];
-for (var i = 0; i < options.length; i++) {
-  menuoptions.push(
-    <MenuItem value={options[i].text}>{options[i].text}</MenuItem>
-  );
-}
+import 'react-calendar/dist/Calendar.css';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const MainBody2 = (props) => {
   const [firstname, setFirstname] = useState("");
@@ -34,6 +29,7 @@ const MainBody2 = (props) => {
   const [email, setEmail] = useState("");
   const [history, setHistory] = useState("");
   const [activityIndicator, setActivityIndicator] = useState(false);
+  const [open,setOpen] = useState(false)
 
   const submit = async (e) => {
     e.preventDefault();
@@ -63,9 +59,18 @@ const MainBody2 = (props) => {
           body: formdata,
         });
         const resData = await response.json();
-        if (resData.success === "Successfully added new Patient") {
-          history.push("/");
+        if (resData.added) {
+          toast.success("New Patient Added", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
+        console.log(resData, resData.status)
         setActivityIndicator(false);
       } catch (err) {
         console.log(err);
@@ -209,15 +214,53 @@ const MainBody2 = (props) => {
               xs={12}
             >
               <div className="fields-inner-container">
-                <TextField
+                {/* <h3>DOB: </h3> */}
+                {/* <TextField
                   required
+                  id="outlined-read-only-input"
                   className="fields1"
-                  id="outlined-basic"
+                  // id="outlined-basic"
+                  defaultValue={DOB}
+                  InputProps={{
+                    readOnly: true,
+                  }}
                   label="Date of Birth"
                   type="Text"
                   onChange={(event) => setDOB(event.target.value)}
                   variant="outlined"
-                />
+                /> */}
+                <FormControl variant="outlined">
+          <OutlinedInput
+            id="outlined-adornment-weight"
+            value={DOB}
+            // onChange={handleChange('weight')}
+            endAdornment={<InputAdornment position="end" onClick={() => {
+              // var datePicker = new DateTimePicker.Date(null, {
+              //   lang: 'EN', // default 'EN'. One of 'EN', 'zh-CN'
+              //   format: 'yyyy-MM-dd', // default 'yyyy-MM-dd'
+              //    // default `new Date()`. If `default` type is string, then it will be parsed to `Date` instance by `format` . Or it can be a `Date` instance
+              //   min: '1930-01-01', // min date value, `{String | Date}`, default `new Date(1900, 0, 1, 0, 0, 0, 0)`
+              //   max: `new Date()` // max date value, `{String | Date}`, default `new Date(2100, 11, 31, 23, 59, 59, 999)`
+              // })
+              // datePicker.on('selected', function (formatDate, now) {
+              //   setDOB(formatDate)
+              //   // formatData = 2016-10-19
+              //   // now = Date instance -> Wed Oct 19 2016 20:28:12 GMT+0800 (CST)
+              // })
+              // datePicker.on('cleared', function () {
+              //   // clicked clear btn
+              // })
+              setOpen(true)
+            }}>select</InputAdornment>}
+            aria-describedby="outlined-weight-helper-text"
+            inputProps={{
+              'aria-label': 'weight',
+            }}
+            labelWidth={0}
+          />
+          <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>
+        </FormControl>
+                
               </div>
             </Grid>
             <Grid
@@ -279,6 +322,23 @@ const MainBody2 = (props) => {
                 />
               </div>
             </Grid>
+            <button onClick={() => {
+              var datePicker = new DateTimePicker.Time(null, {
+                lang: 'EN', // default 'EN'
+                format: 'HH:mm', // default 'HH:mm'
+                default: '12:27', // default `new Date()`. If `default` type is string, then it will be parsed to `Date` instance by `format` . Or it can be a `Date` instance
+                minuteStep: 5, // default 5. Select minutes step, must be one of [1, 5, 10]
+                min: '00:00', // min time value, `{String | Date}`, default `new Date(1900, 0, 1, 0, 0, 0, 0)`
+                max: '23:59' // max time value, `{String | Date}`, default `new Date(2100, 11, 31, 23, 59, 59, 999)`
+              })
+              datePicker.on('selected', function (formatDate, now) {
+                // formatData = 2016-10-19
+                // now = Date instance -> Wed Oct 19 2016 20:28:12 GMT+0800 (CST)
+              })
+              datePicker.on('cleared', function () {
+                // clicked clear btn
+              })
+            }}>Dt/Ti</button>
           </Grid>
           <div>
             <Button
@@ -298,6 +358,32 @@ const MainBody2 = (props) => {
             </Button>
           </div>
         </form>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+        />
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          {(
+            <Calendar
+              onChange={(date)=>{
+                console.log(date)
+              }}
+              value={new Date()}
+            />
+          )}
+        </Modal>
       </div>
     </div>
   );

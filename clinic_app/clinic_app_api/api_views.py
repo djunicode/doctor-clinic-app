@@ -1,16 +1,61 @@
 from rest_framework.views import APIView
-from .serializers import (
-    AppointmentSerializer,
-    ReportSerializer,
-    PatientSerializer,
-    AppointmentSerializer2,
-    DocSerializer,
-    DailySerializer,
-    CustomSerializer,
-)
+from .serializers import *
 from ..models import *
 from rest_framework.response import Response
 import datetime
+from rest_framework import status
+
+
+# class BookNewAppointmentView(APIView):
+#     """
+#     """
+#     def post(self, request):
+#         print(request.data)
+#         serializer = AppointmentSerializer2(data=request.data)
+#         print(request.POST["date"], "Helllloooo")
+#         # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and L2 <= R1)
+#         if request.POST["start_time"] < request.POST["end_time"]:
+#             appointments_in_range_for_doctor = Appointment.objects.filter(
+#                 date=request.POST["date"],
+#                 doctor=request.POST["doctor"],
+#                 start_time__lte=request.POST["end_time"],
+#                 end_time__gte=request.POST["start_time"],
+#             )
+
+#             appointments_in_range_for_patient = Appointment.objects.filter(
+#                 date=request.POST["date"],
+#                 patient=request.POST["patient"],
+#                 start_time__lte=request.POST["end_time"],
+#                 end_time__gte=request.POST["start_time"],
+#             )
+#             print(serializer.is_valid())
+#             if (
+#                 serializer.is_valid()
+#                 and len(appointments_in_range_for_doctor) == 0
+#                 and len(appointments_in_range_for_patient) == 0
+#             ):
+#                 # print(serializer.data)
+#                 val = serializer.save()
+#                 return Response(serializer.data)
+#             else:
+#                 return Response({"Not posssible": "This slot is not available"})
+#         else:
+#             return Response(
+#                 {"Not posssible": "Start time cannot be greater than end time"}
+#             )
+
+#         return Response(serializer.errors)
+
+
+class DocView(APIView):
+    def get(self, request):
+        print(Doctor.objects.all().first())
+        val = Doctor.objects.all()
+        ser = DocSerializer(val, many=True)
+        # print(ser.is_valid())
+        # if ser.is_valid():
+        return Response(ser.data)
+        # return Response("Hi")
 
 
 class PatientDashboardView(APIView):
@@ -32,74 +77,54 @@ class PatientDashboardView(APIView):
         return Response(final)
 
 
-class PatientRegisterView(APIView):
-    def post(self, request):
-        print(request.data)
-        serializer = AppointmentSerializer2(data=request.data)
-        print(request.POST["date"], "Helllloooo")
-        # Appointments (L1, R1) and (L2, R2) will collide iff (R2 >= L1 and L2 <= R1)
-        if request.POST["start_time"] < request.POST["end_time"]:
-            appointments_in_range_for_doctor = Appointment.objects.filter(
-                date=request.POST["date"],
-                doctor=request.POST["doctor"],
-                start_time__lte=request.POST["end_time"],
-                end_time__gte=request.POST["start_time"],
-            )
-
-            appointments_in_range_for_patient = Appointment.objects.filter(
-                date=request.POST["date"],
-                patient=request.POST["patient"],
-                start_time__lte=request.POST["end_time"],
-                end_time__gte=request.POST["start_time"],
-            )
-            print(serializer.is_valid())
-            if (
-                serializer.is_valid()
-                and len(appointments_in_range_for_doctor) == 0
-                and len(appointments_in_range_for_patient) == 0
-            ):
-                # print(serializer.data)
-                val = serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response({"Not posssible": "This slot is not available"})
-        else:
-            return Response(
-                {"Not posssible": "Start time cannot be greater than end time"}
-            )
-
-        return Response(serializer.errors)
-
-
-class docview(APIView):
-    def get(self, request):
-        print(Doctor.objects.all().first())
-        val = Doctor.objects.all()
-        ser = DocSerializer(val, many=True)
-        # print(ser.is_valid())
-        # if ser.is_valid():
-        return Response(ser.data)
-        # return Response("Hi")
-
-
 class PatientView(APIView):
+    """
+     This view gives a list of all the patient registered in the clinic
+     GET request(Optional parameter id)
+     if an id is provided in the request then the specific patient is returned else the entire list of 
+     Patients is returned
+     """
     def get(self, request):
         user_id = request.query_params.get("id")
         print(user_id)
         if user_id:
-            val = Patient.objects.filter(patient_id=user_id)
-            print(val[0].username)
-            ser = PatientSerializer(val, many=True)
-            # if ser.is_valid():
-            return Response(ser.data)
-            # else:
-            #   return Response(ser.errors)
-
+            try:
+                val = Patient.objects.filter(patient_id=user_id)
+                print(val[0].username)
+                ser = PatientSerializer(val, many=True)
+                # if ser.is_valid():
+                return Response(ser.data)
+                # else:
+                #   return Response(ser.errors)
+            except IndexError:
+                return Response({"error": "Invalid Id provided "})
         else:
-            return Response({"error": "Invalid Id provided "})
+            val = PatientSerializer(Patient.objects.all(), many=True)
+            return Response(val.data)
+
+
+# class PatientList(APIView):
+#     """
+#     This view gives a list of all the patient registered in the clinic
+#     GET request
+#     """
+#     def get(self, request):
+        
 
 
 class AppointmentScheduler(APIView):
+
+    """
+    
+    GET request(Parameters doc_id and day)
+    The get request returns returns the appointments for a doctor on a particular day 
+    on the basis of date and id provided as parameters in the request
+
+    This view is used for creating new appointments 
+    POST request(Parameters doctor,patient,type_of,date,start_time,end_time)
+    The post request is used to book a new appointment .All the possible cases to prevent clash 
+    of appointment have been handled
+    """
     def get(self, request):
         doc_id = request.query_params.get("id")
         day = request.query_params.get("date")
@@ -158,13 +183,13 @@ class AppointmentScheduler(APIView):
         return Response(serializer.errors)
 
 
-class PatientList(APIView):
-    def get(self, request):
-        val = PatientSerializer(Patient.objects.all(), many=True)
-        return Response(val.data)
 
 
 class DailyQueue(APIView):
+    """
+    This function generates the daily queue for the particular day(by default today)
+    The doctor id is the query parameter used to filter the queue by doctors
+    """
     def get(self, request):
         schedule = Appointment.objects.filter(date=datetime.date.today()).order_by(
             "start_time"
@@ -197,14 +222,20 @@ class DailyQueue(APIView):
 
 
 class AddNewPatient(APIView):
+    """
+    This view handles adding new patients to the database.
+    POST request
+    parameters 
+    username,DOB,email,password,password2,first_name,last_name,contact_no,profile_pic(optional)
+    """
     def post(self, request):
-
+        
         ser = CustomSerializer(data=request.data)
         print("request.data", request.data)
         if ser.is_valid() and request.data != {}:
             print("----------->", ser.is_valid())
             print("-------+++++", ser.errors)
-            if request.data["password"] != request.data["password"]:
+            if request.data["password"] != request.data["password2"]:
                 return Response({"error": "Your Passwords don't match ,Please check"})
 
             else:
@@ -223,6 +254,9 @@ class AddNewPatient(APIView):
                 return Response({"Null Fields": "Some fields are not filled"})
             else:
                 return Response(ser.errors)
+
+    # def put(self,request):
+
 
 
 # class AddNewDoctor(APIView):
@@ -268,12 +302,13 @@ class MarkAttendance(APIView):
     """
 
     def get(self, request):
-        pid = request.query_params.get("name")
+        pid = request.query_params.get("id")
         # day=request.query_params.get('date')
         print(pid, "000000000000000000000")
         val = DailyDoctorQueue.objects.get(
-            appointment__patient__username=CustomUser.objects.get(username=str(pid)),
-            appointment__date=datetime.date.today(),
+            # appointment__patient__username=CustomUser.objects.get(username=str(pid)),
+            # appointment__date=datetime.date.today(),
+            appointment__id=pid
         )
         print(val)
         val.present = True
@@ -283,6 +318,15 @@ class MarkAttendance(APIView):
 
 
 class ReportUploader(APIView):
+    """
+    This view handles all the stuff related to reports 
+    GET (Parameter id of patient)
+    The get method returns the Reports of patient depending on the id provided
+
+    POST (Parameters fillocation(file),typeof,patient,publishedon,appointment)
+    This function is used for uploading data to the database 
+
+    """
     
 
     def get(self,request):
@@ -300,6 +344,40 @@ class ReportUploader(APIView):
             print("Yes")
             val=ser.save()
             return Response({'success':'Your reports have been uploaded ',
+                                'location':f'{val.filelocation}'})
+
+        return Response(ser.errors)
+
+
+
+
+class ReceiptUploader(APIView):
+    """
+    This view handles all the stuff related to receipts 
+    GET (Parameter id of patient)
+    The get method returns the Reports of patient depending on the id provided
+
+    POST (Parameters fillocation(file),typeof,patient,publishedon,appointment)
+    This function is used for uploading data to the database 
+
+    """
+    
+
+    def get(self,request):
+        pid = request.query_params.get("patientid")
+        rep=Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
+        print(rep)
+
+        ser=ReceiptSerializer(rep,many=True)
+        return Response(ser.data)
+
+        return (ser.data)
+    def post(self,request):
+        ser=ReceiptSerializer(data=request.data)
+        if ser.is_valid():
+            print("Yes")
+            val=ser.save()
+            return Response({'success':'Your receipt has been uploaded ',
                                 'location':f'{val.filelocation}'})
 
         return Response(ser.errors)

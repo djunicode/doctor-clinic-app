@@ -17,6 +17,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 # Create your models here.
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=100, unique=True)
     DOB = models.DateField(blank=True,null=True)
@@ -124,9 +125,9 @@ class Report(models.Model):
 
 
 class Receipt(models.Model):
+    filelocation = models.FileField(upload_to="uploads/%Y/%m/%d/",null=True,blank=True)
     appointment = models.ForeignKey(Appointment,on_delete=models.CASCADE,null=True,blank=True)
     date = models.DateField()
-    time = models.TimeField()   
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     price = models.IntegerField()

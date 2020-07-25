@@ -1,21 +1,12 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
-import Modal from '@material-ui/core/Modal';
-import DateTimePicker from 'date-time-picker'
-import Calendar from 'react-calendar';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './style.css'
 import 'react-calendar/dist/Calendar.css';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 const MainBody2 = (props) => {
   const [firstname, setFirstname] = useState("");
@@ -29,7 +20,11 @@ const MainBody2 = (props) => {
   const [email, setEmail] = useState("");
   const [history, setHistory] = useState("");
   const [activityIndicator, setActivityIndicator] = useState(false);
-  const [open,setOpen] = useState(false)
+
+  const today = () => {
+    let dt = new Date()
+    return dt.getMonth() + "-" + dt.getDate() + "-" + dt.getFullYear() 
+  }
 
   const submit = async (e) => {
     e.preventDefault();
@@ -132,8 +127,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container ">
-              
+              <div className="fields-inner-container">
                 <TextField
                   required
                   className="fields1"
@@ -153,14 +147,14 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container ">
+              <div className="fields-inner-container">
                 <TextField
                   required
                   className="fields1"
                   id="outlined-basic"
-                  label="Condition"
-                  type="Text"
-                  onChange={(event) => setCondition(event.target.value)}
+                  label="Email Id"
+                  type="email"
+                  onChange={(event) => setEmail(event.target.value)}
                   variant="outlined"
                 />
               </div>
@@ -214,53 +208,17 @@ const MainBody2 = (props) => {
               xs={12}
             >
               <div className="fields-inner-container">
-                {/* <h3>DOB: </h3> */}
-                {/* <TextField
-                  required
-                  id="outlined-read-only-input"
-                  className="fields1"
-                  // id="outlined-basic"
-                  defaultValue={DOB}
-                  InputProps={{
-                    readOnly: true,
-                  }}
+                <TextField
+                  id="date"
                   label="Date of Birth"
-                  type="Text"
+                  type="date"
+                  defaultValue={today()}
+                  style={{ width: 230 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   onChange={(event) => setDOB(event.target.value)}
-                  variant="outlined"
-                /> */}
-                <FormControl variant="outlined">
-          <OutlinedInput
-            id="outlined-adornment-weight"
-            value={DOB}
-            // onChange={handleChange('weight')}
-            endAdornment={<InputAdornment position="end" onClick={() => {
-              // var datePicker = new DateTimePicker.Date(null, {
-              //   lang: 'EN', // default 'EN'. One of 'EN', 'zh-CN'
-              //   format: 'yyyy-MM-dd', // default 'yyyy-MM-dd'
-              //    // default `new Date()`. If `default` type is string, then it will be parsed to `Date` instance by `format` . Or it can be a `Date` instance
-              //   min: '1930-01-01', // min date value, `{String | Date}`, default `new Date(1900, 0, 1, 0, 0, 0, 0)`
-              //   max: `new Date()` // max date value, `{String | Date}`, default `new Date(2100, 11, 31, 23, 59, 59, 999)`
-              // })
-              // datePicker.on('selected', function (formatDate, now) {
-              //   setDOB(formatDate)
-              //   // formatData = 2016-10-19
-              //   // now = Date instance -> Wed Oct 19 2016 20:28:12 GMT+0800 (CST)
-              // })
-              // datePicker.on('cleared', function () {
-              //   // clicked clear btn
-              // })
-              setOpen(true)
-            }}>select</InputAdornment>}
-            aria-describedby="outlined-weight-helper-text"
-            inputProps={{
-              'aria-label': 'weight',
-            }}
-            labelWidth={0}
-          />
-          <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>
-        </FormControl>
-                
+                />
               </div>
             </Grid>
             <Grid
@@ -291,14 +249,17 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
-                  required
+                  // required
+                  id="outlined-multiline-static"
+                  multiline
+                  rows={4}
+                  defaultValue=""
                   className="fields1"
-                  id="outlined-basic"
-                  label="Email Id"
-                  type="email"
-                  onChange={(event) => setEmail(event.target.value)}
+                  label="Medical Conditions"
+                  type="Text"
+                  onChange={(event) => setCondition(event.target.value)}
                   variant="outlined"
                 />
               </div>
@@ -314,31 +275,17 @@ const MainBody2 = (props) => {
               <div className="fields-inner-container">
                 <TextField
                   className="fields1"
-                  id="outlined-basic"
-                  label="History / Add Details"
+                  id="outlined-multiline-static"
+                  multiline
+                  rows={4}
+                  defaultValue=""
+                  label="Medical History / Add Details"
                   type="Text"
                   onChange={(event) => setHistory(event.target.value)}
                   variant="outlined"
                 />
               </div>
             </Grid>
-            <button onClick={() => {
-              var datePicker = new DateTimePicker.Time(null, {
-                lang: 'EN', // default 'EN'
-                format: 'HH:mm', // default 'HH:mm'
-                default: '12:27', // default `new Date()`. If `default` type is string, then it will be parsed to `Date` instance by `format` . Or it can be a `Date` instance
-                minuteStep: 5, // default 5. Select minutes step, must be one of [1, 5, 10]
-                min: '00:00', // min time value, `{String | Date}`, default `new Date(1900, 0, 1, 0, 0, 0, 0)`
-                max: '23:59' // max time value, `{String | Date}`, default `new Date(2100, 11, 31, 23, 59, 59, 999)`
-              })
-              datePicker.on('selected', function (formatDate, now) {
-                // formatData = 2016-10-19
-                // now = Date instance -> Wed Oct 19 2016 20:28:12 GMT+0800 (CST)
-              })
-              datePicker.on('cleared', function () {
-                // clicked clear btn
-              })
-            }}>Dt/Ti</button>
           </Grid>
           <div>
             <Button
@@ -369,21 +316,6 @@ const MainBody2 = (props) => {
           draggable
           pauseOnHover
         />
-        <Modal
-          open={open}
-          onClose={() => setOpen(false)}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          {(
-            <Calendar
-              onChange={(date)=>{
-                console.log(date)
-              }}
-              value={new Date()}
-            />
-          )}
-        </Modal>
       </div>
     </div>
   );

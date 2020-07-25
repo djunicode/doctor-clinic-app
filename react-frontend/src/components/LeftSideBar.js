@@ -9,7 +9,7 @@ class LeftSideBar extends Component {
       <div className="LeftContainer">
         <div>
           <img
-            src="https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png"
+            src = {require("../images/defaultdp.webp")}
             className="LImage"
             alt="Profile"
           ></img>

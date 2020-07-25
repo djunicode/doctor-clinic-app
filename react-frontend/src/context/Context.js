@@ -10,6 +10,7 @@ const INIT_STATE = {
 }
 
 var Token = null
+var is_doctor = false
 
 const ContextProvider = (props) => {
     const [clinicData, setClinicData] = useState(INIT_STATE)
@@ -42,8 +43,7 @@ const ContextProvider = (props) => {
         setClinicData({
             doctors: responses[0],
             patients: responses[1],
-            appointments: responses[2],
-            loggedIn: true
+            appointments: responses[2]
         })
     }
 
@@ -78,6 +78,13 @@ const ContextProvider = (props) => {
         return -1
     }
 
+    const forceRefreshAppt = async() => {
+        setClinicData({
+            ...clinicData,
+            appointments: await getDailyAppointments()
+        })
+    }
+
     const attendance = (index) => {
         let temp = clinicData.appointments
         temp[index].present = true
@@ -101,7 +108,7 @@ const ContextProvider = (props) => {
             })
             const resData = await res.json()
             console.log(resData)
-            localStorage.setItem('doctorClinicAppToken', JSON.stringify(resData))
+            localStorage.setItem('doctorClinicAppToken', resData.token)
             Token = resData.token
             setLoggedIn(true)
             getClinicData()
@@ -126,9 +133,11 @@ const ContextProvider = (props) => {
             appointments: clinicData.appointments, 
             patients: clinicData.patients, 
             doctors: clinicData.doctors, 
+            forceRefreshAppt,
             init, 
             attendance, 
-            loggedIn, 
+            loggedIn,
+            is_doctor, 
             Token, 
             login,
             logout

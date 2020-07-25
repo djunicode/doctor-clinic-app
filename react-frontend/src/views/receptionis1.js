@@ -22,14 +22,7 @@ function Receptionist1() {
             <MainBody />
           </Col>
           <Col xs={12} md={3} lg={2} className="Cellpadding">
-            <RightSideBar
-              time="18:00"
-              date="24-03-20"
-              day="Tuesday"
-              queue="1"
-              name="Vatsal Chheda"
-              docname="Dr. Asthana"
-            />
+            <RightSideBar />
           </Col>
         </Row>
       </Container>

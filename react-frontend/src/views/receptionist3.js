@@ -22,9 +22,7 @@ function Receptionist3() {
             <MainBody2 />
           </Col>
           <Col xs={12}  lg={3} xl={2} className="Cellpadding">
-            <RightSideBar
-             
-            />
+            <RightSideBar />
           </Col>
         </Row>
       </Container>

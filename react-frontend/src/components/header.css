@@ -14,7 +14,23 @@
     width: 35px;
     height: 35px;
     position: absolute;
-    right: 20px;
+    right: 15px;
+    align-self: center;
+    cursor: pointer;
+}
+#home{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 60px;
+    align-self: center;
+    cursor: pointer;
+}
+#docprofile{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 105px;
     align-self: center;
     cursor: pointer;
 }

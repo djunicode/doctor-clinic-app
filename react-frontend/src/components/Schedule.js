@@ -217,6 +217,7 @@ export default class Schedule extends React.Component {
             draggable: true,
             progress: undefined,
           });
+          this.context.forceRefreshAppt();
           document.getElementById("slot").textContent = temp[0];
         }
       })
@@ -284,7 +285,7 @@ export default class Schedule extends React.Component {
                 }}
                 onChange={async(e, newValue) => {
                   // alert(Object.keys(newValue))
-                  alert(newValue['doctor_id'])
+                  // alert(newValue['doctor_id'])
                   await this.setState({
                     selectedDoctor: newValue===null ? null : newValue['doctor_id'],
                   });

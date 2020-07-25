@@ -19,7 +19,7 @@ function patientprofile() {
           <Col xs={12} md={6} lg={8} className="Cellpadding patientprofilemain">
             <div className="ppmain">
               <img
-                src="https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png"
+                src = {require("../images/defaultdp.webp")}
                 alt="Profile"
                 className="LImage"
                 style={{

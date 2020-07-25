@@ -129,12 +129,13 @@
   text-align: left;
   padding-bottom: 10px;
 }
+
 .PImage {
   float: left;
   height: 70px;
   width: 70px;
   border: 1px solid black;
-  background-image: url("https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png");
+  background-image: url("images/defaultdp.webp");
   background-size: 70px;
   margin-right: 5px;
 }
@@ -245,15 +246,6 @@
 .PContainer {
   text-align: left;
   padding-bottom: 10px;
-}
-.PImage {
-  float: left;
-  height: 70px;
-  width: 70px;
-  border: 1px solid black;
-  background-image: url("https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png");
-  background-size: 70px;
-  margin-right: 5px;
 }
 
 .PInfo p {

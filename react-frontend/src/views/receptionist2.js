@@ -10,18 +10,6 @@ import Col from "react-bootstrap/Col";
 import Header from "../components/Header";
 
 function Receptionist2() {
-  // const [appointments, setAppointments] = useState([])
-
-  // useEffect(()=>{
-  //   getAppointments()
-  // },[])
-
-  // const getAppointments = async() => {
-  //   const response = await fetch('api/appointments/')
-  //   const resp = await response.json()
-  //   console.log(resp)
-  // }
-
   return (
     <>
       <Header />
@@ -38,11 +26,7 @@ function Receptionist2() {
             </div>
           </Col>
           <Col xs={12} md={3} lg={2} className="Cellpadding">
-            {/* {appointments.map((appointment)=>( */}
-              <RightSideBar
-                
-              />
-            {/* ))} */}
+            <RightSideBar />
           </Col>
         </Row>
       </Container>

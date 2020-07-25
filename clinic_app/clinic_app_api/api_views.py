@@ -84,6 +84,7 @@ class PatientView(APIView):
      if an id is provided in the request then the specific patient is returned else the entire list of 
      Patients is returned
      """
+
     def get(self, request):
         user_id = request.query_params.get("id")
         print(user_id)
@@ -109,7 +110,6 @@ class PatientView(APIView):
 #     GET request
 #     """
 #     def get(self, request):
-        
 
 
 class AppointmentScheduler(APIView):
@@ -125,6 +125,7 @@ class AppointmentScheduler(APIView):
     The post request is used to book a new appointment .All the possible cases to prevent clash 
     of appointment have been handled
     """
+
     def get(self, request):
         doc_id = request.query_params.get("id")
         day = request.query_params.get("date")
@@ -183,13 +184,12 @@ class AppointmentScheduler(APIView):
         return Response(serializer.errors)
 
 
-
-
 class DailyQueue(APIView):
     """
     This function generates the daily queue for the particular day(by default today)
     The doctor id is the query parameter used to filter the queue by doctors
     """
+
     def get(self, request):
         schedule = Appointment.objects.filter(date=datetime.date.today()).order_by(
             "start_time"
@@ -228,8 +228,9 @@ class AddNewPatient(APIView):
     parameters 
     username,DOB,email,password,password2,first_name,last_name,contact_no,profile_pic(optional)
     """
+
     def post(self, request):
-        
+
         ser = CustomSerializer(data=request.data)
         print("request.data", request.data)
         if ser.is_valid() and request.data != {}:
@@ -248,52 +249,71 @@ class AddNewPatient(APIView):
                 )
                 temp.save()
 
-                return Response({"added": "New user added"})
+                return Response({"added": "New patient added"})
         else:
             if request.data == {}:
                 return Response({"Null Fields": "Some fields are not filled"})
             else:
                 return Response(ser.errors)
 
-    # def put(self,request):
+    def put(self, request):
+        pat_id = request.query_params.get("patid")
+        pat = Patient.objects.get(doctor_id=pat_id)
+        use=CustomUser.objects.get(id=pat.username.id)
+        use.profile_pic=request.data['image']
+        use.save()
 
 
 
-# class AddNewDoctor(APIView):
-#     def post(self, request):
-
-#         ser = CustomSerializer(data=request.data)
-#         print("request.data", request.data)
-#         if ser.is_valid() and request.data != {}:
-#             print("----------->", ser.is_valid())
-#             print("-------+++++", ser.errors)
-#             if request.data["password"] != request.data["password"]:
-#                 return Response({"error": "Your Passwords don't match ,Please check"})
-
-#             else:
-#                 ser.validated_data["is_Patient"] = True
-#                 val = ser.save()
-#                 temp=Doctor.objects.create(
-#                     username=val,
-#                     Degrees=request.POST["Degrees"],
-#                     Postgrad=request.POST["history"],
-#                     Specialization=request.POST['Specialization'],
-#                     daily_start_time=request.POST['daily_start_time']
-#                     daily_end_time=request.POST['daily_end_time']
-#                 )
-#                 temp.save()
+        return Response({'updated':'Profile Photo updated'})
 
 
-#                 return Response({"added": "New user added"})
-#         else:
-#             if request.data == {}:
-#                 return Response({"Null Fields": "Some fields are not filled"})
-#             else:
-#                 return Response(ser.errors)
+
+class AddNewDoctor(APIView):
+    def post(self, request):
+
+        ser = CustomSerializer(data=request.data)
+        print("request.data", request.data)
+        if ser.is_valid() and request.data != {}:
+            print("----------->", ser.is_valid())
+            print("-------+++++", ser.errors)
+            if request.data["password"] != request.data["password"]:
+                return Response({"error": "Your Passwords don't match ,Please check"})
+
+            else:
+                ser.validated_data["is_Patient"] = True
+                val = ser.save()
+                temp = Doctor.objects.create(
+                    username=val,
+                    qualification=request.POST["Degrees"],
+                    postgrad=request.POST["Postgrad"],
+                    speciality=request.POST["Specialization"],
+                    daily_start_time=request.POST["daily_start_time"],
+                    daily_end_time=request.POST["daily_end_time"],
+                )
+                temp.save()
+
+                return Response({"added": "New doctor added"})
+        else:
+            if request.data == {}:
+                return Response({"Null Fields": "Some fields are not filled"})
+            else:
+                return Response(ser.errors)
+
+    def put(self, request):
+        doc_id = request.query_params.get("docid")
+        doc = Doctor.objects.get(doctor_id=doc_id)
+        use=CustomUser.objects.get(id=doc.username.id)
+        use.profile_pic=request.data['image']
+        use.save()
+
+
+
+        return Response({'updated':'Profile Photo updated'})
 
 
 class MarkAttendance(APIView):
-    
+
     """
     This view handles the attendance part of the user.It takes the 
     patient id whose attendance has to be marked as query params
@@ -316,7 +336,6 @@ class MarkAttendance(APIView):
         return Response({"done": "done"})
 
 
-
 class ReportUploader(APIView):
     """
     This view handles all the stuff related to reports 
@@ -327,28 +346,30 @@ class ReportUploader(APIView):
     This function is used for uploading data to the database 
 
     """
-    
 
-    def get(self,request):
+    def get(self, request):
         pid = request.query_params.get("patientid")
-        rep=Report.objects.filter(patient=Patient.objects.get(patient_id=pid))
+        rep = Report.objects.filter(patient=Patient.objects.get(patient_id=pid))
         print(rep)
 
-        ser=ReportSerializer(rep,many=True)
+        ser = ReportSerializer(rep, many=True)
         return Response(ser.data)
 
-        return (ser.data)
-    def post(self,request):
-        ser=ReportSerializer(data=request.data)
+        return ser.data
+
+    def post(self, request):
+        ser = ReportSerializer(data=request.data)
         if ser.is_valid():
             print("Yes")
-            val=ser.save()
-            return Response({'success':'Your reports have been uploaded ',
-                                'location':f'{val.filelocation}'})
+            val = ser.save()
+            return Response(
+                {
+                    "success": "Your reports have been uploaded ",
+                    "location": f"{val.filelocation}",
+                }
+            )
 
         return Response(ser.errors)
-
-
 
 
 class ReceiptUploader(APIView):
@@ -361,24 +382,28 @@ class ReceiptUploader(APIView):
     This function is used for uploading data to the database 
 
     """
-    
 
-    def get(self,request):
+    def get(self, request):
         pid = request.query_params.get("patientid")
-        rep=Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
+        rep = Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
         print(rep)
 
-        ser=ReceiptSerializer(rep,many=True)
+        ser = ReceiptSerializer(rep, many=True)
         return Response(ser.data)
 
-        return (ser.data)
-    def post(self,request):
-        ser=ReceiptSerializer(data=request.data)
+        return ser.data
+
+    def post(self, request):
+        ser = ReceiptSerializer(data=request.data)
         if ser.is_valid():
             print("Yes")
-            val=ser.save()
-            return Response({'success':'Your receipt has been uploaded ',
-                                'location':f'{val.filelocation}'})
+            val = ser.save()
+            return Response(
+                {
+                    "success": "Your receipt has been uploaded ",
+                    "location": f"{val.filelocation}",
+                }
+            )
 
         return Response(ser.errors)
 

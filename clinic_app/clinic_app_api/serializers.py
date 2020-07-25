@@ -18,13 +18,21 @@ class CustomSerializer(serializers.ModelSerializer):
         validated_data["password"] = make_password(validated_data.get("password"))
         return super(CustomSerializer, self).create(validated_data)
 
+
 class CustomSerializer2(CustomSerializer):
-
-
     class Meta:
-        model=CustomUser
-        
-        fields = ("username","first_name","last_name","contact_no","email",'DOB','date_joined')
+        model = CustomUser
+
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "contact_no",
+            "email",
+            "DOB",
+            "date_joined",
+        )
 
 
 class PatientSerializer(serializers.ModelSerializer):
@@ -43,6 +51,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
         model = Report
         fields = "__all__"
+
 
 class ReceiptSerializer(serializers.ModelSerializer):
     class Meta:
@@ -118,8 +127,6 @@ class DailySerializer(serializers.ModelSerializer):
 
             return field_class, field_kwargs
         return super().build_nested_field(field_name, relation_info, nested_depth)
-
-
 
 
 # class PartialFirstSerializer(FirstSerializer):

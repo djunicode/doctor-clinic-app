@@ -29,6 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+    is_hospital_staff=models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     profile_pic = models.ImageField(
         upload_to="uploads/%Y/%m/%d/", null=True, blank=True
@@ -107,6 +108,7 @@ class Appointment(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    
 
     def __str__(self):
         return 'Patient='+str(self.patient.username.username)+' '+'Doctor='+ str(self.doctor.username.username)+'Type-of'+ str(self.type_of)

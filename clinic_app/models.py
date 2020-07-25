@@ -74,7 +74,7 @@ class Doctor(models.Model):
         ("DM", "DM"),
         ("MCh", "MCh"),
     )
-    doctor_id = models.AutoField(primary_key=True,default=0)
+    doctor_id = models.AutoField(primary_key=True)
     qualification = models.CharField(max_length=50, choices=Degrees, default="MBBS")
     postgrad = models.CharField(
         max_length=50, choices=Postgrad, default=None, null=True
@@ -87,11 +87,12 @@ class Doctor(models.Model):
     description=models.TextField(blank=True,null=True)
 
     def __str__(self):
-        return self.username.first_name+' '+self.username.last_name
+        # return self.username.first_name+' '+self.username.last_name
+        return self.username.username
 
 
 class Patient(models.Model):
-    patient_id = models.AutoField(primary_key=True,default=0)
+    patient_id = models.AutoField(primary_key=True)
     username = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     
      # doc under which patient is working

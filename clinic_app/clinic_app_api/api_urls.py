@@ -16,8 +16,8 @@ urlpatterns = [
     path('report/',ReportUploader.as_view(),name='report'),
     path('receipt/',ReceiptUploader.as_view(),name='receipt'),
     path('newdoc/',AddNewDoctor.as_view(),name="newdoctor"),
+    path('login/',CustomAuth.as_view(),name="login"),
 
 
 ]
- 
  

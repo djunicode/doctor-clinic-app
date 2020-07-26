@@ -4,6 +4,33 @@ from ..models import *
 from rest_framework.response import Response
 import datetime
 from rest_framework import status
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login
+
+
+class CustomAuth(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
+        print(request.user.is_authenticated, "____________")
+        return Response(
+            {
+                "token": token.key,
+                "user_id": user.pk,
+                "email": user.email,
+                "isDoctor": user.is_Doctor,
+                "isPatient": user.is_Patient,
+                "isStaff": user.is_hospital_staff,
+                "firstName": user.first_name,
+                "lastName": user.last_name,
+            }
+        )
 
 
 # class BookNewAppointmentView(APIView):
@@ -257,24 +284,23 @@ class AddNewPatient(APIView):
                 return Response(ser.errors)
 
         def put(self, request):
-        pat_id = request.query_params.get("patid")
-        pat= Patient.objects.get(patient_id=pat_id)
-        use=CustomUser.objects.get(id=pat.username.id)
-        use.profile_pic=request.data.get('image',None) or use.profile_pic
-        use.contact_no=request.data.get('contact',None) or use.contact_no
-        use.DOB=request.data.get('DOB',None) or use.DOB
-        use.email=request.data.get('email',None) or use.email
-        use.first_name=request.data.get('firstname',None) or use.first_name
-        use.last_name=request.data.get('lastname',None) or use.last_name
-        pat.conditions=request.data.get('conditions',None) or doc.conditions
-        pat.history=request.data.get('history',None) or doc.history
-        
-        use.save()
-        pat.save()
 
+            pat_id = request.query_params.get("patid")
+            pat = Patient.objects.get(patient_id=pat_id)
+            use = CustomUser.objects.get(id=pat.username.id)
+            use.profile_pic = request.data.get("image", None) or use.profile_pic
+            use.contact_no = request.data.get("contact", None) or use.contact_no
+            use.DOB = request.data.get("DOB", None) or use.DOB
+            use.email = request.data.get("email", None) or use.email
+            use.first_name = request.data.get("firstname", None) or use.first_name
+            use.last_name = request.data.get("lastname", None) or use.last_name
+            pat.conditions = request.data.get("conditions", None) or doc.conditions
+            pat.history = request.data.get("history", None) or doc.history
 
+            use.save()
+            pat.save()
 
-        return Response({'updated':'Patient Details Updated'})
+            return Response({"updated": "Patient Details Updated"})
 
 
 class AddNewDoctor(APIView):
@@ -311,24 +337,22 @@ class AddNewDoctor(APIView):
     def put(self, request):
         doc_id = request.query_params.get("docid")
         doc = Doctor.objects.get(doctor_id=doc_id)
-        use=CustomUser.objects.get(id=doc.username.id)
-        use.profile_pic=request.data.get('image',None) or use.profile_pic
-        use.contact_no=request.data.get('contact',None) or use.contact_no
-        use.DOB=request.data.get('DOB',None) or use.DOB
-        use.email=request.data.get('email',None) or use.email
-        use.first_name=request.data.get('firstname',None) or use.first_name
-        use.last_name=request.data.get('lastname',None) or use.last_name
-        doc.qualification=request.data.get('qualification',None) or doc.qualification
-        doc.postgrad=request.data.get('postgrad',None) or doc.postgrad
-        doc.speciality=request.data.get('specialization',None) or doc.speciality
-        doc.description=request.data.get('description',None) or doc.description
+        use = CustomUser.objects.get(id=doc.username.id)
+        use.profile_pic = request.data.get("image", None) or use.profile_pic
+        use.contact_no = request.data.get("contact", None) or use.contact_no
+        use.DOB = request.data.get("DOB", None) or use.DOB
+        use.email = request.data.get("email", None) or use.email
+        use.first_name = request.data.get("firstname", None) or use.first_name
+        use.last_name = request.data.get("lastname", None) or use.last_name
+        doc.qualification = request.data.get("qualification", None) or doc.qualification
+        doc.postgrad = request.data.get("postgrad", None) or doc.postgrad
+        doc.speciality = request.data.get("specialization", None) or doc.speciality
+        doc.description = request.data.get("description", None) or doc.description
 
         use.save()
         doc.save()
 
-
-
-        return Response({'updated':'Doctor Details Updated'})
+        return Response({"updated": "Doctor Details Updated"})
 
 
 class MarkAttendance(APIView):

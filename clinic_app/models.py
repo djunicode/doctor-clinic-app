@@ -88,7 +88,7 @@ class Doctor(models.Model):
 
     def __str__(self):
         # return self.username.first_name+' '+self.username.last_name
-        return self.username.username
+        return self.username.first_name+' '+self.username.last_name
 
 
 class Patient(models.Model):

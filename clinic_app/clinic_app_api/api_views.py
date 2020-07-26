@@ -16,21 +16,27 @@ class CustomAuth(ObtainAuthToken):
         )
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
-        #   login(request, user)
+        login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         print(request.user.is_authenticated, "____________")
-        return Response(
-            {
-                "token": token.key,
-                "user_id": user.pk,
-                "email": user.email,
-                "isDoctor": user.is_Doctor,
-                "isPatient": user.is_Patient,
-                "isStaff": user.is_hospital_staff,
-                "firstName": user.first_name,
-                "lastName": user.last_name,
-            }
-        )
+        final = {
+            "token": token.key,
+            "user_id": user.pk,
+            "email": user.email,
+            "isDoctor": user.is_Doctor,
+            "isPatient": user.is_Patient,
+            "isStaff": user.is_hospital_staff,
+            "firstName": user.first_name,
+            "lastName": user.last_name,
+        }
+        if user.is_Doctor:
+            temp = Doctor.objects.get(username__id=user.pk)
+            final["doctor_id"] = temp.doctor_id
+        elif user.is_Patient:
+            temp = Patient.objects.get(username__id=user.pk)
+            final["patient_id"] = temp.patient_id
+
+        return Response(final)
 
 
 # class BookNewAppointmentView(APIView):

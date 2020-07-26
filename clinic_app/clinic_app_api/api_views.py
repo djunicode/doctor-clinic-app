@@ -171,12 +171,12 @@ class AppointmentScheduler(APIView):
             val2 = Appointment.objects.filter(doctor=val1, date=day)
 
             ser = DocSerializer(val1)
-            ser2 = AppointmentSerializer2(val2, many=True)
+            ser2 = AppointmentSerializer(val2, many=True)
             final = {"doctor": ser.data, "patients": ser2.data}
             return Response(final)
         else:
             val = Appointment.objects.all()
-            ser = AppointmentSerializer2(val, many=True)
+            ser = AppointmentSerializer(val, many=True)
             return Response(ser.data)
 
     def post(self, request):

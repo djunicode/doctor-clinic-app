@@ -160,11 +160,11 @@ class AppointmentScheduler(APIView):
         print("doc_id=", doc_id)
         print(day)
         if doc_id:
-            val = Doctor.objects.filter(doctor_id=doc_id)
-            print(val)
-            val2 = Appointment.objects.filter(doctor=val[0], date=day)
+            val1 = Doctor.objects.get(doctor_id=doc_id)
+            print(val1)
+            val2 = Appointment.objects.filter(doctor=val1, date=day)
 
-            ser = DocSerializer(val, many=True)
+            ser = DocSerializer(val1)
             ser2 = AppointmentSerializer2(val2, many=True)
             final = {"doctor": ser.data, "patients": ser2.data}
             return Response(final)

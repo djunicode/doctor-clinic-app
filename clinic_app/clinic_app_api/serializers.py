@@ -32,6 +32,7 @@ class CustomSerializer2(CustomSerializer):
             "email",
             "DOB",
             "date_joined",
+            "profile_pic",
         )
 
 

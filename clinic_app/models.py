@@ -87,8 +87,14 @@ class Doctor(models.Model):
     description=models.TextField(blank=True,null=True)
 
     def __str__(self):
-        # return self.username.first_name+' '+self.username.last_name
-        return self.username.first_name+' '+self.username.last_name
+        main=""
+        if self.username.first_name != None and self.username.last_name != None:
+            main=self.username.first_name +self.username.last_name
+        else:
+            main=self.username.username
+
+        # print(self.username.first_name)
+        return (main) 
 
 
 class Patient(models.Model):
@@ -99,7 +105,14 @@ class Patient(models.Model):
     conditions=models.CharField(max_length=200,blank=True,null=True)
     history=models.CharField(max_length=200,blank=True,null=True)
     def __str__(self):
-        return self.username.first_name+' '+self.username.last_name
+        main=""
+        if self.username.first_name != None and self.username.last_name != None:
+            main=self.username.first_name +self.username.last_name
+        else:
+            main=self.username.username
+
+        # print(self.username.first_name)
+        return (main) 
 
 
 class Appointment(models.Model):

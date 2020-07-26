@@ -16,7 +16,7 @@ class CustomAuth(ObtainAuthToken):
         )
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
-        login(request, user)
+        #   login(request, user)
         token, created = Token.objects.get_or_create(user=user)
         print(request.user.is_authenticated, "____________")
         return Response(
@@ -267,7 +267,9 @@ class AddNewPatient(APIView):
                 return Response({"error": "Your Passwords don't match ,Please check"})
 
             else:
+                # print(ser.validated_data)
                 ser.validated_data["is_Patient"] = True
+                ser.validated_data["is_active"] = True
                 val = ser.save()
                 temp = Patient.objects.create(
                     username=val,
@@ -315,7 +317,9 @@ class AddNewDoctor(APIView):
                 return Response({"error": "Your Passwords don't match ,Please check"})
 
             else:
-                ser.validated_data["is_Patient"] = True
+
+                ser.validated_data["is_Doctor"] = True
+                ser.validated_data["is_active"] = True
                 val = ser.save()
                 temp = Doctor.objects.create(
                     username=val,

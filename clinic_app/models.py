@@ -26,7 +26,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=100,null=True, blank=True)
     is_Doctor = models.BooleanField(default=False)
     is_Patient = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_hospital_staff=models.BooleanField(default=False)

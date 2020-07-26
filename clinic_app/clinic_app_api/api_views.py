@@ -291,24 +291,23 @@ class AddNewPatient(APIView):
             else:
                 return Response(ser.errors)
 
-        def put(self, request):
+    def put(self, request):
 
-            pat_id = request.query_params.get("patid")
-            pat = Patient.objects.get(patient_id=pat_id)
-            use = CustomUser.objects.get(id=pat.username.id)
-            use.profile_pic = request.data.get("image", None) or use.profile_pic
-            use.contact_no = request.data.get("contact", None) or use.contact_no
-            use.DOB = request.data.get("DOB", None) or use.DOB
-            use.email = request.data.get("email", None) or use.email
-            use.first_name = request.data.get("firstname", None) or use.first_name
-            use.last_name = request.data.get("lastname", None) or use.last_name
-            pat.conditions = request.data.get("conditions", None) or doc.conditions
-            pat.history = request.data.get("history", None) or doc.history
+        pat_id = request.query_params.get("patid")
+        pat = Patient.objects.get(patient_id=pat_id)
+        use = CustomUser.objects.get(id=pat.username.id)
+        use.profile_pic = request.data.get("image", None) or use.profile_pic
+        use.contact_no = request.data.get("contact", None) or use.contact_no
+        use.DOB = request.data.get("DOB", None) or use.DOB
+        use.email = request.data.get("email", None) or use.email
+        use.first_name = request.data.get("firstname", None) or use.first_name
+        use.last_name = request.data.get("lastname", None) or use.last_name
+        pat.conditions = request.data.get("conditions", None) or doc.conditions
+        pat.history = request.data.get("history", None) or doc.history
+        use.save()
+        pat.save()
 
-            use.save()
-            pat.save()
-
-            return Response({"updated": "Patient Details Updated"})
+        return Response({"updated": "Patient Details Updated"})
 
 
 class AddNewDoctor(APIView):

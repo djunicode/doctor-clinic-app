@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../App.css";
 import Header from "../components/Header";
 import LeftSideBarTherapist from "../components/LeftSideBarTherapist";
@@ -7,13 +7,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Context } from '../context/Context';
 
 function Therapist1(props) {
   const [data, setData] = useState()
+  const context = useContext(Context)
 
   useEffect(()=>{
-    let d = new Date()
-    getTherapistData(new URLSearchParams(props.location.search).get("id"),(d.getYear()+1900)+'-'+(d.getMonth()+1)+'-'+(d.getDate()))
+    // let d = new Date()
+    // getTherapistData(new URLSearchParams(props.location.search).get("id"), (d.getYear()+1900)+'-'+(d.getMonth()+1)+'-'+(d.getDate()))
   },[])
 
   const getTherapistData = async(docID, date) => {
@@ -28,13 +30,13 @@ function Therapist1(props) {
     <div>
       <Header />
       <Container fluid className="ContainerMargin">
-        {data && 
+        {context.doctorProfile!==null && 
           <Row>
-            <Col xs={12} md={2} className="Cellpadding">
-              <LeftSideBarTherapist doctor={data.doctor[0]} />
+            <Col xs={12} md={3} className="Cellpadding">
+              <LeftSideBarTherapist doctor={context.doctorProfile.doctor} />
             </Col>
-            <Col xs={12} md={8} className="Cellpadding">
-              <AppointmentDay patients={data.patients} />
+            <Col xs={12} md={7} className="Cellpadding">
+              <AppointmentDay patients={context.doctorProfile.patients} />
             </Col>
           </Row>
         }

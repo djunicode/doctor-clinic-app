@@ -26,10 +26,11 @@ function DoctorSignIn() {
   const checkCredentials = async(e) => {
     e.preventDefault()
     setActivityIndicator(true);
-    await context.login(username, Pass)
+    let success = await context.login(username, Pass)
     setActivityIndicator(false);
-    //context.setToken(resData.token, true)
-    //history.replace('/receptionist1')
+    if(!success){
+      alert("Invalid credentials")
+    }
   };
 
   return (

@@ -34,3 +34,11 @@
     align-self: center;
     cursor: pointer;
 }
+#addDoc{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 105px;
+    align-self: center;
+    cursor: pointer;
+}

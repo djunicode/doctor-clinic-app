@@ -9,9 +9,13 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import Header from '../components/Header'
 import { useHistory, Link } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import './doctorSignup.css';
 
 const DoctorSignup = (props) => {
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
     const [username,setUsername] = useState("")
     const [password1,setPassword1] = useState("")
     const [password2,setPassword2] = useState("")
@@ -19,8 +23,17 @@ const DoctorSignup = (props) => {
     const [speciality,setSpeciality] = useState("")
     const [postgrad,setPostgraduation] = useState("")
     const [email,setEmail] = useState("")
+    const [DOB,setDOB] = useState("")
+    const [phone, setPhone] = useState("");
+    const [dailyTime, setDailyTime] = useState("");
+    const [endTime, setEndTime] = useState("");
     const [activityIndicator,setActivityIndicator] = useState(false)
     const history = useHistory();
+
+    const today = () => {
+        let dt = new Date()
+        return dt.getMonth() + "-" + dt.getDate() + "-" + dt.getFullYear() 
+    }
 
     const signUp = async(e) => {
         e.preventDefault()
@@ -33,26 +46,42 @@ const DoctorSignup = (props) => {
         else{
             let formdata = new FormData()
             formdata.append("username",username)
-            formdata.append("postgrad",postgrad)
-            formdata.append("password1",password1)
+            formdata.append("Postgrad",postgrad)
+            formdata.append("password",password1)
             formdata.append("password2",password2)
-            formdata.append("special",speciality)
-            formdata.append("quali",qualification)
-            formdata.append("Email",email)
+            formdata.append("Specialization",speciality)
+            formdata.append("Degrees",qualification)
+            formdata.append("email",email)
+
+            formdata.append("DOB",DOB)
+            formdata.append("first_name",firstname)
+            formdata.append("last_name",lastname)
+            formdata.append("contact_no",phone)
+            formdata.append("daily_start_time",dailyTime)
+            formdata.append("daily_end_time",endTime)
+            //DOB, 'first_name','last_name','contact_no', daily_start_time, daily_end_time
             try{
                 setActivityIndicator(true);
-                const response = await fetch('register/',{
+                const response = await fetch('api/newdoc/', {
                     method: 'POST',
                     headers: {
                         //'Content-Type': 'application/json',
                     },
                     body: formdata
                 })
-                console.log(await response.text())
+                // console.log(await response.text())
                 const resData = await response.json()
-                
-                if(resData.success==='Successfully created new doctor'){
-                    history.push('/')
+                console.log(resData)
+                if(resData.added){
+                    toast.success("Doctor Added", {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 }
                 setActivityIndicator(false);
             }
@@ -73,6 +102,47 @@ const DoctorSignup = (props) => {
                         <h1 className="heading">DOCTOR-SIGNUP</h1>
                         <form className="form">
                             <Grid container className="gridContainer">
+                                <Grid
+                                    className="fields-container"
+                                    container
+                                    item
+                                    lg={6}
+                                    sm={8}
+                                    xs={12}
+                                >
+                                    <div className="fields-inner-container ">
+                                        <TextField
+                                            required
+                                            className="fields1"
+                                            id="outlined-basic"
+                                            label="First Name"
+                                            defaultValue={firstname}
+                                            onChange={(event) => setFirstname(event.target.value)}
+                                            variant="outlined"
+                                        />
+                                    </div>
+                                </Grid>
+                                <Grid
+                                    className="fields-container"
+                                    container
+                                    item
+                                    lg={6}
+                                    sm={8}
+                                    xs={12}
+                                >
+                                    <div className="fields-inner-container  ">
+                                        <TextField
+                                            required
+                                            type="text"
+                                            className="fields1"
+                                            id="outlined-basic"
+                                            label="Last Name"
+                                            defaultValue={lastname}
+                                            onChange={(event) => setLastname(event.target.value)}
+                                            variant="outlined"
+                                        />
+                                    </div>
+                                </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12} >
                                     <div className="fields-inner-container">
                                         <TextField required className="fields1" id="outlined-basic" label="Username" onChange={(event)=>setUsername(event.target.value)} variant="outlined"/>
@@ -83,6 +153,27 @@ const DoctorSignup = (props) => {
                                         <TextField required type="email" className="fields1" id="outlined-basic" label="Email-ID" onChange={(event)=>setEmail(event.target.value)} variant="outlined"/>
                                     </div>
                                 </Grid>
+                                <Grid
+                                    className="fields-container"
+                                    container
+                                    item
+                                    lg={6}
+                                    sm={8}
+                                    xs={12}
+                                    >
+                                    <div className="fields-inner-container">
+                                        <TextField
+                                            required
+                                            className="fields1"
+                                            id="outlined-basic"
+                                            label="Phone"
+                                            defaultValue={phone}
+                                            onChange={(event) => setPhone(event.target.value)}
+                                            type="Number"
+                                            variant="outlined"
+                                        />
+                                    </div>
+                                </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12}>
                                     <div className="fields-inner-container">
                                         <TextField required className="fields1" id="outlined-basic" label="Password" type="Password" onChange={(event)=>setPassword1(event.target.value)} variant="outlined" />
@@ -91,6 +182,75 @@ const DoctorSignup = (props) => {
                                 <Grid className="fields-container" container item sm={6} xs={12}>
                                     <div className="fields-inner-container">
                                         <TextField required className="fields1" id="outlined-basic" label="Re-enter Password" type="Password" onChange={(event)=>setPassword2(event.target.value)} variant="outlined" />
+                                    </div>
+                                </Grid>
+                                <Grid
+                                    className="fields-container"
+                                    container
+                                    item
+                                    lg={6}
+                                    sm={8}
+                                    xs={12}
+                                    >
+                                    <div className="fields-inner-container">
+                                        <TextField
+                                        id="date"
+                                        label="Date of Birth"
+                                        type="date"
+                                        defaultValue={today()}
+                                        style={{ width: 230 }}
+                                        defaultValue={DOB}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={(event) => setDOB(event.target.value)}
+                                        />
+                                    </div>
+                                </Grid>
+                                <Grid
+                                    className="fields-container"
+                                    container
+                                    item
+                                    lg={6}
+                                    sm={8}
+                                    xs={12}
+                                    >
+                                    <div className="fields-inner-container">
+                                        <TextField
+                                            id="time"
+                                            label="Daily Start Time"
+                                            type="time"
+                                            // defaultValue={today()}
+                                            style={{ width: 230 }}
+                                            // defaultValue={DOB}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={(event) => setDailyTime(event.target.value+":00")}
+                                        />
+                                    </div>
+                                </Grid>
+                                <Grid
+                                    className="fields-container"
+                                    container
+                                    item
+                                    lg={6}
+                                    sm={8}
+                                    xs={12}
+                                    >
+                                    <div className="fields-inner-container">
+                                        <TextField
+                                        id="time"
+                                        label="Daily End Time"
+                                        type="time"
+                                        // defaultValue={today()}
+                                        style={{ width: 230 }}
+                                        // defaultValue={DOB}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={(event) => setEndTime(event.target.value+":00")}
+                                        />
                                     </div>
                                 </Grid>
                                 <Grid className="fields-container" container item sm={6} xs={12}>
@@ -175,16 +335,27 @@ const DoctorSignup = (props) => {
                                     </div>
                                 </Grid>
                             </Grid>
-                            <div>
+                            <div style={{paddingBottom: 30}}>
                                 <Button type="submit" className="signUpButton" id="stylebutton" variant="contained" onClick={(e)=>signUp(e)}>SIGN UP</Button>
                             </div>
-                            <div style={{paddingBottom: 30}}>
+                            {/* <div style={{paddingBottom: 30}}>
                                 <p>Already Registered? <Link className="link" to="/">Login</Link></p>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+            />
         </div>
     )
 }

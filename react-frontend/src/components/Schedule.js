@@ -96,6 +96,7 @@ export default class Schedule extends React.Component {
   getTherapistData = async (docID, date) => {
     // alert("getslots")
     const { selectedDoctor, selectedDate } = this.state
+    // alert(selectedDoctor)
     if(selectedDoctor!==null && selectedDate!==null){
       // alert("apicall")
       // document.getElementById("confirm").disabled = false;
@@ -105,11 +106,8 @@ export default class Schedule extends React.Component {
       // console.log(await response.text())
       const data = await response.json();
       console.log(data);
-      this.availableSlots(data.doctor[0], data.patients);
+      this.availableSlots(data.doctor, data.patients);
     }
-    // else{
-
-    // }
   };
 
   availableSlots(doctorData, patientData) {
@@ -153,7 +151,7 @@ export default class Schedule extends React.Component {
       }
       array.pop();
       let slots = array.filter((element) => {
-        return !abc.includes(element);
+        return (!abc.includes(element));
       });
       console.log(slots);
       this.setState({ slots, spinnerVisible: false });
@@ -241,7 +239,7 @@ export default class Schedule extends React.Component {
                 options={this.context.patients}
                 getOptionLabel={(option) =>
                   // option.id.toString() + ": " + 
-                  option.username
+                  option.username.username
                 }
                 style={{ width: 300 }}
                 renderInput={(params) => (
@@ -254,7 +252,7 @@ export default class Schedule extends React.Component {
                 }}
               />
             )}
-            <p class="margin_10">THERAPIST:</p>
+            <p class="margin_10">DOCTOR:</p>
             {this.context.doctors.length === 0 ? (
               <p>Loading Doctors...</p>
             ) : (
@@ -263,7 +261,7 @@ export default class Schedule extends React.Component {
                 options={this.context.doctors}
                 getOptionLabel={(option) =>
                   // option.id.toString() + ": " + 
-                  option.username
+                  option.username.username
                 }
                 style={{ width: 300 }}
                 // onInputChange={(event, newInputValue) => {
@@ -278,7 +276,7 @@ export default class Schedule extends React.Component {
                   return (
                     <TextField
                       {...params}
-                      label="Therapist"
+                      label="Doctor"
                       variant="outlined"
                     />
                   );
@@ -325,19 +323,6 @@ export default class Schedule extends React.Component {
                     this.getTherapistData()
                   }}
                 />
-                 {/* {this.getSlotsValidation() && (
-                  <button style={{alignSelf: 'center'}}
-                    onClick={() =>
-
-                      this.getTherapistData(
-                        parseInt(this.state.selectedDoctor),
-                        this.state.selectedDate
-                      )
-                    }
-                  >
-                    getslots
-                  </button>
-                )} */}
               </div>
               {this.state.spinnerVisible && <div class="lds-dual-ring" style={{marginLeft: 95, marginTop: 80}}></div>}
               {this.getSlotsValidation() &&
@@ -352,19 +337,9 @@ export default class Schedule extends React.Component {
                       renderInput={(params) => (
                         <TextField {...params} label="Slot" variant="outlined" />
                       )}
-                      // inputValue={inputValue}
-                      // onInputChange={(event, newInputValue) => {
-                      //   // alert("newInputValue"+newInputValue)
-                      //   this.setState({
-                      //     selectedSlot: newInputValue,
-                      //     confirmVisible: true,
-                      //   });
-                      // }}
                       onChange={(e, newValue) => {
-                        // alert("newValue"+newValue)
                         this.setState({
                           selectedSlot: newValue,
-                          // confirmVisible: true,
                         });
                       }}
                     />

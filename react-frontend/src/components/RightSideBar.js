@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../context/Context';
+import Button from "@material-ui/core/Button";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import DoneIcon from '@material-ui/icons/Done';
 import WarningIcon from '@material-ui/icons/Warning';
+import PanToolIcon from '@material-ui/icons/PanTool';
 
 const RightSideBar = (props) => {
   const context = useContext(Context)
@@ -39,11 +41,11 @@ const RightSideBar = (props) => {
     return DOWcodes[dt.getDay()] + ", " + dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear()
   }
 
-  const markAttendance = async(username, index) => {
+  const markAttendance = async(apptID, index) => {
     // alert("x")
     showSpinner(true)
     try{
-      const response = await fetch(`api/markAttend/?name=${username}`)
+      const response = await fetch(`api/markAttend/?id=${apptID}`)
       // console.log(await response.text())
       const res = await response.json()
       console.log(res)
@@ -53,6 +55,20 @@ const RightSideBar = (props) => {
       console.log(err)
     }
     showSpinner(false)
+  }
+
+  const showMarker = (present, end_time) => {
+    if(present){
+      return false
+    }
+    else{
+      let dt = new Date()
+      let time = dt.getHours()*60 + dt.getMinutes()
+      if(parseInt(end_time.slice(0,2))*60 + parseInt(end_time.slice(3,5)) < time){
+        return false
+      }
+      return true
+    }
   }
 
   return (
@@ -66,11 +82,14 @@ const RightSideBar = (props) => {
         {context.appointments.length>0 ? context.appointments.map((appointment, index) => (
           <div style={{marginBottom: 15}}>
             <h6>QUEUE: {appointment.token} {status(appointment.appointment.start_time, appointment.present)}</h6>
-            <p>Name: {appointment.appointment.patient.username}</p>
-            <p>Doctor: {appointment.appointment.doctor.username}</p>
+            <p>Name: {appointment.appointment.patient.username.first_name + " " + appointment.appointment.patient.username.last_name}</p>
+            <p>Doctor: {appointment.appointment.doctor.username.first_name + " " + appointment.appointment.doctor.username.last_name}</p>
             <p>Time: {appointment.appointment.start_time}</p>
             {/* <p>{appointment.appointment.id}</p> */}
-            {!appointment.present && <button onClick={() => markAttendance(appointment.appointment.patient.username, index)}>mark</button>}
+            {showMarker(appointment.present, appointment.appointment.end_time) && <Button variant="contained"
+              color="secondary" className="defred" onClick={() => markAttendance(appointment.appointment.id, index)}>
+                <PanToolIcon />
+              </Button>}
           </div>
         )) : <p>No Appointments Today</p>}
       </div>

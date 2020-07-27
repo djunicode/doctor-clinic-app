@@ -6,7 +6,8 @@ export const Context = createContext()
 const INIT_STATE = {
     doctors: [],
     patients: [],
-    appointments: []
+    appointments: [],
+    doctorProfile: null
 }
 
 var Token = null
@@ -18,10 +19,15 @@ const ContextProvider = (props) => {
 
     const init = async() => {
         try{
-            Token = await localStorage.getItem('doctorClinicAppToken')
+            let Data = await localStorage.getItem('doctorClinicAppData')
+            if (Data){
+                Data = JSON.parse(Data)
+                is_doctor = Data.isDoctor
+                Token = Data.token
+            }
             if(Token){
                 setLoggedIn(true)
-                getClinicData()
+                getClinicData(Data.doctor_id)
             }
             else{
                 setLoggedIn(false)
@@ -36,19 +42,26 @@ const ContextProvider = (props) => {
         init()
     })
 
-    const getClinicData = async() => {
-        const arrayOfPromises = [getAllDoctors(), getAllPatients(), getDailyAppointments()]
+    const getClinicData = async(docID) => {
+        let arrayOfPromises = []
+        if(is_doctor){
+            arrayOfPromises = [getAllDoctors(), getAllPatients(), getDailyAppointments(), getDoctorProfile(docID)]
+        }
+        else{
+            arrayOfPromises = [getAllDoctors(), getAllPatients(), getDailyAppointments()]
+        }
         const responses = await Promise.all(arrayOfPromises)
         console.log(responses);
         setClinicData({
             doctors: responses[0],
             patients: responses[1],
-            appointments: responses[2]
+            appointments: responses[2],
+            doctorProfile: responses[3]
         })
     }
 
     const getAllDoctors = async() => {
-        const url = "api/test/";
+        const url = "api/doclist/";
         const response = await fetch(url);
         const data = await response.json();
         console.log(data);
@@ -85,6 +98,13 @@ const ContextProvider = (props) => {
         })
     }
 
+    const forceRefreshPatients = async() => {
+        setClinicData({
+            ...clinicData,
+            patients: await getAllPatients()
+        })
+    }
+
     const attendance = (index) => {
         let temp = clinicData.appointments
         temp[index].present = true
@@ -94,9 +114,21 @@ const ContextProvider = (props) => {
         })
     }
 
+    const getDoctorProfile = async(docID) => {
+        let d = new Date()
+        // alert("x")
+        const url = `api/newAppointment?id=${docID}&date=${(d.getYear()+1900)+'-'+(d.getMonth()+1)+'-'+(d.getDate())}`
+        const response = await fetch(url)
+        // console.log(await response.text())
+        const data = await response.json()
+        console.log(data)
+        return data
+        // doctorProfile = data
+    }
+
     const login = async(username, password) => {
         try{
-            const res = await fetch("login/", {
+            const res = await fetch("api/login/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -108,24 +140,33 @@ const ContextProvider = (props) => {
             })
             const resData = await res.json()
             console.log(resData)
-            localStorage.setItem('doctorClinicAppToken', resData.token)
-            Token = resData.token
-            setLoggedIn(true)
-            getClinicData()
+            if(resData.token){
+                is_doctor = resData.isDoctor
+                localStorage.setItem('doctorClinicAppData', JSON.stringify(resData))
+                // localStorage.setItem('doctorClinicAppRole', resData.isDoctor)
+                Token = resData.token
+                setLoggedIn(true)
+                getClinicData(resData.doctor_id)
+                return true
+            }
         }
         catch(err){
             console.log(err)
-        }   
+        }
+        return false
     }
 
     const logout = () => {
         setLoggedIn(false)
+        Token = null
+        is_doctor = false
         try{
-            localStorage.removeItem('doctorClinicAppToken')
+            localStorage.removeItem('doctorClinicAppData')
         }
         catch(err){
             console.log(err)
         }
+        setClinicData(INIT_STATE)
     }
 
     return(
@@ -133,7 +174,9 @@ const ContextProvider = (props) => {
             appointments: clinicData.appointments, 
             patients: clinicData.patients, 
             doctors: clinicData.doctors, 
+            doctorProfile: clinicData.doctorProfile,
             forceRefreshAppt,
+            forceRefreshPatients,
             init, 
             attendance, 
             loggedIn,

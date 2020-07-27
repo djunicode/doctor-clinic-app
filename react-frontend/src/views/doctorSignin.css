@@ -54,6 +54,17 @@
     margin-top: 40px !important;
     margin-bottom: 40px !important;
 }
+#modalLogin {
+    width: 100%    
+}
+
+@media screen and (min-width: 1000px){
+    #modalLogin{
+        width: 60%;
+        margin-left: 20%;
+    }
+}
+
 @media screen and (max-width: 599px){
     .fields{
         width: 300px  !important;

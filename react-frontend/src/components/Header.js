@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import { Context } from '../context/Context';
 import './header.css'
 
@@ -21,12 +22,21 @@ const Header = () => {
                     }}/>
                     <HomeIcon id="home" onClick = {() => {
                         if(context.is_doctor){
-                            history.push("/therapist1")
+                            if(window.location.pathname!=="/profile"){
+                                history.push("/profile")
+                            }
                         }
                         else{
-                            history.push("/receptionist1")
+                            if(window.location.pathname!=="/home"){
+                                history.push("/home")
+                            }
                         }
                     }} />
+                    {!context.is_doctor && <AddBoxIcon id="addDoc" onClick={() => {
+                        if(window.location.pathname!=="/doctorsignup"){
+                            history.push("/doctorsignup")
+                        }
+                    }} />}
                 </>
             }
         </AppBar>

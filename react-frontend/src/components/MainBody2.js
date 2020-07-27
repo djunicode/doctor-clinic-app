@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import { Context } from '../context/Context';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './style.css'
 import 'react-calendar/dist/Calendar.css';
 
 const MainBody2 = (props) => {
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [username, setUsername] = useState("");
-  const [condition, setCondition] = useState("");
-  const [password1,setPassword1] = useState("")
-  const [password2,setPassword2] = useState("")
-  const [DOB, setDOB] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [history, setHistory] = useState("");
+  const [firstname, setFirstname] = useState(props.values.firstname);
+  const [lastname, setLastname] = useState(props.values.lastname);
+  const [username, setUsername] = useState(props.values.username);
+  const [condition, setCondition] = useState(props.values.condition);
+  const [password1,setPassword1] = useState(props.values.password1)
+  const [password2,setPassword2] = useState(props.values.password2)
+  const [DOB, setDOB] = useState(props.values.DOB);
+  const [phone, setPhone] = useState(props.values.phone);
+  const [email, setEmail] = useState(props.values.email);
+  const [history, setHistory] = useState(props.values.history);
+  const context = useContext(Context)
   const [activityIndicator, setActivityIndicator] = useState(false);
 
   const today = () => {
@@ -30,32 +31,38 @@ const MainBody2 = (props) => {
     e.preventDefault();
     if (firstname === "" || lastname === "" || username === "" || condition === "" || DOB === "" || phone === "" || email === "" || password1 ==="" || password2 ==="") {
       alert("Fill in all fields");
-    }  else if(password1!==password2){
-      alert("Passwords do not match")
-  } else {
+    } else if(password1!==password2){
+        alert("Passwords do not match")
+    }
+    else if(props.type=="POST" && password1.length<8){
+      alert("Password must be longer than 8 characters")
+    } else {
       let formdata = new FormData();
       formdata.append("first_name", firstname);
       formdata.append("last_name", lastname);
-      formdata.append("username", username);
       formdata.append("conditions", condition);
-      formdata.append("password",password1)
-      formdata.append("confirm_password",password2)
+      if(props.type=="POST"){
+        formdata.append("username", username);
+        formdata.append("password",password1)
+        formdata.append("password2",password2)
+      }
       formdata.append("DOB", DOB);
       formdata.append("contact_no", phone);
       formdata.append("email", email);
       formdata.append("history", history);
       try {
         setActivityIndicator(true);
-        const response = await fetch("api/newpat/", {
-          method: "POST",
+        const response = await fetch(props.url, {
+          method: props.type,
           headers: {
-            //'Content-Type': 'application/json',
+            'Authorization': context.Token
           },
           body: formdata,
         });
+        // console.log(await response.text())
         const resData = await response.json();
-        if (resData.added) {
-          toast.success("New Patient Added", {
+        if (resData.added || resData.updated) {
+          toast.success(props.message, {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -64,6 +71,11 @@ const MainBody2 = (props) => {
             draggable: true,
             progress: undefined,
           });
+          if(props.init){
+            props.init()
+          }
+          context.forceRefreshPatients()
+          e.target.reset()
         }
         console.log(resData, resData.status)
         setActivityIndicator(false);
@@ -76,8 +88,8 @@ const MainBody2 = (props) => {
 
   return (
     <div className="MainContainer">
-      <h2>Add Patient</h2>
-      <div className="formclass">
+      <h2>{props.edit ? "Edit" : "Add"} Patient</h2>
+      <div className="formclass" style={{height: (props.edit && '90%'), overflowY: (props.edit && 'scroll')}}>
         <form className="form">
           <Grid container style={{ justifyContent: "center" }}>
             <Grid
@@ -94,6 +106,7 @@ const MainBody2 = (props) => {
                   className="fields1"
                   id="outlined-basic"
                   label="First Name"
+                  defaultValue={firstname}
                   onChange={(event) => setFirstname(event.target.value)}
                   variant="outlined"
                 />
@@ -114,6 +127,7 @@ const MainBody2 = (props) => {
                   className="fields1"
                   id="outlined-basic"
                   label="Last Name"
+                  defaultValue={lastname}
                   onChange={(event) => setLastname(event.target.value)}
                   variant="outlined"
                 />
@@ -131,9 +145,13 @@ const MainBody2 = (props) => {
                 <TextField
                   required
                   className="fields1"
-                  id="outlined-basic"
+                  id={props.edit ? "outlined-read-only-input" : "outlined-basic" }
                   label="Username"
                   type="text"
+                  defaultValue={username}
+                  InputProps={{
+                    readOnly: props.edit,
+                  }}
                   onChange={(event) => setUsername(event.target.value)}
                   variant="outlined"
                 />
@@ -154,12 +172,13 @@ const MainBody2 = (props) => {
                   id="outlined-basic"
                   label="Email Id"
                   type="email"
+                  defaultValue={email}
                   onChange={(event) => setEmail(event.target.value)}
                   variant="outlined"
                 />
               </div>
             </Grid>
-            <Grid
+            {!props.edit && <> <Grid
               className="fields-container"
               container
               item
@@ -174,6 +193,7 @@ const MainBody2 = (props) => {
                   id="outlined-basic"
                   label="Enter Password"
                   type="Password"
+                  defaultValue={password1}
                   onChange={(event) => setPassword1(event.target.value)}
                   variant="outlined"
                 />
@@ -194,11 +214,12 @@ const MainBody2 = (props) => {
                   id="outlined-basic"
                   label="Re-enter Password"
                   type="Password"
+                  defaultValue={password2}
                   onChange={(event) => setPassword2(event.target.value)}
                   variant="outlined"
                 />
               </div>
-            </Grid>
+            </Grid> </>}
             <Grid
               className="fields-container"
               container
@@ -214,6 +235,7 @@ const MainBody2 = (props) => {
                   type="date"
                   defaultValue={today()}
                   style={{ width: 230 }}
+                  defaultValue={DOB}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -235,6 +257,7 @@ const MainBody2 = (props) => {
                   className="fields1"
                   id="outlined-basic"
                   label="Phone"
+                  defaultValue={phone}
                   onChange={(event) => setPhone(event.target.value)}
                   type="Number"
                   variant="outlined"
@@ -255,7 +278,7 @@ const MainBody2 = (props) => {
                   id="outlined-multiline-static"
                   multiline
                   rows={4}
-                  defaultValue=""
+                  defaultValue={condition}
                   className="fields1"
                   label="Medical Conditions"
                   type="Text"
@@ -278,7 +301,7 @@ const MainBody2 = (props) => {
                   id="outlined-multiline-static"
                   multiline
                   rows={4}
-                  defaultValue=""
+                  defaultValue={history}
                   label="Medical History / Add Details"
                   type="Text"
                   onChange={(event) => setHistory(event.target.value)}

@@ -137,7 +137,10 @@ class PatientView(APIView):
                 return Response({"error": "Invalid Id provided "})
         else:
             val = PatientSerializer(Patient.objects.all(), many=True)
-            return Response(val.data)
+            if val.data==[]:
+                return Response({"No Patients":"There are no patients in our Database"})
+            else:
+                return Response(val.data)
 
 
 # class PatientList(APIView):

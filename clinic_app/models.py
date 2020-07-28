@@ -34,7 +34,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # profile_pic = models.ImageField(
     #     upload_to="uploads/%Y/%m/%d/", null=True, blank=True
     # )
-    profile_pic=models.TextField()
+    profile_pic=models.TextField(null=True,blank=True)
     contact_no = PhoneField(blank=True, help_text = 'Contact phone number',null=True)
 
 

@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate, login
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class CustomAuth(ObtainAuthToken):
@@ -108,6 +109,7 @@ class PatientDashboardView(APIView):
         # serializer3 = ReportSerializer(reports, many=True)
 
         # print(dict(serializer3.data[0]))
+
         final = {"appointments": serializer.data, "patient": serializer2.data}
 
         return Response(final)
@@ -137,8 +139,10 @@ class PatientView(APIView):
                 return Response({"error": "Invalid Id provided "})
         else:
             val = PatientSerializer(Patient.objects.all(), many=True)
-            if val.data==[]:
-                return Response({"No Patients":"There are no patients in our Database"})
+            if val.data == []:
+                return Response(
+                    {"No Patients": "There are no patients in our Database"}
+                )
             else:
                 return Response(val.data)
 
@@ -183,7 +187,10 @@ class AppointmentScheduler(APIView):
         else:
             val = Appointment.objects.all()
             ser = AppointmentSerializer(val, many=True)
-            return Response(ser.data)
+            if ser.data == []:
+                return Response({"No appointments": "No appointments "})
+            else:
+                return Response(ser.data)
 
     def post(self, request):
         print(request.data)
@@ -285,12 +292,16 @@ class AddNewPatient(APIView):
                 val = ser.save()
                 temp = Patient.objects.create(
                     username=val,
-                    conditions=request.POST["conditions"],
-                    history=request.POST["history"],
+                    conditions=request.data.get("conditions", None),
+                    history=request.data.get("history", None),
                 )
                 temp.save()
+                final = {
+                    "added": "New patient added",
+                    "Patient": PatientSerializer(temp).data,
+                }
 
-                return Response({"added": "New patient added"})
+                return Response(final)
         else:
             if request.data == {}:
                 return Response({"Null Fields": "Some fields are not filled"})
@@ -298,30 +309,27 @@ class AddNewPatient(APIView):
                 return Response(ser.errors)
 
     def put(self, request):
-        final={}
+        final = {}
         pat_id = request.query_params.get("patid")
-        
-        
+
         pat = Patient.objects.get(patient_id=pat_id)
         use = CustomUser.objects.get(id=pat.username.id)
         if request.data.get("image", None):
-            final['image']="Image has been updated" 
+            final["image"] = "Image has been updated"
         if request.data.get("contact", None):
-            final['contact']="Contact number updated"
-        if  request.data.get("DOB", None):
-            final['Date of Birth']="Date of birth updated"
+            final["contact"] = "Contact number updated"
+        if request.data.get("DOB", None):
+            final["Date of Birth"] = "Date of birth updated"
         if request.data.get("email", None):
-            final['Email']="Email address updated"
+            final["Email"] = "Email address updated"
         if request.data.get("firstname", None):
-            final['First Name']="First name updated"
+            final["First Name"] = "First name updated"
         if request.data.get("lastname", None):
-            final['Last Name']="Last Name updated"
+            final["Last Name"] = "Last Name updated"
         if request.data.get("conditions", None):
-            final['Conditions']="Conditions of patient updated"
+            final["Conditions"] = "Conditions of patient updated"
         if request.data.get("history", None):
-            final['History']="History of patient updated"
-
-
+            final["History"] = "History of patient updated"
 
         use.profile_pic = request.data.get("profile_pic", None) or use.profile_pic
         use.contact_no = request.data.get("contact", None) or use.contact_no
@@ -344,10 +352,10 @@ class AddNewDoctor(APIView):
         ser = DocSerializer(val, many=True)
         # print(ser.is_valid())
         # if ser.is_valid():
-        if ser.data!=[]:
+        if ser.data != []:
             return Response(ser.data)
         else:
-            return Response({"No Doctors":"There are no doctors in our Database"})
+            return Response({"No Doctors": "There are no doctors in our Database"})
         # return Response("Hi")
 
     def post(self, request):
@@ -374,8 +382,9 @@ class AddNewDoctor(APIView):
                     daily_end_time=request.POST["daily_end_time"],
                 )
                 temp.save()
-                final={
-                    "added": "New doctor added","Doctor":DocSerializer(temp).data
+                final = {
+                    "added": "New doctor added",
+                    "Doctor": DocSerializer(temp).data,
                 }
                 return Response(final)
         else:
@@ -385,34 +394,34 @@ class AddNewDoctor(APIView):
                 return Response(ser.errors)
 
     def put(self, request):
-        final={}
-        doc_id = request.query_params.get("docid")
-        doc = Doctor.objects.get(doctor_id=doc_id)
-        use = CustomUser.objects.get(id=doc.username.id)
-
+        final = {}
+        try:
+            doc_id = request.query_params.get("docid")
+            doc = Doctor.objects.get(doctor_id=doc_id)
+            use = CustomUser.objects.get(id=doc.username.id)
+        except ObjectDoesNotExist:
+            return Response({"Error": "The id provided is incorrect"})
 
         if request.data.get("image", None):
-            final['image']="Image has been updated" 
+            final["image"] = "Image has been updated"
         if request.data.get("contact", None):
-            final['contact']="Contact number updated"
-        if  request.data.get("DOB", None):
-            final['Date of Birth']="Date of birth updated"
+            final["contact"] = "Contact number updated"
+        if request.data.get("DOB", None):
+            final["Date of Birth"] = "Date of birth updated"
         if request.data.get("email", None):
-            final['Email']="Email address updated"
+            final["Email"] = "Email address updated"
         if request.data.get("firstname", None):
-            final['First Name']="First name updated"
+            final["First Name"] = "First name updated"
         if request.data.get("lastname", None):
-            final['Last Name']="Last Name updated"
+            final["Last Name"] = "Last Name updated"
         if request.data.get("specialization", None):
-            final['Specialization']="Specialization of patient updated"
+            final["Specialization"] = "Specialization of patient updated"
         if request.data.get("description", None):
-            final['description']="description of doctor updated"
+            final["description"] = "description of doctor updated"
         if request.data.get("postgrad", None):
-            final["postgrad"]="Postgrad details of doctor updated"
+            final["postgrad"] = "Postgrad details of doctor updated"
         if request.data.get("qualification", None):
-            final["Qualification"]="Qualification of the doctor updated"
-
-
+            final["Qualification"] = "Qualification of the doctor updated"
 
         use.profile_pic = request.data.get("image", None) or use.profile_pic
         use.contact_no = request.data.get("contact", None) or use.contact_no
@@ -444,14 +453,17 @@ class MarkAttendance(APIView):
         pid = request.query_params.get("id")
         # day=request.query_params.get('date')
         print(pid, "000000000000000000000")
-        val = DailyDoctorQueue.objects.get(
-            # appointment__patient__username=CustomUser.objects.get(username=str(pid)),
-            # appointment__date=datetime.date.today(),
-            appointment__id=pid
-        )
-        print(val)
-        val.present = True
-        val.save()
+        try:
+            val = DailyDoctorQueue.objects.get(
+                # appointment__patient__username=CustomUser.objects.get(username=str(pid)),
+                # appointment__date=datetime.date.today(),
+                appointment__id=pid
+            )
+            print(val)
+            val.present = True
+            val.save()
+        except ObjectDoesNotExist:
+            return Response({"Error": "No such patient in our list today"})
         return Response({"done": "done"})
 
 
@@ -468,13 +480,15 @@ class ReportUploader(APIView):
 
     def get(self, request):
         pid = request.query_params.get("patientid")
-        rep = Report.objects.filter(patient=Patient.objects.get(patient_id=pid))
-        print(rep)
+        if pid:
+            rep = Report.objects.filter(patient=Patient.objects.get(patient_id=pid))
+            print(rep)
 
-        ser = ReportSerializer(rep, many=True)
-        return Response(ser.data)
-
-        return ser.data
+            ser = ReportSerializer(rep, many=True)
+            return Response(ser.data)
+        else:
+            return Response({"Error": "A valid id is not provided"})
+        # return ser.data
 
     def post(self, request):
         ser = ReportSerializer(data=request.data)
@@ -503,14 +517,17 @@ class ReceiptUploader(APIView):
     """
 
     def get(self, request):
-        pid = request.query_params.get("patientid")
-        rep = Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
-        print(rep)
+        if pid:
+            pid = request.query_params.get("patientid")
+            rep = Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
+            print(rep)
 
-        ser = ReceiptSerializer(rep, many=True)
-        return Response(ser.data)
+            ser = ReceiptSerializer(rep, many=True)
+            return Response(ser.data)
+        else:
+            return Response({"Error": "Invalid id provided"})
 
-        return ser.data
+        # return ser.data
 
     def post(self, request):
         ser = ReceiptSerializer(data=request.data)

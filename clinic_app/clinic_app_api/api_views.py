@@ -80,15 +80,18 @@ class CustomAuth(ObtainAuthToken):
 #         return Response(serializer.errors)
 
 
-class DocView(APIView):
-    def get(self, request):
-        print(Doctor.objects.all().first())
-        val = Doctor.objects.all()
-        ser = DocSerializer(val, many=True)
-        # print(ser.is_valid())
-        # if ser.is_valid():
-        return Response(ser.data)
-        # return Response("Hi")
+# class DocView(APIView):
+#     def get(self, request):
+#         print(Doctor.objects.all().first())
+#         val = Doctor.objects.all()
+#         ser = DocSerializer(val, many=True)
+#         # print(ser.is_valid())
+#         # if ser.is_valid():
+#         if ser.data!=[]:
+#             return Response(ser.data)
+#         else:
+#             return Response({"No Doctors":"There are no doctors in our Database"})
+#         # return Response("Hi")
 
 
 class PatientDashboardView(APIView):
@@ -302,8 +305,8 @@ class AddNewPatient(APIView):
         use.email = request.data.get("email", None) or use.email
         use.first_name = request.data.get("firstname", None) or use.first_name
         use.last_name = request.data.get("lastname", None) or use.last_name
-        pat.conditions = request.data.get("conditions", None) or doc.conditions
-        pat.history = request.data.get("history", None) or doc.history
+        pat.conditions = request.data.get("conditions", None) or pat.conditions
+        pat.history = request.data.get("history", None) or pat.history
         use.save()
         pat.save()
 
@@ -311,6 +314,18 @@ class AddNewPatient(APIView):
 
 
 class AddNewDoctor(APIView):
+    def get(self, request):
+        print(Doctor.objects.all().first())
+        val = Doctor.objects.all()
+        ser = DocSerializer(val, many=True)
+        # print(ser.is_valid())
+        # if ser.is_valid():
+        if ser.data!=[]:
+            return Response(ser.data)
+        else:
+            return Response({"No Doctors":"There are no doctors in our Database"})
+        # return Response("Hi")
+
     def post(self, request):
 
         ser = CustomSerializer(data=request.data)

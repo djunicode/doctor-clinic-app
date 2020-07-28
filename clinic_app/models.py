@@ -31,9 +31,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_hospital_staff=models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
-    profile_pic = models.ImageField(
-        upload_to="uploads/%Y/%m/%d/", null=True, blank=True
-    )
+    # profile_pic = models.ImageField(
+    #     upload_to="uploads/%Y/%m/%d/", null=True, blank=True
+    # )
+    profile_pic=models.TextField()
     contact_no = PhoneField(blank=True, help_text = 'Contact phone number',null=True)
 
 

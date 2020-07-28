@@ -5,8 +5,8 @@ from .api_views import *
 
 urlpatterns = [
     path("appointments/", PatientDashboardView.as_view(), name="Appointment"),
-    path("patregister/", AppointmentScheduler.as_view(), name="PatientRegister"),
-    path("doclist/", DocView.as_view()),
+    path("bookappointment/", AppointmentScheduler.as_view(), name="PatientRegister"),
+    path("doclist/", AddNewDoctor.as_view()),
     path("patientdetails/", PatientView.as_view(), name="dash"),
     path("newAppointment/",AppointmentScheduler.as_view(),name="new"),
     path("allpat/",PatientView.as_view(),name="allpat"),

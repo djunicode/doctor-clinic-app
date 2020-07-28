@@ -6,7 +6,6 @@ import { Context } from '../context/Context';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './style.css'
-import 'react-calendar/dist/Calendar.css';
 
 const MainBody2 = (props) => {
   const [firstname, setFirstname] = useState(props.values.firstname);

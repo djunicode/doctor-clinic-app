@@ -5,11 +5,13 @@ import TextField from '@material-ui/core/TextField';
 import Header from '../components/Header';
 import Modal from '@material-ui/core/Modal';
 import MainBody2 from '../components/MainBody2';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import Webcam from "../components/Webcam";
 import useWillMount from '../custom hooks/useWillMount';
 import { Context } from '../context/Context';
 import './doctorSignup.css';
@@ -19,12 +21,16 @@ const PatientDashboard = (props) => {
     const [modal, setModal] = useState({state: false, type: "Reports"})
     const [editModal, setEditModal] = useState({state: false, validation: false})
     const [details, setDetails] = useState()
+    const [receiptAppointment, setReceiptAppointment] = useState("")
+    const [type_of_report, set_type_of_report] = useState("")
     const [Reports, setReports] = useState(null)
     const [Receipts, setReceipts] = useState(null)
     const [report, setReport] = useState()
     const [receipt, setReceipt] = useState()
+    const [receiptPrice, setReceiptPrice] = useState("")
     const [username, setUsername] = useState("");
     const [Pass, setPass] = useState("");
+    const [openCamera, setOpenCamera] = useState(false)
     const context = useContext(Context)
 
     const usernamehandler = e => {
@@ -70,7 +76,14 @@ const PatientDashboard = (props) => {
     }
 
     useWillMount(() => {
-        Promise.all([init(), view("receipt"), view("report")])
+        let arr = []
+        if(context.is_doctor){
+            arr = [init(), view("receipt"), view("report")]
+        }
+        else{
+            arr = [init()]
+        }
+        Promise.all(arr)
     })
 
     const today = () => {
@@ -79,16 +92,31 @@ const PatientDashboard = (props) => {
     }
 
     const upload = async(type) => {
+        if(type==="Receipt"){
+            if(receiptPrice==="" && isNaN(parseFloat(receiptPrice)) && receiptAppointment==="")  {
+                alert("Enter proper values for Receipt details")
+                return
+            }
+        }
+        else{
+            if(type_of_report===""){
+                alert("Enter proper values for Report details")
+                return
+            }
+        }
         let formdata = new FormData()
         if(type==="Report"){
             formdata.append("filelocation", report.file)  
-            formdata.append("typeof", report.name.split(/(\\|\/)/g).pop())  
+            formdata.append("typeof", type_of_report)  
+            formdata.append("published_on", today())
         }
         else{
             formdata.append("filelocation", receipt.file)
-            formdata.append("typeof", receipt.name.split(/(\\|\/)/g).pop())
+            formdata.append("date", today())
+            formdata.append("price", receiptPrice)
+            formdata.append("doctor", parseInt(receiptAppointment.doctor_id))
+            formdata.append("appointment", parseInt(receiptAppointment.appt_id))
         }
-        formdata.append("published_on", today())
         formdata.append("patient", patientID)
         console.log(formdata)
         try{
@@ -104,7 +132,7 @@ const PatientDashboard = (props) => {
             const resData = await response.json()
             console.log(resData)
             if(resData.success){
-                toast.success("Uploaded file", {
+                toast.success(`Uploaded ${type}`, {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -113,12 +141,16 @@ const PatientDashboard = (props) => {
                     draggable: true,
                     progress: undefined,
                 });
-
+                // if(type==="Receipt"){
+                //     // setReceipts(() => [...Receipts, {type_of: type_of_report}])
+                // }
+                // else{
+                //     setReports(() => [...Reports, {typeof: type_of_report, filelocation: resData.location}])
+                // }
             }
             document.getElementById('upload'+type).disabled = false
             if(type==="Report"){
                 setReport(null)
-                // setReports(() => [...Reports, ])
             }else{
                 setReceipt(null)
             }
@@ -131,7 +163,10 @@ const PatientDashboard = (props) => {
 
     const checkCredentials = async(e) => {
         e.preventDefault()
-        myToken = "token"
+        if(details[0].username.username!==username){
+            alert("Wrong username");
+            return;
+        }
         try{
             const res = await fetch("api/login/", {
                 method: 'POST',
@@ -147,6 +182,10 @@ const PatientDashboard = (props) => {
             console.log(resData)
             if(resData.token){
                 myToken = resData.token
+                setEditModal({
+                    ...editModal,
+                    validation: true
+                })
             }
             else{
                 alert("Invalid credentials")
@@ -154,19 +193,16 @@ const PatientDashboard = (props) => {
         }
         catch(err){
             console.log(err)
+            alert("Something went wrong")
         }
-        setTimeout(() => {
-            myToken = null
-            // alert("token gaya")
-            setEditModal({
-                ...editModal,
-                validation: false
-            }) 
-        },300000)
-        setEditModal({
-            ...editModal,
-            validation: true
-        }) 
+        // setTimeout(() => {
+        //     myToken = null
+        //     // alert("token gaya")
+        //     setEditModal({
+        //         ...editModal,
+        //         validation: false
+        //     }) 
+        // },300000)
     };
       
     const useStyles = makeStyles((theme) => ({
@@ -213,7 +249,7 @@ const PatientDashboard = (props) => {
             <h2 id="simple-modal-title">Receipts</h2>
             {Receipts===null ? <p>Loading Receipts..</p> : Receipts!==[] ? Receipts.map((receipt) => (
                 <div>
-                    <a href={"http://localhost:8000"+receipt.filelocation}>{receipt.typeof}</a>
+                    <a href={"http://localhost:8000"+receipt.filelocation}>{receipt.date}</a>
                 </div>
             )) : <p>No Receipts Found</p>}
         </div>
@@ -225,7 +261,7 @@ const PatientDashboard = (props) => {
                 firstname: details[0].username.first_name,
                 lastname: details[0].username.last_name,
                 username: details[0].username.username,
-                condition: details[0].condition,
+                condition: details[0].conditions,
                 DOB: details[0].username.DOB,
                 phone: details[0].username.contact_no,
                 email: details[0].username.email,
@@ -316,36 +352,38 @@ const PatientDashboard = (props) => {
         }
     }
 
-    const getPatientAppointments = () => {
+    const demoDP = (imageSrc) => {
+        document.getElementById("profilepic").src = imageSrc
+    }
+
+    const showPatientAppointments = (flag) => {
         let arr = context.appointments.map((appt) => {
             if(appt.appointment.patient.patient_id == patientID){
-                return (
-                    <div>
-                        <p>Doctor: {appt.appointment.doctor.username.username}</p>
-                        <p>Time: {appt.appointment.start_time}</p>
-                    </div>
-                )
+                if(flag){
+                    return (
+                        <div>
+                            <p>Doctor: {appt.appointment.doctor.username.username}</p>
+                            <p>Time: {appt.appointment.start_time}</p>
+                        </div>
+                    )
+                }
+                else{
+                    let obj = {
+                        doctor_id: appt.appointment.doctor.doctor_id,
+                        appt_id: appt.appointment.id
+                    }
+                    return(
+                        <option value={JSON.stringify(obj)}>{appt.appointment.doctor.username.username+"@"+appt.appointment.start_time}</option>
+                    )
+                }
             } 
         })
         if(arr.length === 0){
-            return <p>No appointments today</p>
+            if(flag){
+                return <p>No appointments today</p>
+            }
         }
         return arr
-    }
-
-    const uploadDp = async(dp) => {
-        let formdata = new FormData();
-        formdata.append("profile_pic", dp);
-        const response = await fetch("api/newpat/?patid="+patientID, {
-            method: "PUT",
-            headers: {
-                'Authorization': context.Token
-            },
-            body: formdata,
-        })
-        console.log(await response.text())
-        const resData = await response.json()
-        console.log(resData)
     }
 
     return(
@@ -358,17 +396,33 @@ const PatientDashboard = (props) => {
                         <Grid container>
                             <Grid item xs={12} sm={12} md={4}>
                                 <div>
-                                    {details && <><img
+                                    {details && <><img id="profilepic"
                                         src = {details[0].username.profile_pic===null ? require("../images/defaultdp.webp") : "http://localhost:8000/"+details[0].username.profile_pic}
                                         className="LImage"
                                     ></img>{!context.is_doctor && <div style={{marginLeft: 65}}>
                                         <PhotoCameraIcon style={{width: 40, height: 40, cursor: 'pointer'}} onClick = {() => {
-                                            document.getElementById("dp-upload").click()
+                                            if(!editModal.validation){
+                                                setEditModal({
+                                                    ...editModal,
+                                                    state: true
+                                                })
+                                            }
+                                            else{
+                                                // document.getElementById("dp-upload").click()
+                                                setOpenCamera(!openCamera)
+                                            }
                                         }} /> </div>}
-                                        <input id="dp-upload" type="file" style={{display: 'none'}} onChange={(e) => {
-                                            let name = document.getElementById("dp-upload").value
+                                        {openCamera && 
+                                            <Modal open={openCamera} style={{flex: 1, display:'flex', alignItems:'center', justifyContent:'center'}}>
+                                                <div>
+                                                <Webcam token={myToken} patientID={patientID} demo={demoDP} />
+                                                </div>
+                                            </Modal>
+                                        }
+                                        {/* <input id="dp-upload" type="file" style={{display: 'none'}} onChange={(e) => {
+                                            // let name = document.getElementById("dp-upload").value
                                             uploadDp(e.target.files[0])
-                                        }} />
+                                        }} /> */}
                                     </>}
                                 </div>
                             </Grid>
@@ -403,7 +457,7 @@ const PatientDashboard = (props) => {
                                 </div>
                                 <div style={{marginTop: 30, marginBottom: 10, height: '40%', overflowY: 'scroll'}}>
                                     <h5>APPOINTMENTS TODAY:</h5>
-                                    {getPatientAppointments()}
+                                    {showPatientAppointments(true)}
                                 </div>
                             </Grid>
                         </Grid>
@@ -458,6 +512,10 @@ const PatientDashboard = (props) => {
                             <p>{report.name} <button id="uploadReport" onClick={() => {
                                 upload("Report")
                             }}>Upload</button></p>
+                            <label for="type_of">Type of</label>
+                            <input id="type_of" onChange={(e) => {
+                                set_type_of_report(e.target.value)
+                            }} />
                         </div>}
                     </div>
                     <div className="contained">
@@ -473,6 +531,22 @@ const PatientDashboard = (props) => {
                             <p>{receipt.name} <button id="uploadReceipt" onClick={() => {
                                 upload("Receipt")
                             }}>Upload</button></p>
+                            <div>
+                                <label for="price">Price</label>
+                                <input id="price" onChange={(e) => {
+                                    setReceiptPrice(e.target.value)
+                                }} />
+                            </div>
+                            <div>
+                                <label for="select">Appointment</label>
+                                <select id="select" onChange={(e) => {
+                                    console.log(JSON.parse(e.target.value))
+                                    setReceiptAppointment(JSON.parse(e.target.value))
+                                }}>
+                                    <option value="">Select</option>
+                                    {showPatientAppointments(false)}
+                                </select>
+                            </div>
                         </div>}
                     </div> </div>}
                     <Modal

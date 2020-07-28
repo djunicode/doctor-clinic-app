@@ -132,6 +132,18 @@ export default class Schedule extends React.Component {
       });
       let array = [];
       let current = doctorData.daily_start_time;
+      let dt = new Date()
+      let splitUp = current.split(":")
+      if((dt.getMinutes() + (dt.getHours()*60)) > ((parseInt(splitUp[0])*60) + parseInt(splitUp[1]))){
+        if(dt.getMinutes() > 30){
+          splitUp[0] = this.hoursCalc((dt.getHours() + 1).toString())
+        }
+        else{
+          splitUp[0] = this.hoursCalc(dt.getHours().toString())
+          splitUp[1] = "30"
+        }
+        current = splitUp.join(":")
+      }
       array.push(current);
       let flag = true;
       if (current.split(":")[1] === "30") {
@@ -140,22 +152,29 @@ export default class Schedule extends React.Component {
       while (doctorData.daily_end_time !== current) {
         if (flag) {
           let temp = current.split(":");
-          current = temp[0] + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2];
+          current = this.hoursCalc(temp[0]) + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2];
           array.push(current);
         } else {
           let temp1 = current.split(":");
-          current = parseInt(temp1[0]) + 1 + ":" + "00" + ":" + temp1[2];
+          current = this.hoursCalc((parseInt(temp1[0]) + 1).toString()) + ":" + "00" + ":" + temp1[2];
           array.push(current);
         }
         flag = !flag;
       }
       array.pop();
       let slots = array.filter((element) => {
-        return (!abc.includes(element));
+        return (!abc.includes(element) );
       });
       console.log(slots);
       this.setState({ slots, spinnerVisible: false });
     }
+  }
+
+  hoursCalc = (hr) => {
+    if(hr.length===1){
+      return "0"+hr
+    }
+    return hr
   }
 
   confirmAppointment = () => {

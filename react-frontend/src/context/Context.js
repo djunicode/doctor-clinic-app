@@ -105,6 +105,13 @@ const ContextProvider = (props) => {
         })
     }
 
+    const refreshProfile = async(docID) => {
+        setClinicData({
+            ...clinicData,
+            doctorProfile: await getDoctorProfile(docID)
+        })
+    }
+
     const attendance = (index) => {
         let temp = clinicData.appointments
         temp[index].present = true
@@ -177,6 +184,7 @@ const ContextProvider = (props) => {
             doctorProfile: clinicData.doctorProfile,
             forceRefreshAppt,
             forceRefreshPatients,
+            refreshProfile,
             init, 
             attendance, 
             loggedIn,

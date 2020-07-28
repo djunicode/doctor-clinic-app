@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link, useHistory } from "react-router-dom";
 import Header from '../components/Header';
 import { Context } from '../context/Context';
-import './doctorSignin.css';
+import './signin.css';
 
 function DoctorSignIn() {
   const [username, setUsername] = useState("");

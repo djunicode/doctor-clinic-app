@@ -81,6 +81,7 @@ const SignupForm = (props) => {
                     });
                 }
                 props.activity(false);
+                props.addDoctor(resData.Doctor)
             }
             catch(err){
                 console.log(err);

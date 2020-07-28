@@ -9,7 +9,7 @@ class LeftSideBar extends Component {
       <div className="LeftContainer">
         <div>
           <img
-            src = {require("../images/defaultdp.webp")}
+            src = {require("../images/hospital.jpg")}
             className="LImage"
             alt="Profile"
           ></img>

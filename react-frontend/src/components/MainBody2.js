@@ -73,10 +73,10 @@ const MainBody2 = (props) => {
           if(props.init){
             props.init()
           }
-          context.forceRefreshPatients()
-          e.target.reset()
+          context.addPatient(resData.Patient)
+          // e.target.reset()
         }
-        console.log(resData, resData.status)
+        console.log(resData)
         setActivityIndicator(false);
       } catch (err) {
         console.log(err);

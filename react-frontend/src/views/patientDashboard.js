@@ -31,6 +31,7 @@ const PatientDashboard = (props) => {
     const [username, setUsername] = useState("");
     const [Pass, setPass] = useState("");
     const [openCamera, setOpenCamera] = useState(false)
+    const [activityIndicator, setActivityIndicator] = useState(false)
     const context = useContext(Context)
 
     const usernamehandler = e => {
@@ -167,6 +168,7 @@ const PatientDashboard = (props) => {
             alert("Wrong username");
             return;
         }
+        setActivityIndicator(true)
         try{
             const res = await fetch("api/login/", {
                 method: 'POST',
@@ -180,6 +182,11 @@ const PatientDashboard = (props) => {
             })
             const resData = await res.json()
             console.log(resData)
+            if(!resData.isPatient){
+                alert("Invalid credentials")
+                setActivityIndicator(false)
+                return
+            }
             if(resData.token){
                 myToken = resData.token
                 setEditModal({
@@ -195,6 +202,7 @@ const PatientDashboard = (props) => {
             console.log(err)
             alert("Something went wrong")
         }
+        setActivityIndicator(false)
         // setTimeout(() => {
         //     myToken = null
         //     // alert("token gaya")
@@ -297,11 +305,12 @@ const PatientDashboard = (props) => {
                     width: '85%',
                     height: '75%'
                 }} className={classes.paper}>
+                    {activityIndicator && <LinearProgress />}
                     <ClearIcon onClick={() => setEditModal({
                         ...editModal,
                         state: false
                     })} style={{position: 'absolute', right: 10, top: 10, cursor: 'pointer'}} />
-                    <div style={{flex: 1, flexDirection:'column'}}>
+                    <div style={{flex: 1, flexDirection: 'column'}}>
                         <div id="modalLogin" style={{ textAlign: 'center'}}>
                             <div className="innerField">
                                 <form className="form">
@@ -392,14 +401,14 @@ const PatientDashboard = (props) => {
         <Grid container style={{paddingTop: 50}}>
             <Grid item xs={12} sm={12} md={8}>
                 <div style={{marginLeft: '10%', marginRight:'10%', marginTop: '5%'}}>
-                    <div style={{textAlign:'left'}}>
+                    <div style={{textAlign: 'left'}}>
                         <Grid container>
                             <Grid item xs={12} sm={12} md={4}>
                                 <div>
                                     {details && <><img id="profilepic"
-                                        src = {details[0].username.profile_pic===null ? require("../images/defaultdp.webp") : "http://localhost:8000/"+details[0].username.profile_pic}
+                                        src = {details[0].username.profile_pic===null ? require("../images/defaultdp.webp") : details[0].username.profile_pic}
                                         className="LImage"
-                                    ></img>{!context.is_doctor && <div style={{marginLeft: 65}}>
+                                    ></img>{!context.is_doctor && <div style={{marginLeft: '25%'}}>
                                         <PhotoCameraIcon style={{width: 40, height: 40, cursor: 'pointer'}} onClick = {() => {
                                             if(!editModal.validation){
                                                 setEditModal({
@@ -408,14 +417,23 @@ const PatientDashboard = (props) => {
                                                 })
                                             }
                                             else{
-                                                // document.getElementById("dp-upload").click()
                                                 setOpenCamera(!openCamera)
                                             }
                                         }} /> </div>}
                                         {openCamera && 
                                             <Modal open={openCamera} style={{flex: 1, display:'flex', alignItems:'center', justifyContent:'center'}}>
                                                 <div>
-                                                <Webcam token={myToken} patientID={patientID} demo={demoDP} />
+                                                    <Webcam token={myToken} ID={patientID} url="api/newpat/?patid=" demo={demoDP} closeCamera={(flag) => {
+                                                        setOpenCamera(false)
+                                                        if(!flag){
+                                                            if(details[0].username.profile_pic===null){
+                                                                document.getElementById("profilepic").src = require("../images/defaultdp.webp")
+                                                            }
+                                                            else{
+                                                                document.getElementById("profilepic").src = details[0].username.profile_pic
+                                                            }
+                                                        } 
+                                                    }} />
                                                 </div>
                                             </Modal>
                                         }

@@ -250,7 +250,7 @@ export default class Schedule extends React.Component {
           <span className="span1">SCHEDULE APPOINTMENTS</span>
           <div className="defgrey appointmentbox">
             <p>PATIENT:</p>
-            {this.context.patients.length === 0 ? (
+            {this.context.doctors.hasOwnProperty('No Patients') ? <p>No Patients Yet</p> : this.context.patients.length === 0 ? (
               <p>Loading Patients...</p>
             ) : (
               <Autocomplete
@@ -272,7 +272,7 @@ export default class Schedule extends React.Component {
               />
             )}
             <p class="margin_10">DOCTOR:</p>
-            {this.context.doctors.length === 0 ? (
+            {this.context.doctors.hasOwnProperty('No Doctors') ? <p>No Doctors Yet</p> : this.context.doctors.length === 0 ? (
               <p>Loading Doctors...</p>
             ) : (
               <Autocomplete

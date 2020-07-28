@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from "@material-ui/core/styles";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Header from '../components/Header';
 import { Context } from '../context/Context';
 import './signin.css';

@@ -7,7 +7,8 @@ const INIT_STATE = {
     doctors: [],
     patients: [],
     appointments: [],
-    doctorProfile: null
+    doctorProfile: null,
+    loading: true
 }
 
 var Token = null
@@ -24,10 +25,10 @@ const ContextProvider = (props) => {
                 Data = JSON.parse(Data)
                 is_doctor = Data.isDoctor
                 Token = Data.token
-            }
-            if(Token){
-                setLoggedIn(true)
-                getClinicData(Data.doctor_id)
+                if(Token){
+                    setLoggedIn(true)
+                    getClinicData(Data.doctor_id)
+                }
             }
             else{
                 setLoggedIn(false)
@@ -56,7 +57,8 @@ const ContextProvider = (props) => {
             doctors: responses[0],
             patients: responses[1],
             appointments: responses[2],
-            doctorProfile: responses[3]
+            doctorProfile: responses[3],
+            loading: false
         })
     }
 
@@ -98,11 +100,34 @@ const ContextProvider = (props) => {
         })
     }
 
-    const forceRefreshPatients = async() => {
-        setClinicData({
-            ...clinicData,
-            patients: await getAllPatients()
-        })
+    const addPatient = (patient) => {
+        if(clinicData.patients.hasOwnProperty('No Patients')){
+            setClinicData({
+                ...clinicData,
+                patients: [patient]
+            }) 
+        }
+        else{
+            setClinicData({
+                ...clinicData,
+                patients: [...clinicData.patients, patient]
+            })
+        }
+    }
+
+    const addDoctor = (doctor) => {
+        if(clinicData.doctors.hasOwnProperty('No Doctors')){
+            setClinicData({
+                ...clinicData,
+                doctors: [doctor]
+            }) 
+        }
+        else{
+            setClinicData({
+                ...clinicData,
+                doctors: [...clinicData.doctors, doctor]
+            })
+        }
     }
 
     const refreshProfile = async(docID) => {
@@ -147,10 +172,12 @@ const ContextProvider = (props) => {
             })
             const resData = await res.json()
             console.log(resData)
+            if(!(resData.isDoctor || resData.isStaff)){
+                return false
+            }
             if(resData.token){
                 is_doctor = resData.isDoctor
                 localStorage.setItem('doctorClinicAppData', JSON.stringify(resData))
-                // localStorage.setItem('doctorClinicAppRole', resData.isDoctor)
                 Token = resData.token
                 setLoggedIn(true)
                 getClinicData(resData.doctor_id)
@@ -182,8 +209,10 @@ const ContextProvider = (props) => {
             patients: clinicData.patients, 
             doctors: clinicData.doctors, 
             doctorProfile: clinicData.doctorProfile,
+            loading: clinicData.loading,
             forceRefreshAppt,
-            forceRefreshPatients,
+            addPatient,
+            addDoctor,
             refreshProfile,
             init, 
             attendance, 

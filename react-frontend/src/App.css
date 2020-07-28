@@ -121,12 +121,14 @@
 }
 
 .PImage {
+  margin-right: 5px;
+}
+
+#dp {
   float: left;
-  height: 70px;
   width: 70px;
+  height: 70px;
   border: 1px solid black;
-  background-image: url("images/defaultdp.webp");
-  background-size: 70px;
   margin-right: 5px;
 }
 
@@ -242,15 +244,6 @@
   .SearchBar{
     width: 280px;
   }
-}
-
-.PContainer {
-  text-align: left;
-  padding-bottom: 10px;
-}
-
-.PInfo p {
-  margin-bottom: 0;
 }
 
 .RightContainer {

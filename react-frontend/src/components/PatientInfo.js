@@ -6,7 +6,9 @@ class PatientInfo extends Component {
   render() {
     return (
       <div className="PContainer">
-        <div className="PImage"></div>
+        <div className="PImage">
+          <img id="dp" src={this.props.dp===null ? require("../images/defaultdp.webp") : this.props.dp} />
+        </div>
         <div className="PInfo">
           <p>{this.props.name}</p>
           <p>{this.props.dname}</p>

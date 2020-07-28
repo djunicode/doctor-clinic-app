@@ -24,6 +24,11 @@ const MainBody = (props) => {
   }
 
   const patList = () => {
+    if(context.loading){
+      return(
+        <div class="lds-dual-ring" ></div>
+      )
+    }
     let arr = patientsToShow;
     if(patientsToShow===null){
       arr = context.patients
@@ -34,6 +39,7 @@ const MainBody = (props) => {
           <PatientInfo
             name={patient.username.username}
             dname={patient.username.first_name+" "+patient.username.last_name}
+            dp={patient.username.profile_pic}
             id={patient.patient_id}
           ></PatientInfo>
         </Grid>

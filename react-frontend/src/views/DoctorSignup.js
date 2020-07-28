@@ -26,6 +26,10 @@ const DoctorSignup = (props) => {
     const [activityIndicator, setActivityIndicator] = useState(false)
     const context = useContext(Context)
 
+    const addDoctor = (doctor) => {
+        context.addDoctor(doctor)
+    }
+
     return(
         <div className="bodyStyles">
             <Header />
@@ -41,6 +45,7 @@ const DoctorSignup = (props) => {
                             url='api/newdoc/'
                             message="Doctor Added"
                             token={context.Token}
+                            addDoctor={addDoctor}
                         />
                     </div>
                 </div>

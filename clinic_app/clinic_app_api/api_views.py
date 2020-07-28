@@ -298,11 +298,32 @@ class AddNewPatient(APIView):
                 return Response(ser.errors)
 
     def put(self, request):
-
+        final={}
         pat_id = request.query_params.get("patid")
+        
+        
         pat = Patient.objects.get(patient_id=pat_id)
         use = CustomUser.objects.get(id=pat.username.id)
-        use.profile_pic = request.data.get("image", None) or use.profile_pic
+        if request.data.get("image", None):
+            final['image']="Image has been updated" 
+        if request.data.get("contact", None):
+            final['contact']="Contact number updated"
+        if  request.data.get("DOB", None):
+            final['Date of Birth']="Date of birth updated"
+        if request.data.get("email", None):
+            final['Email']="Email address updated"
+        if request.data.get("firstname", None):
+            final['First Name']="First name updated"
+        if request.data.get("lastname", None):
+            final['Last Name']="Last Name updated"
+        if request.data.get("conditions", None):
+            final['Conditions']="Conditions of patient updated"
+        if request.data.get("history", None):
+            final['History']="History of patient updated"
+
+
+
+        use.profile_pic = request.data.get("profile_pic", None) or use.profile_pic
         use.contact_no = request.data.get("contact", None) or use.contact_no
         use.DOB = request.data.get("DOB", None) or use.DOB
         use.email = request.data.get("email", None) or use.email
@@ -313,7 +334,7 @@ class AddNewPatient(APIView):
         use.save()
         pat.save()
 
-        return Response({"updated": "Patient Details Updated"})
+        return Response(final)
 
 
 class AddNewDoctor(APIView):
@@ -353,8 +374,10 @@ class AddNewDoctor(APIView):
                     daily_end_time=request.POST["daily_end_time"],
                 )
                 temp.save()
-
-                return Response({"added": "New doctor added"})
+                final={
+                    "added": "New doctor added","Doctor":DocSerializer(temp).data
+                }
+                return Response(final)
         else:
             if request.data == {}:
                 return Response({"Null Fields": "Some fields are not filled"})
@@ -362,9 +385,35 @@ class AddNewDoctor(APIView):
                 return Response(ser.errors)
 
     def put(self, request):
+        final={}
         doc_id = request.query_params.get("docid")
         doc = Doctor.objects.get(doctor_id=doc_id)
         use = CustomUser.objects.get(id=doc.username.id)
+
+
+        if request.data.get("image", None):
+            final['image']="Image has been updated" 
+        if request.data.get("contact", None):
+            final['contact']="Contact number updated"
+        if  request.data.get("DOB", None):
+            final['Date of Birth']="Date of birth updated"
+        if request.data.get("email", None):
+            final['Email']="Email address updated"
+        if request.data.get("firstname", None):
+            final['First Name']="First name updated"
+        if request.data.get("lastname", None):
+            final['Last Name']="Last Name updated"
+        if request.data.get("specialization", None):
+            final['Specialization']="Specialization of patient updated"
+        if request.data.get("description", None):
+            final['description']="description of doctor updated"
+        if request.data.get("postgrad", None):
+            final["postgrad"]="Postgrad details of doctor updated"
+        if request.data.get("qualification", None):
+            final["Qualification"]="Qualification of the doctor updated"
+
+
+
         use.profile_pic = request.data.get("image", None) or use.profile_pic
         use.contact_no = request.data.get("contact", None) or use.contact_no
         use.DOB = request.data.get("DOB", None) or use.DOB
@@ -379,7 +428,7 @@ class AddNewDoctor(APIView):
         use.save()
         doc.save()
 
-        return Response({"updated": "Doctor Details Updated"})
+        return Response(final)
 
 
 class MarkAttendance(APIView):

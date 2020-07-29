@@ -519,8 +519,8 @@ class ReceiptUploader(APIView):
     """
 
     def get(self, request):
+        pid = request.query_params.get("patientid")
         if pid:
-            pid = request.query_params.get("patientid")
             rep = Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
             print(rep)
 

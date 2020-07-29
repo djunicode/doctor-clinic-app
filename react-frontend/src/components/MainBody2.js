@@ -140,7 +140,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"
@@ -164,7 +164,7 @@ const MainBody2 = (props) => {
               sm={8}
               xs={12}
             >
-              <div className="fields-inner-container">
+              <div className="fields-inner-container ">
                 <TextField
                   required
                   className="fields1"

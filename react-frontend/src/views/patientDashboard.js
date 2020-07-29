@@ -394,6 +394,7 @@ const PatientDashboard = (props) => {
         }
         return arr
     }
+    // )
 
     return(
         <div>

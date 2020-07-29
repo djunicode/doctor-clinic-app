@@ -1,0 +1,10 @@
+django_proj.sh
+*.pyc
+*~
+__pycache__
+clinic_app/__pycache__
+myvenv
+uploads
+.DS_Store
+.vscode/
+*.sqlite3

@@ -8,4 +8,37 @@
 #header{
     background-color:#CF6A6A;
     position: fixed;
+    flex-direction: row;
+}
+#logout{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 15px;
+    align-self: center;
+    cursor: pointer;
+}
+#home{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 60px;
+    align-self: center;
+    cursor: pointer;
+}
+#docprofile{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 105px;
+    align-self: center;
+    cursor: pointer;
+}
+#addDoc{
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 105px;
+    align-self: center;
+    cursor: pointer;
 }

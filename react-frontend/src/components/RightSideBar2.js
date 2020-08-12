@@ -11,9 +11,6 @@ class RightSideBar2 extends Component {
         <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">
           Upload Reciepts
         </Button>
-        <Button variant="contained" color="Secondary" className="defred margin_10 margin_10_b">
-          Remove Patient
-        </Button>
       </div>
     );
   }

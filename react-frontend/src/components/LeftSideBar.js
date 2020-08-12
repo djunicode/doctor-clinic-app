@@ -9,14 +9,14 @@ class LeftSideBar extends Component {
       <div className="LeftContainer">
         <div>
           <img
-            src="https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png"
+            src = {require("../images/hospital.jpg")}
             className="LImage"
             alt="Profile"
           ></img>
         </div>
         <Button variant="contained" className={this.props.className}>
-          <Link className="link" to="/">
-            Patients
+          <Link className="link" to="/home">
+            Home
           </Link>
         </Button>
         <div className="margin_10 margin_10_b">

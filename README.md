@@ -53,14 +53,14 @@ Then just open the URL [localhost:8000](http://127.0.0.1:8000) to run the websit
   ### Developers
   <ol>
 <li>Rishi Desai(Frontend)</li>
-<li>Vatsal Chheda(Frontend)</li>
-<li>Dhruv Talati(Frontend)</li>
 <li>Samit Kapadia(Frontend)</li>
-<li>Nilay Bhatia(Backend)</li>
+<li>Vatsal Chheda(Frontend)</li>
 <li>Neha Doshi(Design)</li>
-<li>Amogh Desai(Backend)</li>
-<li>Ishaan Khetan(Backend)</li>
 <li>Hrishikesh Avanoor(Backend)</li>
+<li>Nilay Bhatia(Backend)</li>
+<li>Ishaan Khetan(Backend)</li>
+<li>Amogh Desai(Backend)</li>
+
 </ol>
 
   ### Mentors

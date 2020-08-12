@@ -9,6 +9,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+const defVal = {
+  firstname: "",
+  lastname: "",
+  username: "",
+  condition: "-",
+  password1: "",
+  password2: "",
+  DOB: "",
+  phone: "",
+  email: "",
+  history: "-"
+}
+
 function Receptionist3() {
   return (
     <div>
@@ -19,17 +32,16 @@ function Receptionist3() {
             <LeftSideBar className2="defred" />
           </Col>
           <Col xs={12}  lg={6} xl={8} className="Cellpadding">
-            <MainBody2 />
-          </Col>
-          <Col xs={12}  lg={3} xl={2} className="Cellpadding">
-            <RightSideBar
-              time="18:00"
-              date="24-03-20"
-              day="Tuesday"
-              queue="1"
-              name="Vatsal Chheda"
-              docname="Dr. Asthana"
+            <MainBody2 
+              url = "api/newpat/"
+              type = "POST"
+              message = "New Patient Added"
+              values = {defVal}
+              edit={false}
             />
+          </Col>
+          <Col xs={12} lg={3} xl={2} className="Cellpadding">
+            <RightSideBar />
           </Col>
         </Row>
       </Container>

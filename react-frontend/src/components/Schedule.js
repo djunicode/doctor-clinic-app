@@ -10,7 +10,6 @@ export default class Schedule extends React.Component {
   state = {
     loading: true,
     person: null,
-    confirmVisible: false,
     doctors: [],
     type: ["X-ray", "checkup", "sonography", "other"],
     dates: [],
@@ -21,6 +20,7 @@ export default class Schedule extends React.Component {
     selectedDoctor: null,
     selectedDate: null,
     selectedSlot: null,
+    spinnerVisible: false
   };
 
   static contextType = Context;
@@ -77,13 +77,37 @@ export default class Schedule extends React.Component {
     this.setState({ dates: arr, loading: false });
   }
 
+  appointmentValidation = () => {
+    const { selectedType, selectedPatient, selectedDoctor, selectedDate, selectedSlot } = this.state
+    if(selectedType!==null && selectedPatient!==null && selectedDoctor!==null && selectedDate!==null && selectedSlot!==null){
+      return true
+    }
+    return false
+  }
+
+  getSlotsValidation = () => {
+    const { selectedDoctor, selectedDate } = this.state
+    if(selectedDoctor!==null && selectedDate!==null){
+      return true
+    }
+    return false
+  }
+
   getTherapistData = async (docID, date) => {
-    document.getElementById("confirm").disabled = false;
-    const url = `http://localhost:8000/api/newAppointment?id=${docID}&date=${date}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
-    this.availableSlots(data.doctor[0], data.patients);
+    // alert("getslots")
+    const { selectedDoctor, selectedDate } = this.state
+    // alert(selectedDoctor)
+    if(selectedDoctor!==null && selectedDate!==null){
+      // alert("apicall")
+      // document.getElementById("confirm").disabled = false;
+      this.setState({spinnerVisible: true, slots: []})
+      const url = `api/newAppointment?id=${parseInt(selectedDoctor)}&date=${selectedDate}`;
+      const response = await fetch(url);
+      // console.log(await response.text())
+      const data = await response.json();
+      console.log(data);
+      this.availableSlots(data.doctor, data.patients);
+    }
   };
 
   availableSlots(doctorData, patientData) {
@@ -101,12 +125,25 @@ export default class Schedule extends React.Component {
         draggable: true,
         progress: undefined,
       });
+      this.setState({slots: [], spinnerVisible: false})
     } else {
       let abc = patientData.map((x) => {
         return x.start_time;
       });
       let array = [];
       let current = doctorData.daily_start_time;
+      let dt = new Date()
+      let splitUp = current.split(":")
+      if((dt.getMinutes() + (dt.getHours()*60)) > ((parseInt(splitUp[0])*60) + parseInt(splitUp[1]))){
+        if(dt.getMinutes() > 30){
+          splitUp[0] = this.hoursCalc((dt.getHours() + 1).toString())
+        }
+        else{
+          splitUp[0] = this.hoursCalc(dt.getHours().toString())
+          splitUp[1] = "30"
+        }
+        current = splitUp.join(":")
+      }
       array.push(current);
       let flag = true;
       if (current.split(":")[1] === "30") {
@@ -115,22 +152,29 @@ export default class Schedule extends React.Component {
       while (doctorData.daily_end_time !== current) {
         if (flag) {
           let temp = current.split(":");
-          current = temp[0] + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2];
+          current = this.hoursCalc(temp[0]) + ":" + (parseInt(temp[1]) + 30) + ":" + temp[2];
           array.push(current);
         } else {
           let temp1 = current.split(":");
-          current = parseInt(temp1[0]) + 1 + ":" + "00" + ":" + temp1[2];
+          current = this.hoursCalc((parseInt(temp1[0]) + 1).toString()) + ":" + "00" + ":" + temp1[2];
           array.push(current);
         }
         flag = !flag;
       }
       array.pop();
       let slots = array.filter((element) => {
-        return !abc.includes(element);
+        return (!abc.includes(element) );
       });
       console.log(slots);
-      this.setState({ slots });
+      this.setState({ slots, spinnerVisible: false });
     }
+  }
+
+  hoursCalc = (hr) => {
+    if(hr.length===1){
+      return "0"+hr
+    }
+    return hr
   }
 
   confirmAppointment = () => {
@@ -149,7 +193,7 @@ export default class Schedule extends React.Component {
       let end_time = parseInt(temp1[0]) + 1 + ":" + "00" + ":" + temp1[2];
       formdata.append("end_time", end_time);
     }
-    fetch("http://localhost:8000/api/newAppointment/", {
+    fetch("api/newAppointment/", {
       method: "POST",
       body: formdata,
     })
@@ -158,25 +202,41 @@ export default class Schedule extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        let temp = this.state.slots;
-        let index = temp.findIndex((slot) => slot === this.state.selectedSlot);
-        console.log(index);
-        temp.splice(index, 1);
-        console.log(temp);
-        this.setState({
-          slots: temp,
-          confirmVisible: false,
-        });
-        toast.success("Appointment booked", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        document.getElementById("slot").textContent = temp[0];
+        if(response['Not posssible']){
+          toast.error("This slot has been booked", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        else{
+          let temp = this.state.slots;
+          let index = temp.findIndex((slot) => slot === this.state.selectedSlot);
+          console.log(index);
+          if(index>=0){
+            temp.splice(index, 1);
+          }
+          console.log(temp);
+          this.setState({
+            slots: temp,
+            // confirmVisible: false,
+          });
+          toast.success("Appointment booked", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          this.context.forceRefreshAppt();
+          document.getElementById("slot").textContent = temp[0];
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -185,55 +245,68 @@ export default class Schedule extends React.Component {
 
   render() {
     return (
-      <div class="ScheduleContainer ">
+      <div class="ScheduleContainer " style={{textAlign:'center'}}>
         <div className="MainPara">
           <span className="span1">SCHEDULE APPOINTMENTS</span>
           <div className="defgrey appointmentbox">
             <p>PATIENT:</p>
-            {this.context.patients.length === 0 ? (
+            {this.context.doctors.hasOwnProperty('No Patients') ? <p>No Patients Yet</p> : this.context.patients.length === 0 ? (
               <p>Loading Patients...</p>
             ) : (
               <Autocomplete
                 id="combo-box-demo"
                 options={this.context.patients}
                 getOptionLabel={(option) =>
-                  option.id.toString() + ": " + option.username
+                  // option.id.toString() + ": " + 
+                  option.username.username
                 }
                 style={{ width: 300 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Patient" variant="outlined" />
                 )}
-                onChange={(e) => {
+                onChange={(e, newValue) => {
                   this.setState({
-                    selectedPatient: e.target.textContent.split(": ")[0],
+                    selectedPatient: newValue===null ? null : newValue.patient_id,
                   });
                 }}
               />
             )}
-            <p class="margin_10">THERAPIST:</p>
-            {this.context.doctors.length === 0 ? (
+            <p class="margin_10">DOCTOR:</p>
+            {this.context.doctors.hasOwnProperty('No Doctors') ? <p>No Doctors Yet</p> : this.context.doctors.length === 0 ? (
               <p>Loading Doctors...</p>
             ) : (
               <Autocomplete
                 id="combo-box-demo"
                 options={this.context.doctors}
                 getOptionLabel={(option) =>
-                  option.id.toString() + ": " + option.username
+                  // option.id.toString() + ": " + 
+                  option.username.username
                 }
                 style={{ width: 300 }}
+                // onInputChange={(event, newInputValue) => {
+                //   // alert("newInputValue"+newInputValue)
+                //   this.setState({
+                //     selectedDoctor: newInputValue,
+                //     // confirmVisible: true,
+                //   });
+
+                // }}
                 renderInput={(params) => {
                   return (
                     <TextField
                       {...params}
-                      label="Therapist"
+                      label="Doctor"
                       variant="outlined"
                     />
                   );
                 }}
-                onChange={(e) => {
-                  this.setState({
-                    selectedDoctor: e.target.textContent.split(": ")[0],
+                onChange={async(e, newValue) => {
+                  // alert(Object.keys(newValue))
+                  // alert(newValue['doctor_id'])
+                  await this.setState({
+                    selectedDoctor: newValue===null ? null : newValue['doctor_id'],
                   });
+                  this.getTherapistData()
                 }}
               />
             )}
@@ -248,69 +321,58 @@ export default class Schedule extends React.Component {
                   <TextField {...params} label="Type" variant="outlined" />
                 );
               }}
-              onChange={(e) => {
-                this.setState({ selectedType: e.target.textContent });
+              onChange={(e, newValue) => {
+                this.setState({ selectedType: newValue });
               }}
             />
-            <div class = "margin_10" style={{ float: "left" }}>
-              <p>DATE:</p>
-              <Autocomplete
-                id="combo-box-demo"
-                options={this.state.dates}
-                getOptionLabel={(option) => option.toString()}
-                style={{ width: 150 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Date" variant="outlined" />
-                )}
-                onChange={(e) => {
-                  this.setState({ selectedDate: e.target.textContent });
-                }}
-              />
+            <div style={{display: "flex", flex: 1}}>
+              <div class = "margin_10" style={{ float: "left" }}>
+                <p>DATE:</p>
+                <Autocomplete
+                  id="combo-box-demo"
+                  options={this.state.dates}
+                  getOptionLabel={(option) => option.toString()}
+                  style={{ width: 140 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Date" variant="outlined" />
+                  )}
+                  onChange={async(e, newValue) => {
+                    // alert(newValue)
+                    await this.setState({ selectedDate: newValue });
+                    this.getTherapistData()
+                  }}
+                />
+              </div>
+              {this.state.spinnerVisible && <div class="lds-dual-ring" style={{marginLeft: 95, marginTop: 80}}></div>}
+              {this.getSlotsValidation() &&
+                this.state.slots.length !== 0 && (
+                  <div class="margin_10" style={{ float: "right", marginLeft: 20, marginRight: "45px" }}>
+                    <p>SLOT:</p>
+                    <Autocomplete
+                      id="slot"
+                      options={this.state.slots}
+                      getOptionLabel={(option) => option.toString()}
+                      style={{ width: 140 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Slot" variant="outlined" />
+                      )}
+                      onChange={(e, newValue) => {
+                        this.setState({
+                          selectedSlot: newValue,
+                        });
+                      }}
+                    />
+                  </div>
+                ) }
             </div>
-            {this.state.selectedDate !== null &&
-              this.state.selectedDoctor !== null && (
-                <button
-                  onClick={() =>
-                    this.getTherapistData(
-                      parseInt(this.state.selectedDoctor),
-                      this.state.selectedDate
-                    )
-                  }
-                >
-                  getslots
-                </button>
-              )}
-            {this.state.selectedDate !== null &&
-              this.state.selectedDoctor !== null &&
-              this.state.slots.length !== 0 && (
-                <div style={{ float: "right", marginRight: "45px" }}>
-                  <p>SLOT:</p>
-                  <Autocomplete
-                    id="slot"
-                    options={this.state.slots}
-                    getOptionLabel={(option) => option.toString()}
-                    style={{ width: 150 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Slot" variant="outlined" />
-                    )}
-                    onChange={(e) => {
-                      this.setState({
-                        selectedSlot: e.target.textContent,
-                        confirmVisible: true,
-                      });
-                    }}
-                  />
-                </div>
-              )}
-
             <Button
               variant="contained"
               color="secondary"
               className="defred"
               id="confirm"
-              style={{ marginLeft: "35%", marginTop:" 45%", zIndex: 1001 }}
+              style={{ alignSelf: 'center',marginLeft: "35%", marginTop: 50, zIndex: 1001 }}
               onClick={this.confirmAppointment}
-              disabled={!this.state.confirmVisible}
+              disabled={!this.appointmentValidation()}
             >
               Confirm
             </Button>

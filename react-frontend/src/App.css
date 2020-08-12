@@ -88,7 +88,7 @@
   float: left;
   width: 100%;
   margin-left: 7%;
-  padding-bottom: ;
+  
 }
 
 .ContainerPadding {
@@ -115,27 +115,20 @@
   text-align: left;
 }
 
-.SearchBar {
-  border-radius: 25px;
-  border: 2px solid white;
-  box-shadow: 2px 2px 4px gray;
-  padding: 20px;
-  width: 350px;
-  height: 15px;
-  color: black;
-}
-
 .PContainer {
   text-align: left;
   padding-bottom: 10px;
 }
+
 .PImage {
+  margin-right: 5px;
+}
+
+#dp {
   float: left;
-  height: 70px;
   width: 70px;
+  height: 70px;
   border: 1px solid black;
-  background-image: url("https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png");
-  background-size: 70px;
   margin-right: 5px;
 }
 
@@ -153,11 +146,10 @@
   margin-top: 1px;
   height: 100% !important;
   padding-top: 30px;
-  padding-left: 38px;
   float: left;
   background-color: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 100%;
+  width: 100% !important;
 }
 
 .RightContainer {
@@ -189,7 +181,6 @@
   margin-top: 1px;
   height: 93vh;
   padding-top: 30px;
-  padding-left: 38px;
   float: left;
   width: 100%;
 }
@@ -239,25 +230,20 @@
   width: 350px;
   height: 15px;
   color: black;
-  float: right;
+  margin-top: 25px;
 }
 
-.PContainer {
-  text-align: left;
-  padding-bottom: 10px;
-}
-.PImage {
-  float: left;
-  height: 70px;
-  width: 70px;
-  border: 1px solid black;
-  background-image: url("https://cdn2.iconfinder.com/data/icons/user-people-4/48/6-512.png");
-  background-size: 70px;
-  margin-right: 5px;
+@media screen and (min-width: 530px) {
+  .SearchBar{
+    float: right;
+    margin-top: 0;
+  }
 }
 
-.PInfo p {
-  margin-bottom: 0;
+@media screen and (max-width: 400px) {
+  .SearchBar{
+    width: 280px;
+  }
 }
 
 .RightContainer {
@@ -273,9 +259,16 @@
 }
 
 .formclass {
-  width: 70%;
+  width: 80%;
   padding: 20px;
-  margin-left: 100px;
+  margin-left: 9%;
+}
+
+@media screen and (max-width: 400px) {
+  .formclass{
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 .patientprofilemain {
@@ -331,7 +324,7 @@
   background: #f5f5f5;
   border-radius: 10px;
   padding-top: 40px;
-  padding-left: 38px;
+  padding-left: 3%;
   width: 85%;
   padding-bottom: 50px;
   margin-top: 5%;
@@ -352,7 +345,7 @@
 .Patientprofilebutton {
   float: right;
   padding-right: 40px;
-  margin-top: 22px;
+  margin-top: 17px;
 }
 #div1 {
   background: #ffffff;
@@ -367,7 +360,7 @@
 }
 
 #confirm {
-  margin-top: 30%;
+  margin-top: 50px;
   margin-left: 0% !important;
   margin-right: 5% !important;
 }
@@ -381,4 +374,28 @@
 
 .margin_30{
   margin-top: 80% !important;
+}
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid black;
+  border-color: black transparent black transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

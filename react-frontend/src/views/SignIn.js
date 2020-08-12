@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from "@material-ui/core/styles";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Header from '../components/Header';
-import './doctorSignin.css'
+import { Context } from '../context/Context';
+import './signin.css';
 
 function DoctorSignIn() {
   const [username, setUsername] = useState("");
   const [Pass, setPass] = useState("");
   const history = useHistory();
   const [activityIndicator,setActivityIndicator] = useState(false)
+  const context = useContext(Context)
+  
   const usernamehandler = e => {
     setUsername(e.target.value);
   };
@@ -23,25 +25,11 @@ function DoctorSignIn() {
   const checkCredentials = async(e) => {
     e.preventDefault()
     setActivityIndicator(true);
-    const res = await fetch("http://localhost:8000/login/",{
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        password: Pass
-      })
-    })
-    const resData = await res.json()
-    console.log(resData)
-    try{
-      localStorage.setItem('doctorClinicAppData', JSON.stringify(resData))
+    let success = await context.login(username, Pass)
+    setActivityIndicator(false);
+    if(!success){
+      alert("Invalid credentials")
     }
-    catch(err){
-      console.log(err)
-    }
-    history.replace('/receptionist1')
   };
 
   return (
@@ -87,9 +75,9 @@ function DoctorSignIn() {
                         <Button type="submit" className="signInButton" id="stylebutton"  variant="contained" onClick={(e) => checkCredentials(e)}>LOGIN</Button>
                         
                       </div>
-                      <div style={{paddingBottom: 30}}>
+                      {/* <div style={{paddingBottom: 30}}>
                         <p>Dont have an account? <Link className="link" to="/doctorsignup">Sign Up</Link></p>
-                      </div>
+                      </div> */}
                     </form>
                 </div>
             </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-import Nav from "../components/nav";
 import LeftSideBar from "../components/LeftSideBar";
 import MainBody from "../components/MainBody";
 import RightSideBar from "../components/RightSideBar";
@@ -20,18 +19,10 @@ function Receptionist1() {
             <LeftSideBar className="defred" />
           </Col>
           <Col xs={12} md={6} lg={8} className="Cellpadding">
-            
             <MainBody />
           </Col>
           <Col xs={12} md={3} lg={2} className="Cellpadding">
-            <RightSideBar
-              time="18:00"
-              date="24-03-20"
-              day="Tuesday"
-              queue="1"
-              name="Vatsal Chheda"
-              docname="Dr. Asthana"
-            />
+            <RightSideBar />
           </Col>
         </Row>
       </Container>

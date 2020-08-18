@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Doctor's dashboard</title>
+    </head>
+    <h2>This is your schedule, {{ doctor }}</h2>
+    <table>
+		<tr>
+            <th align="left" scope = "col">Patient</th>
+            <th align="left" scope = "col">Type</th>
+            <th align="left" scope = "col">Date</th>
+			<th align="left" scope = "col">Start datetime</th>
+            <th align="left" scope = "col">End datetime</th>
+            <th align="left" scope = "col">Token number</th>
+		</tr>
+
+		{% for appointment in current_calendar %}
+			<tr>	
+                <td>{{appointment.patient}}</td>
+                <td>{{appointment.type}}</td>
+                <td>{{appointment.date}}</td>
+                <td>{{appointment.start_time}}</td>
+                <td>{{appointment.end_time}}</td>
+                <td>{{appointment.id}}</td>
+				
+			</tr>
+		{% endfor %}
+	</table>
+</html>

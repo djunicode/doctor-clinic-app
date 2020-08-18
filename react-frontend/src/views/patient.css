@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+.outerContainer{
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 100px;
+}
+.innerContainer{
+    background-color:#CF6A6A;
+    width: 600px !important;
+}
+.form{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.heading{
+    padding-top: 35px;
+}
+.innerField{
+    background-color: #F5F5F5;
+    border-radius: 15px;
+    margin: 20px;
+}
+.formlabel{
+    color: black;
+    font-size: 17.5px;
+    margin-bottom: 8px;
+}
+.already{
+    padding-bottom: 30px;
+}

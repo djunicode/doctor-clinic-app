@@ -13,8 +13,18 @@ from pprint import pprint
 from rest_framework.response import Response
 from rest_framework import permissions
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework import permissions, status
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .forms import *
+from .models import *
+from .serializers import *
 
 
 def token_generator(userinput):
@@ -189,7 +199,10 @@ def LoginUser(request):
             request, "register3.html", {"form": form3, "val": val, "status": "patient"}
         )
 
-
+'''
+Displays a list of current appointments and allows the patient to book a 
+non-clashing one
+'''
 def bookAppointment(request):
 
     current_calendar = Appointment.objects.order_by("-date")

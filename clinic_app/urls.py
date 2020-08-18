@@ -17,6 +17,27 @@ urlpatterns = [
     path(
         "login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"
     ),
+    path('logout/', auth_views.LogoutView.as_view(template_name='logout.html')),
+    path('accounts/password-reset/',
+         auth_views.PasswordResetView.as_view(
+            #  template_name='password_reset.html' <--- to be added by frontend team
+         ),
+         name='password_reset'),
+    path('accounts/password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+            #  template_name='password_reset_done.html'
+         ),
+         name='password_reset_done'),
+    path('acoounts/password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+            #  template_name='password_reset_confirm.html'
+         ),
+         name='password_reset_confirm'),
+    path('accounts/password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(
+            #  template_name='password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
     path("doc-register/", views.docRegister, name="Doctor Register"),
     path("pat-register/", views.patRegister, name="Patient Register"),
     path("book-appointment/", views.bookAppointment, name="bookAppointment"),
@@ -24,4 +45,5 @@ urlpatterns = [
     path("report/", views.reports, name="report"),
     path("sch/", views.scheduleAppointments, name="sch"),
     path("test/", views.test, name="test"),
+    path('doctor/dashboard/', views.doctorDashboard, name = "doctorDashboard"),
 ]

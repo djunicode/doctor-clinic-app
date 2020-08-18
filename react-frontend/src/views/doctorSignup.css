@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+.outerContainer{
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    margin-top: 100px;
+}
+.innerContainer{
+    background-color:#CF6A6A;
+    width: 600px !important;
+}
+.fields-container{
+    justify-content: center;
+}
+.fields-inner-container{
+    padding: 20px;
+}
+.fields1{
+    width: 235px !important;
+    background-color: white;
+    border-radius: 5px; 
+}
+.signUpButton{
+    width: 300px !important;
+    margin-top: 40px !important;
+    height: 50px !important;
+}
+.patientDetails{
+    border: 0.8px solid black;
+    border-radius: 20px;
+}
+.link{
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+.form{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.heading{
+    padding-top: 35px;
+}
+.innerField{
+    background-color: #F5F5F5;
+    border-radius: 15px;
+    margin: 20px;
+}
+#stylebutton{
+    background-color:#CF6A6A;
+    color: white;
+    font-weight: bold;
+    font-size: 17px;
+    border-radius: 10px;
+}
+.gridContainer{
+    justify-content: center;
+}
+@media screen and (max-width: 599px){
+    .fields{
+        width: 300px !important;
+    }
+    .innerContainer{
+        width: 450px !important
+    }
+    .signUpButton{
+        width: 200px !important;
+    }
+}
+@media screen and (max-width: 400px){
+    .fields{
+        width: 245px !important;
+    }
+    .signUpButton{
+        width: 150px !important;
+    }
+}
+@media screen and (max-width: 360px){
+    .innerContainer{
+        width: 310px !important
+    }
+}

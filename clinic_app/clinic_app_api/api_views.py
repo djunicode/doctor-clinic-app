@@ -314,10 +314,10 @@ class AddNewPatient(APIView):
 
         pat = Patient.objects.get(patient_id=pat_id)
         use = CustomUser.objects.get(id=pat.username.id)
-        if request.data.get("image", None):
-            final["image"] = "Image has been updated"
-        if request.data.get("contact", None):
-            final["contact"] = "Contact number updated"
+        if request.data.get("profile_pic", None):
+            final["profile_pic"] = "Image has been updated"
+        if request.data.get("contact_no", None):
+            final["contact_no"] = "Contact number updated"
         if request.data.get("DOB", None):
             final["Date of Birth"] = "Date of birth updated"
         if request.data.get("email", None):
@@ -332,7 +332,7 @@ class AddNewPatient(APIView):
             final["History"] = "History of patient updated"
 
         use.profile_pic = request.data.get("profile_pic", None) or use.profile_pic
-        use.contact_no = request.data.get("contact", None) or use.contact_no
+        use.contact_no = request.data.get("contact_no", None) or use.contact_no
         use.DOB = request.data.get("DOB", None) or use.DOB
         use.email = request.data.get("email", None) or use.email
         use.first_name = request.data.get("firstname", None) or use.first_name
@@ -341,6 +341,7 @@ class AddNewPatient(APIView):
         pat.history = request.data.get("history", None) or pat.history
         use.save()
         pat.save()
+        final["updated"] = "Details Updated"
 
         return Response(final)
 
@@ -402,10 +403,10 @@ class AddNewDoctor(APIView):
         except ObjectDoesNotExist:
             return Response({"Error": "The id provided is incorrect"})
 
-        if request.data.get("image", None):
-            final["image"] = "Image has been updated"
-        if request.data.get("contact", None):
-            final["contact"] = "Contact number updated"
+        if request.data.get("profile_pic", None):
+            final["profile_pic"] = "Image has been updated"
+        if request.data.get("contact_no", None):
+            final["contact_no"] = "Contact number updated"
         if request.data.get("DOB", None):
             final["Date of Birth"] = "Date of birth updated"
         if request.data.get("email", None):
@@ -423,8 +424,8 @@ class AddNewDoctor(APIView):
         if request.data.get("qualification", None):
             final["Qualification"] = "Qualification of the doctor updated"
 
-        use.profile_pic = request.data.get("image", None) or use.profile_pic
-        use.contact_no = request.data.get("contact", None) or use.contact_no
+        use.profile_pic = request.data.get("profile_pic", None) or use.profile_pic
+        use.contact_no = request.data.get("contact_no", None) or use.contact_no
         use.DOB = request.data.get("DOB", None) or use.DOB
         use.email = request.data.get("email", None) or use.email
         use.first_name = request.data.get("firstname", None) or use.first_name
@@ -436,6 +437,7 @@ class AddNewDoctor(APIView):
 
         use.save()
         doc.save()
+        final["updated"] = "Details Updated"
 
         return Response(final)
 
@@ -517,8 +519,8 @@ class ReceiptUploader(APIView):
     """
 
     def get(self, request):
+        pid = request.query_params.get("patientid")
         if pid:
-            pid = request.query_params.get("patientid")
             rep = Receipt.objects.filter(patient=Patient.objects.get(patient_id=pid))
             print(rep)
 

@@ -21,6 +21,6 @@ class CustomManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
-        # extra_fields.setdefault('is_doctor',True)
-        # extra_fields.setdefault('is_patient',True)
+        # extra_fields.setdefault("is_doctor", True)
+        # extra_fields.setdefault("is_patient", True)
         return self.create_user(username, password, **extra_fields)

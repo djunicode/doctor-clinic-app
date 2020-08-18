@@ -1,6 +1,17 @@
 import datetime
-
+from .forms import *
+from .models import *
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
+from .serializers import *
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from pprint import pprint
+from rest_framework.response import Response
+from rest_framework import permissions
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -27,6 +38,7 @@ def token_generator(userinput):
 def register(request):
     form = CustomUserCreationForm(request.POST)
     form2 = DoctorForm(request.POST)
+    print(request.POST)
     if form.is_valid():
         new_user = form.save()
 
@@ -62,7 +74,7 @@ def register(request):
         #     val.save()
         #     return redirect('/patRegister/{}'.format(val.username),{'val':val,'status':'patient'})
     else:
-
+        pprint(form2.errors.get_json_data())
         return render(request, "register.html", {"form": form, "form2": form2})
 
 
@@ -104,6 +116,7 @@ def patRegister(request, name):
         p.username = val
         p.DOB = form3.cleaned_data["dob"]
         p.save()
+
         return JsonResponse({"success:": "Successfully created new Patient"})
     else:
         print("in else patient")
@@ -213,11 +226,13 @@ def bookAppointment(request):
             and len(appointments_in_range_for_doctor) == 0
             and len(appointments_in_range_for_patient) == 0
         ):
+
+            print(form.data)
             appointment = form.save(commit=False)
             appointment.save()
 
             return redirect(
-                "book-appointment"
+                "bookAppointment"
             )  # gotta decide where to redirect after booking appointment
     else:
         form = AppointmentForm()
@@ -256,16 +271,32 @@ def reports(request):
     return render(request, "receipt.html", {"form": form})
 
 
-'''
-To display the doctor's dashboard which consists of
-his upcoming appointments with patients
-'''
-def doctorDashboard(request):
-    doctor_name = request.user
-    doctor_instance = Doctor.objects.get(username = doctor_name)
-    #appointments = Appointment.objects.all()
-    appointments = Appointment.objects.\
-        filter(doctor = doctor_instance).order_by("-start_time")
-    return render(request, "doctor_dashboard.html", {"doctor" : doctor_name, "current_calendar" : appointments})
+def scheduleAppointments(request):
 
+    doc = Doctor.objects.get(username=CustomUser.objects.get(username="Nilay"))
+    # schedule = IndivdualDoctorQueue.objects.filter(doctor=doc)
+    schedule=Appointment.objects.filter(doctor=doc,date=datetime.date.today())
+    print(schedule)
+
+    token = []
+    count = 1
+    for i in schedule:
+        
+        token.append({"name": i.patient.username.username, "token_Number": len(token)})
+        if not DailyDoctorQueue.objects.filter(appointment=i).exists():
+            val=DailyDoctorQueue.objects.create(appointment=i,token=len(token))
+            val.save()
+            count += 1
+    return HttpResponse(token)
+
+
+def test(request):
+    form=PatientForm(request.POST)
+    print(form.is_valid())
+    print(form.errors)
+    if form.is_valid():
+        print("hi")
+        print(form.data)
+
+    return render(request,'test.html',{'form':form})
 

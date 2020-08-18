@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Doctor, Patient, Appointment, Report, CustomUser
+from .models import (
+    Doctor,
+    Patient,
+    Appointment,
+    Report,
+    CustomUser,
+    DailyDoctorQueue,
+)
 from django.contrib.auth.admin import UserAdmin
 from .forms import *
 
@@ -12,6 +19,7 @@ class CustomUserAdmin(UserAdmin):
         "last_login",
         "is_superuser",
         "is_staff",
+        "id",
     )
     search_fields = (
         "email",
@@ -25,6 +33,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 # Register your models here.
-app_models = [Doctor, Patient, Appointment, Report]
+app_models = [Doctor, Patient, Appointment, Report, DailyDoctorQueue]
 admin.site.register(app_models)
 admin.site.register(CustomUser, CustomUserAdmin)
